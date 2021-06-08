@@ -210,6 +210,8 @@ spec:
           mountPath: /pulsar/data/bookkeeper/journal
         - name: "{{ template "pulsar.fullname" . }}-{{ .Values.bookkeeper.component }}-{{ .Values.bookkeeper.volumes.ledgers.name }}"
           mountPath: /pulsar/data/bookkeeper/ledgers
+        - name: "{{ template "pulsar.fullname" . }}-{{ .Values.bookkeeper.component }}-logs"
+          mountPath: /pulsar/logs
 {{ if $tlsEnabled }}
         - name: "keystore-volume"
           mountPath: "/etc/ssl/keystores"
@@ -226,6 +228,8 @@ spec:
       - name: log4j-config
         configMap:
           name: "{{ template "pulsar.fullname" . }}-log4j-config"
+      - name: "{{ template "pulsar.fullname" . }}-{{ .Values.bookkeeper.component }}-logs"
+        emptyDir: {}
       {{- if not (and (and .Values.persistence .Values.volumes.persistence) .Values.bookkeeper.volumes.persistence) }}
       - name: "{{ template "pulsar.fullname" . }}-{{ .Values.bookkeeper.component }}-{{ .Values.bookkeeper.volumes.journal.name }}"
         emptyDir: {}
