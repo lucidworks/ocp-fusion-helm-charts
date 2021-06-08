@@ -40,9 +40,8 @@ spec:
         {{ tpl (toYaml .Values.affinity) . | nindent 8 }}
     {{- end }}
       volumes:
-        - name: "jks"
-          secret:
-            secretName: "{{ include "fusion.api-gateway.fullname" . }}-jks"
+        - name: jks
+          emptyDir: {}
         - name: tmp
           emptyDir: {}
 {{- if $tlsEnabled }}
@@ -73,6 +72,23 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{ end }}
       initContainers:
+        - name: "create-jks"
+          image: "{{ template "fusion.api-gateway.keytoolUtilsRepository" . }}/{{ .Values.keytoolUtils.image.name }}:{{ .Values.keytoolUtils.image.tag }}"
+          imagePullPolicy: "{{ .Values.keytoolUtils.image.imagePullPolicy }}"
+          env:
+            - name: API_GATEWAY_JKS_BASE64
+              valueFrom:
+                secretKeyRef:
+                  name:  dataes-api-gateway-jks
+                  key: api-gateway.jks
+          volumeMounts:
+            - name: jks
+              mountPath: "/etc/ssl/keystores"
+          command:
+            - "/bin/bash"
+            - "-c"
+            - |
+              echo "${API_GATEWAY_JKS_BASE64}" | base64 --decode > /etc/ssl/keystores/api-gateway.jks
 {{- if $tlsEnabled -}}
 {{ $params := dict "tlsServiceName" ( include "fusion.api-gateway.serviceName" . ) "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils "securityContext" $.Values.securityContext }}
 {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
@@ -153,7 +169,7 @@ spec:
             exec:
               command: ["sleep", "{{ .Values.preStopSleepTime }}"]
         volumeMounts:
-          - name: "jks"
+          - name: jks
             mountPath: "/etc/ssl/keystores"
 {{ if $tlsEnabled }}
           - name: "keystore-volume"
