@@ -33,6 +33,7 @@ spec:
       annotations:
 {{ toYaml ( $nodePool.podAnnotations | default $.Values.podAnnotations ) | indent 8 }}
     spec:
+      serviceAccountName: "{{ $.Values.rbac.serviceAccountName | default (include "solr.fullname" $) }}"
     {{- if or $nodePool.nodeSelector $.Values.nodeSelector }}
       nodeSelector: {{ toYaml ($nodePool.nodeSelector | default $.Values.nodeSelector) | nindent 8 }}
     {{- end }}
@@ -113,16 +114,16 @@ spec:
         - name: check-zk
           image: {{ $.Values.initContainer.image.repository }}/check-fusion-dependency:v1.2.0
           imagePullPolicy: IfNotPresent
-
-            runAsUser: {{ $.Values.securityContext.runAsUser }}
           args:
             - zookeeper
           resources:
             requests:
               cpu: 200m
+              memory: 50Mi
               memory: 32Mi
             limits:
               cpu: 200m
+              memory: 50Mi
               memory: 32Mi
           env:
             - name: ZOOKEEPER_CONNECTION_STRING
@@ -258,8 +259,6 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: {{ template "solr.pvc-name" $ }}{{- if not (eq $nodePool.name "") -}}-{{- end -}}{{ $nodePool.name }}
-        annotations:
-          pv.beta.kubernetes.io/gid: "{{ $.Values.securityContext.fsGroup }}"
       spec:
         accessModes:
 {{ toYaml $.Values.volumeClaimTemplates.accessModes | indent 10 }}
@@ -271,3 +270,4 @@ spec:
             storage: {{ $nodePool.storageSize | default $.Values.volumeClaimTemplates.storageSize }}
 
 {{- end -}}
+
