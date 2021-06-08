@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: "5"
+description: A helm chart to install details for the classification service
+keywords:
+- fusion
+- ml
+- classification
+maintainers:
+- email: binoy.dalal1@lucidworks.com
+  name: Binoy Dalal
+name: classification
+version: 1.0.1

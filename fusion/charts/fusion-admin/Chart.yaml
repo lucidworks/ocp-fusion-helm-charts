@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.5.1
+description: Helm Chart to deploy fusion-admin service in Kubernetes
+maintainers:
+- email: alexander.kanarsky@lucidworks.com
+  name: Alexander Kanarsky
+name: fusion-admin
+version: 1.8.1

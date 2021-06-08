@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: "5"
+description: A helm chart to install the templating component
+keywords:
+- fusion
+- templating
+maintainers:
+- email: ian.thebridge@lucidworks.com
+  name: Ian Thebridge
+- email: tim.potter@lucidworks.com
+  name: Timothy Potter
+name: templating
+version: 0.4.1

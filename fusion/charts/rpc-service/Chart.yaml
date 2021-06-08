@@ -1,0 +1,21 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.5.1
+description: Lucidworks Fusion Connectors Service (rpc)
+keywords:
+- fusion
+- connectors
+- rpc
+- v2
+maintainers:
+- email: matt.mitchell@lucidworks.com
+  name: Matt Mitchell
+- email: christopher.bareja@lucidworks.com
+  name: Krzysztof Bareja
+- email: puneet.khanal@lucidworks.com
+  name: Puneet Khanal
+name: rpc-service
+version: 1.15.3
