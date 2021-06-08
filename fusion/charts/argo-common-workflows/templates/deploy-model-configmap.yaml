@@ -20,12 +20,7 @@ data:
         jobRunId: "{{`{{JOB_RUN_ID}}`}}"
         jobConfigId: "{{`{{JOB_CONFIG_ID}}`}}"
     spec:
-      serviceAccountName: "{{`{{SERVICE_ACCOUNT}}`}}"
       activeDeadlineSeconds: 600
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
       imagePullSecrets:
       {{ if .Values.image.imagePullSecrets }}
         {{ .Values.image.imagePullSecrets| toYaml | nindent 8 }}
@@ -39,7 +34,7 @@ data:
             accessModes: [ "ReadWriteOnce" ]
             resources:
               requests:
-                storage: 10Mi
+                storage: 50Mi
       volumes:
       #This secret is set by Fusion cluster installation scripts / cluster administrator
 {{- if $tlsEnabled }}

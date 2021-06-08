@@ -28,7 +28,7 @@ keytoolUtils:
     - name: artifactory
     name: keytool-utils
     repository: lucidworks
-    tag: v2.0.0
+    tag: v2.1.0
 logLevelRoot: info
 networkPolicy:
   additionalEgressRules: []
@@ -48,10 +48,6 @@ rbac:
   create: true
 replicaCount: 1
 resources: {}
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 service:
   http:
     annotations: {}

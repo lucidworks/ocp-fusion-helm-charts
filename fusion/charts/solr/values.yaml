@@ -61,7 +61,7 @@ keytoolUtils:
     imagePullSecrets: []
     name: keytool-utils
     repository: lucidworks
-    tag: v2.0.0
+    tag: v2.1.0
 livenessProbe:
   failureThreshold: 3
   initialDelaySeconds: 30
@@ -97,9 +97,6 @@ readinessProbe:
   timeoutSeconds: 2
 replicaCount: 3
 resources: {}
-securityContext:
-  fsGroup: 8983
-  runAsUser: 8983
 service:
   annotations: {}
   type: ClusterIP
@@ -329,9 +326,6 @@ zookeeper:
     create: true
   replicaCount: 3
   resources: {}
-  securityContext:
-    fsGroup: 1000
-    runAsUser: 1000
   service:
     annotations: {}
     ports:

@@ -33,13 +33,6 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
     spec:
-      securityContext:
-{{- if .Values.bookkeeper.securityContext.runAsUser }}
-        runAsUser: {{ .Values.bookkeeper.securityContext.runAsUser }}
-{{- end }}
-{{- if .Values.bookkeeper.securityContext.fsGroup }}
-        fsGroup: {{ .Values.bookkeeper.securityContext.fsGroup }}
-{{- end }}
       imagePullSecrets:
         - name: "artifactory"
         - name: "artifactory-stable"
@@ -294,6 +287,8 @@ spec:
             value: "{{ .Values.bookkeeper.tls.keystorePassword }}"
 {{- end }}
         volumeMounts:
+          - name: "{{ template "pulsar.fullname" . }}-{{ .Values.broker.component }}-logs"
+            mountPath: /pulsar/logs
           - name: "writable-volume"
             mountPath: "/tmp"
           {{- if .Values.auth.authentication.enabled }}
@@ -312,6 +307,8 @@ spec:
             mountPath: "/etc/ssl/keystores"
           {{- end }}
       volumes:
+      - name: "{{ template "pulsar.fullname" . }}-{{ .Values.broker.component }}-logs"
+        emptyDir: {}
       - name: "writable-volume"
         emptyDir: {}
       {{- if .Values.auth.authentication.enabled }}

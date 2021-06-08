@@ -24,7 +24,7 @@ keytoolUtils:
     imagePullSecrets: []
     name: keytool-utils
     repository: lucidworks
-    tag: v2.0.0
+    tag: v2.1.0
 livenessProbe:
   failureThreshold: 10
   initialDelaySeconds: 155
@@ -64,10 +64,6 @@ readinessProbe:
   successThreshold: 1
   timeoutSeconds: 2
 replicaCount: 1
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 serviceName: connectors-classic
 springProfiles: k8s,jwt
 tls:

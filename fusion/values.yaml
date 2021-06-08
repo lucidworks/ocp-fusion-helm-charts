@@ -30,7 +30,7 @@ admin-ui:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logLevelRoot: info
   logstashEnabled: true
   networkPolicy:
@@ -51,10 +51,6 @@ admin-ui:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -166,10 +162,6 @@ api-gateway:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotations: {}
     port: 6764
@@ -385,11 +377,6 @@ argo:
       replicas: 4
       serviceEndpoint: ""
     secretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-    securityContext:
-      enabled: false
-      fsGroup: 1000
-      runAsGroup: 1000
-      runAsUser: 1000
     service:
       annotations: {}
       clusterIP: null
@@ -457,8 +444,6 @@ argo-common-workflows:
     default: {}
     deploy:
       seldon: null
-  securityContext:
-    fsGroup: 8764
   tls:
     enabled: false
     keystorePassword: changeit
@@ -498,7 +483,7 @@ auth-ui:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logLevelRoot: info
   logstashEnabled: true
   networkPolicy:
@@ -518,10 +503,6 @@ auth-ui:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -572,7 +553,7 @@ classic-rest-service:
       imagePullSecrets: []
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 155
@@ -613,10 +594,6 @@ classic-rest-service:
     successThreshold: 1
     timeoutSeconds: 2
   replicaCount: 1
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connectors-classic
   springProfiles: k8s,jwt
   tls:
@@ -660,8 +637,6 @@ classification:
     etl: null
     seldon: null
     train: null
-  securityContext:
-    fsGroup: 8764
   tls:
     enabled: false
     keystorePassword: changeit
@@ -705,7 +680,7 @@ config-sync:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 30
@@ -747,10 +722,6 @@ config-sync:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -814,7 +785,7 @@ connector-plugin-service:
       imagePullSecrets: []
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 20
     initialDelaySeconds: 65
@@ -855,10 +826,6 @@ connector-plugin-service:
     successThreshold: 1
     timeoutSeconds: 10
   replicaCount: 0
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connector-plugin-service
   springProfiles: k8s,jwt
   tls:
@@ -911,7 +878,7 @@ devops-ui:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logLevelRoot: info
   logstashEnabled: true
   networkPolicy:
@@ -932,10 +899,6 @@ devops-ui:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -993,7 +956,7 @@ fusion-admin:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 5
     initialDelaySeconds: 30
@@ -1028,10 +991,6 @@ fusion-admin:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotation: {}
     externalPort: 8765
@@ -1102,7 +1061,7 @@ fusion-indexing:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     initialDelaySeconds: 20
     periodSeconds: 10
@@ -1136,10 +1095,6 @@ fusion-indexing:
     periodSeconds: 10
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -1269,10 +1224,6 @@ fusion-log-forwarder:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   solrPath: solr
   solrPort: "8983"
   solrProtocol: http
@@ -1308,13 +1259,10 @@ fusion-resources:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logstashEnabled: true
   rbac:
     create: true
-  securityContext:
-    fsGroup: 8764
-    runAsUser: 8764
   serviceAccountKey: ""
   tls:
     caSecret:
@@ -1376,10 +1324,6 @@ insights:
     periodSeconds: 5
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotations: {}
     port: 8080
@@ -1424,7 +1368,7 @@ job-launcher:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 5
     initialDelaySeconds: 20
@@ -1464,10 +1408,6 @@ job-launcher:
     periodSeconds: 10
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -1527,7 +1467,7 @@ job-rest-server:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 5
     initialDelaySeconds: 20
@@ -1563,10 +1503,6 @@ job-rest-server:
     periodSeconds: 10
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -1690,8 +1626,6 @@ ml-model-service:
     resources: {}
     scope:
       singleNamespace: true
-    securityContext:
-      runAsUser: 8888
     service:
       annotations: null
       ports:
@@ -1760,7 +1694,7 @@ ml-model-service:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 30
@@ -1915,8 +1849,8 @@ ml-model-service:
       initContainer:
         resources:
           requests:
-            cpu: 10m
-            memory: 10Mi
+            cpu: 100m
+            memory: 50Mi
       initializationFiles:
         grant.sql: |-
           GRANT ALL PRIVILEGES ON milvus.* TO 'root'@'%';
@@ -1969,10 +1903,6 @@ ml-model-service:
         requests:
           cpu: 100m
           memory: 256Mi
-      securityContext:
-        enabled: false
-        fsGroup: 999
-        runAsUser: 999
       service:
         annotations: {}
         port: 3306
@@ -2100,10 +2030,6 @@ ml-model-service:
     timeoutSeconds: 3
   replicaCount: 1
   runLabelNamespaceJob: true
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotations: {}
     port: 8086
@@ -2159,7 +2085,7 @@ pm-ui:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logLevelRoot: info
   logstashEnabled: true
   networkPolicy:
@@ -2179,10 +2105,6 @@ pm-ui:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -2296,9 +2218,6 @@ pulsar:
       requests:
         cpu: 500m
         memory: 2Gi
-    securityContext:
-      fsGroup: 0
-      runAsUser: 0
     service:
       annotations:
         publishNotReadyAddresses: "true"
@@ -2395,9 +2314,6 @@ pulsar:
       requests:
         cpu: 1000m
         memory: 3Gi
-    securityContext:
-      fsGroup: 0
-      runAsUser: 0
     service:
       annotations: {}
     tls:
@@ -2510,7 +2426,7 @@ pulsar:
       path: /
       port: 80
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
       tls:
         enabled: false
         secretName: ""
@@ -2746,7 +2662,7 @@ query-pipeline:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 30
@@ -2787,10 +2703,6 @@ query-pipeline:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -2864,8 +2776,6 @@ question-answering:
       seldon: {}
       sparkSolrEtl: {}
       train: {}
-  securityContext:
-    fsGroup: 8764
   tls:
     enabled: false
     keystorePassword: changeit
@@ -2907,8 +2817,6 @@ recommender:
     user:
       etl: {}
       train: {}
-  securityContext:
-    fsGroup: 8764
   tls:
     enabled: false
     keystorePassword: changeit
@@ -2957,7 +2865,7 @@ rest-service:
       imagePullSecrets: []
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 155
@@ -3002,10 +2910,6 @@ rest-service:
     successThreshold: 1
     timeoutSeconds: 2
   replicaCount: 1
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connectors
   springProfiles: k8s,jwt
   tls:
@@ -3063,7 +2967,7 @@ rpc-service:
       imagePullSecrets: []
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 20
     initialDelaySeconds: 65
@@ -3115,10 +3019,6 @@ rpc-service:
     successThreshold: 1
     timeoutSeconds: 10
   replicaCount: 1
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connectors-rpc
   springProfiles: k8s,jwt
   tls:
@@ -3171,7 +3071,7 @@ rules-ui:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logLevelRoot: info
   logstashEnabled: true
   networkPolicy:
@@ -3191,10 +3091,6 @@ rules-ui:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -3404,7 +3300,7 @@ solr:
       imagePullSecrets: []
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 3
     initialDelaySeconds: 30
@@ -3441,9 +3337,6 @@ solr:
     timeoutSeconds: 2
   replicaCount: 3
   resources: {}
-  securityContext:
-    fsGroup: 8983
-    runAsUser: 8983
   service:
     annotations: {}
     type: ClusterIP
@@ -3674,9 +3567,6 @@ solr:
       create: true
     replicaCount: 3
     resources: {}
-    securityContext:
-      fsGroup: 1000
-      runAsUser: 1000
     service:
       annotations: {}
       ports:
@@ -3805,7 +3695,7 @@ sql-service:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     initialDelaySeconds: 420
     periodSeconds: 10
@@ -3844,10 +3734,6 @@ sql-service:
     requests:
       cpu: 500m
       memory: 8Gi
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -3914,7 +3800,7 @@ templating:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 30
@@ -3953,10 +3839,6 @@ templating:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -4017,7 +3899,7 @@ webapps:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     initialDelaySeconds: 20
     periodSeconds: 10
@@ -4052,10 +3934,6 @@ webapps:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotations: {}
     port: 8780
@@ -4274,9 +4152,6 @@ zookeeper:
     create: true
   replicaCount: 3
   resources: {}
-  securityContext:
-    fsGroup: 1000
-    runAsUser: 1000
   service:
     annotations: {}
     ports:

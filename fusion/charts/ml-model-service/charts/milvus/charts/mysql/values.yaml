@@ -24,7 +24,7 @@ initContainer:
   resources:
     requests:
       cpu: 10m
-      memory: 10Mi
+      memory: 50Mi
 initializationFiles: {}
 livenessProbe:
   failureThreshold: 3
@@ -67,10 +67,6 @@ resources:
   requests:
     cpu: 100m
     memory: 256Mi
-securityContext:
-  enabled: false
-  fsGroup: 999
-  runAsUser: 999
 service:
   annotations: {}
   port: 3306

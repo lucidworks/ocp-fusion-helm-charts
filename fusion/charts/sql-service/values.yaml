@@ -23,7 +23,7 @@ keytoolUtils:
     - name: artifactory
     name: keytool-utils
     repository: lucidworks
-    tag: v2.0.0
+    tag: v2.1.0
 livenessProbe:
   initialDelaySeconds: 420
   periodSeconds: 10
@@ -61,10 +61,6 @@ resources:
   requests:
     cpu: 500m
     memory: 8Gi
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 service:
   http:
     annotations: {}

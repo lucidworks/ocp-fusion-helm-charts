@@ -28,10 +28,6 @@ spec:
       annotations:
         {{ toYaml .Values.pod.annotations | nindent 8 }}
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
@@ -40,7 +36,6 @@ spec:
       affinity:
         {{ tpl (toYaml .Values.affinity) . | nindent 8 }}
     {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.classic-rest-service.fullname" . ) }}"
       {{ if .Values.priorityClassName }}
       priorityClassName: "{{ .Values.priorityClassName }}"
       {{ end }}
@@ -66,11 +61,6 @@ spec:
       - name: classic-rest-service
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
         env:
           - name: "COMPONENT"
             value: "connectors-classic"

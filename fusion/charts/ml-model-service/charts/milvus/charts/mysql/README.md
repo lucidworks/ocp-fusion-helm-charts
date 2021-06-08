@@ -47,7 +47,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 | Parameter                                    | Description                                                                                  | Default                                              |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | `args`                                       | Additional arguments to pass to the MySQL container.                                         | `[]`                                                 |
-| `initContainer.resources`                    | initContainer resource requests/limits                                                       | Memory: `10Mi`, CPU: `10m`                           |
+| `initContainer.resources`                    | initContainer resource requests/limits                                                       | Memory: `50Mi`, CPU: `10m`                           |
 | `image`                                      | `mysql` image repository.                                                                    | `mysql`                                              |
 | `imageTag`                                   | `mysql` image tag.                                                                           | `5.7.14`                                             |
 | `busybox.image`                              | `busybox` image repository.                                                                  | `busybox`                                            |

@@ -18,12 +18,6 @@ spec:
         app.kubernetes.io/name: {{ include "fusion-jupyter.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-      securityContext:
-        fsGroup: 1000
-        runAsNonRoot: true
-        runAsGroup: 1000
-        runAsUser: 1000
-      serviceAccountName: "{{ include "fusion-jupyter.fullname" . }}"
       {{- if .Values.tolerations }}
       tolerations: {{ .Values.tolerations | toYaml | nindent 8 }}
       {{- end }}

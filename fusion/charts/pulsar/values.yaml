@@ -89,9 +89,6 @@ bookkeeper:
     requests:
       cpu: 500m
       memory: 2Gi
-  securityContext:
-    fsGroup: 0
-    runAsUser: 0
   service:
     annotations:
       publishNotReadyAddresses: "true"
@@ -188,9 +185,6 @@ broker:
     requests:
       cpu: 1000m
       memory: 3Gi
-  securityContext:
-    fsGroup: 0
-    runAsUser: 0
   service:
     annotations: {}
   tls:
@@ -302,7 +296,7 @@ keytoolUtils:
     path: /
     port: 80
     repository: lucidworks
-    tag: v2.0.0
+    tag: v2.1.0
     tls:
       enabled: false
       secretName: ""

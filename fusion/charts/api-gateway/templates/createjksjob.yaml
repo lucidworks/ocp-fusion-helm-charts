@@ -62,17 +62,12 @@ metadata:
 spec:
   template:
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
       volumes:
         - name: workdir
           emptyDir: {}
       restartPolicy: OnFailure
       imagePullSecrets:
         {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName  | default ( printf "%s-jks-create" (include "fusion.api-gateway.fullname" .)) }}"
       {{- if .Values.tolerations }}
       tolerations: {{ .Values.tolerations | toYaml | nindent 8 }}
       {{- end }}
@@ -82,11 +77,6 @@ spec:
       {{- end }}
       containers:
         - name: "generate-jks"
-          securityContext:
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            allowPrivilegeEscalation: false
-            privileged: false
           resources: {{ toYaml  .Values.jksSetup.resources | nindent 12 }}
           image: "{{ template "fusion.api-gateway.keytoolUtilsRepository" . }}/{{ .Values.keytoolUtils.image.name }}:{{ .Values.keytoolUtils.image.tag }}"
           imagePullPolicy: "{{ .Values.keytoolUtils.image.imagePullPolicy }}"

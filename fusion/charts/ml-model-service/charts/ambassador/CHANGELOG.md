@@ -139,7 +139,7 @@ numbering uses [semantic versioning](http://semver.org).
 
 - Update ambassador to 0.52.0
 
-## v2.0.0
+## v2.1.0
 
 ### Major Changes
 
