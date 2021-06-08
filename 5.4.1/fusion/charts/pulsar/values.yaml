@@ -301,7 +301,7 @@ keytoolUtils:
     path: /
     port: 80
     repository: lucidworks
-    tag: v2.0.0
+    tag: v2.1.0
     tls:
       enabled: false
       secretName: ""

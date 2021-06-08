@@ -23,7 +23,7 @@ keytoolUtils:
     - name: artifactory
     name: keytool-utils
     repository: lucidworks
-    tag: v2.0.0
+    tag: v2.1.0
 livenessProbe:
   initialDelaySeconds: 420
   periodSeconds: 10

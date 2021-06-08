@@ -30,7 +30,7 @@ admin-ui:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logLevelRoot: info
   logstashEnabled: true
   networkPolicy:
@@ -487,7 +487,7 @@ auth-ui:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logLevelRoot: info
   logstashEnabled: true
   networkPolicy:
@@ -558,7 +558,7 @@ classic-rest-service:
       imagePullSecrets: []
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 155
@@ -710,7 +710,7 @@ connector-plugin:
       imagePullSecrets: []
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 20
     initialDelaySeconds: 65
@@ -814,7 +814,7 @@ connectors:
       imagePullSecrets: []
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 155
@@ -916,7 +916,7 @@ connectors-backend:
       imagePullSecrets: []
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 20
     initialDelaySeconds: 65
@@ -1024,7 +1024,7 @@ devops-ui:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logLevelRoot: info
   logstashEnabled: true
   networkPolicy:
@@ -1103,7 +1103,7 @@ fusion-admin:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 5
     initialDelaySeconds: 30
@@ -1232,7 +1232,7 @@ fusion-indexing:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     initialDelaySeconds: 20
     periodSeconds: 10
@@ -1436,7 +1436,7 @@ fusion-resources:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logstashEnabled: true
   rbac:
     create: true
@@ -1702,7 +1702,7 @@ job-launcher:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 5
     initialDelaySeconds: 20
@@ -1802,7 +1802,7 @@ job-rest-server:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 5
     initialDelaySeconds: 20
@@ -2030,7 +2030,7 @@ ml-model-service:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 30
@@ -2428,7 +2428,7 @@ pm-ui:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logLevelRoot: info
   logstashEnabled: true
   networkPolicy:
@@ -2775,7 +2775,7 @@ pulsar:
       path: /
       port: 80
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
       tls:
         enabled: false
         secretName: ""
@@ -3020,7 +3020,7 @@ query-pipeline:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 30
@@ -3221,7 +3221,7 @@ rules-ui:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   logLevelRoot: info
   logstashEnabled: true
   networkPolicy:
@@ -3452,7 +3452,7 @@ solr:
       imagePullSecrets: []
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 3
     initialDelaySeconds: 30
@@ -3851,7 +3851,7 @@ sql-service:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     initialDelaySeconds: 420
     periodSeconds: 10
@@ -3957,7 +3957,7 @@ templating:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 10
     initialDelaySeconds: 30
@@ -4043,7 +4043,7 @@ tikaserver:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     failureThreshold: 3
     initialDelaySeconds: 30
@@ -4116,7 +4116,7 @@ webapps:
       - name: artifactory
       name: keytool-utils
       repository: lucidworks
-      tag: v2.0.0
+      tag: v2.1.0
   livenessProbe:
     initialDelaySeconds: 20
     periodSeconds: 10
