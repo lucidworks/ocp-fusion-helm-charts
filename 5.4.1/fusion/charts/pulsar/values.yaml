@@ -89,9 +89,7 @@ bookkeeper:
     requests:
       cpu: 500m
       memory: 2Gi
-  securityContext:
-    fsGroup: 0
-    runAsUser: 0
+
   service:
     spec:
       publishNotReadyAddresses: true
@@ -190,9 +188,7 @@ broker:
     requests:
       cpu: 1000m
       memory: 3Gi
-  securityContext:
-    fsGroup: 0
-    runAsUser: 0
+
   service:
     annotations: {}
   tls:
@@ -361,10 +357,6 @@ proxy:
     requests:
       cpu: 0.2
       memory: 128Mi
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotations: {}
     type: LoadBalancer

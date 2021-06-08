@@ -33,13 +33,7 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
     spec:
-      securityContext:
-{{- if .Values.bookkeeper.securityContext.runAsUser }}
-        runAsUser: {{ .Values.bookkeeper.securityContext.runAsUser }}
-{{- end }}
-{{- if .Values.bookkeeper.securityContext.fsGroup }}
-        fsGroup: {{ .Values.bookkeeper.securityContext.fsGroup }}
-{{- end }}
+
       imagePullSecrets:
         - name: "artifactory"
         - name: "artifactory-stable"

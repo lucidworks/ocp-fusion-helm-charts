@@ -51,10 +51,6 @@ admin-ui:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -166,10 +162,7 @@ api-gateway:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   service:
     annotations: {}
     port: 6764
@@ -387,11 +380,7 @@ argo:
       replicas: 4
       serviceEndpoint: ""
     secretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-    securityContext:
-      enabled: false
-      fsGroup: 1000
-      runAsGroup: 1000
-      runAsUser: 1000
+
     service:
       annotations: {}
       clusterIP: null
@@ -459,8 +448,6 @@ argo-common-workflows:
     default: {}
     deploy:
       seldon: null
-  securityContext:
-    fsGroup: 8764
   tls:
     enabled: false
     keystorePassword: changeit
@@ -520,10 +507,7 @@ auth-ui:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   service:
     http:
       annotations: {}
@@ -615,10 +599,6 @@ classic-rest-service:
     successThreshold: 1
     timeoutSeconds: 2
   replicaCount: 1
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connectors-classic
   springProfiles: k8s,jwt
   tls:
@@ -664,8 +644,7 @@ classification:
     etl: null
     seldon: null
     train: null
-  securityContext:
-    fsGroup: 8764
+
   tls:
     enabled: false
     keystorePassword: changeit
@@ -776,10 +755,6 @@ connector-plugin:
     successThreshold: 1
     timeoutSeconds: 10
   replicaCount: 0
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connector-plugin
   springProfiles: k8s,jwt
   tls:
@@ -884,10 +859,7 @@ connectors:
     successThreshold: 1
     timeoutSeconds: 2
   replicaCount: 1
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   serviceName: connectors
   springProfiles: k8s,jwt
   tls:
@@ -1000,10 +972,6 @@ connectors-backend:
     successThreshold: 1
     timeoutSeconds: 10
   replicaCount: 1
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connectors-backend
   springProfiles: k8s,jwt
   tls:
@@ -1077,10 +1045,7 @@ devops-ui:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   service:
     http:
       annotations: {}
@@ -1173,10 +1138,6 @@ fusion-admin:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotation: {}
     externalPort: 8765
@@ -1308,10 +1269,6 @@ fusion-indexing:
     periodSeconds: 10
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -1444,10 +1401,6 @@ fusion-log-forwarder:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   solrPath: solr
   solrPort: "8983"
   solrProtocol: http
@@ -1487,9 +1440,6 @@ fusion-resources:
   logstashEnabled: true
   rbac:
     create: true
-  securityContext:
-    fsGroup: 8764
-    runAsUser: 8764
   serviceAccountKey: ""
   tls:
     caSecret:
@@ -1707,10 +1657,7 @@ insights:
     periodSeconds: 5
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   service:
     annotations: {}
     port: 8080
@@ -1795,10 +1742,7 @@ job-launcher:
     periodSeconds: 10
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -1894,10 +1838,7 @@ job-rest-server:
     periodSeconds: 10
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -2021,8 +1962,6 @@ ml-model-service:
     resources: {}
     scope:
       singleNamespace: true
-    securityContext:
-      runAsUser: 8888
     service:
       annotations: null
       ports:
@@ -2300,10 +2239,7 @@ ml-model-service:
         requests:
           cpu: 100m
           memory: 256Mi
-      securityContext:
-        enabled: false
-        fsGroup: 999
-        runAsUser: 999
+
       service:
         annotations: {}
         port: 3306
@@ -2436,10 +2372,7 @@ ml-model-service:
     timeoutSeconds: 3
   replicaCount: 1
   runLabelNamespaceJob: true
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   service:
     annotations: {}
     port: 8086
@@ -2515,10 +2448,7 @@ pm-ui:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   service:
     http:
       annotations: {}
@@ -2632,9 +2562,7 @@ pulsar:
       requests:
         cpu: 500m
         memory: 2Gi
-    securityContext:
-      fsGroup: 0
-      runAsUser: 0
+
     service:
       spec:
         publishNotReadyAddresses: true
@@ -2733,9 +2661,7 @@ pulsar:
       requests:
         cpu: 1000m
         memory: 3Gi
-    securityContext:
-      fsGroup: 0
-      runAsUser: 0
+
     service:
       annotations: {}
     tls:
@@ -2906,10 +2832,7 @@ pulsar:
       requests:
         cpu: 0.2
         memory: 128Mi
-    securityContext:
-      fsGroup: 8764
-      runAsNonRoot: true
-      runAsUser: 8764
+
     service:
       annotations: {}
       type: LoadBalancer
@@ -3138,10 +3061,7 @@ query-pipeline:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -3215,8 +3135,7 @@ question-answering:
       seldon: {}
       sparkSolrEtl: {}
       train: {}
-  securityContext:
-    fsGroup: 8764
+
   tls:
     enabled: false
     keystorePassword: changeit
@@ -3258,8 +3177,7 @@ recommender:
     user:
       etl: {}
       train: {}
-  securityContext:
-    fsGroup: 8764
+
   tls:
     enabled: false
     keystorePassword: changeit
@@ -3323,10 +3241,7 @@ rules-ui:
     create: true
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   service:
     http:
       annotations: {}
@@ -3808,9 +3723,6 @@ solr:
       create: true
     replicaCount: 3
     resources: {}
-    securityContext:
-      fsGroup: 1000
-      runAsUser: 1000
     service:
       annotations: {}
       ports:
@@ -3978,10 +3890,7 @@ sql-service:
     requests:
       cpu: 500m
       memory: 8Gi
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   service:
     http:
       annotations: {}
@@ -4087,10 +3996,7 @@ templating:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -4168,10 +4074,7 @@ tikaserver:
     timeoutSeconds: 2
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -4248,10 +4151,7 @@ webapps:
     timeoutSeconds: 3
   replicaCount: 1
   resources: {}
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
+
   service:
     annotations: {}
     port: 8780
@@ -4470,9 +4370,6 @@ zookeeper:
     create: true
   replicaCount: 3
   resources: {}
-  securityContext:
-    fsGroup: 1000
-    runAsUser: 1000
   service:
     annotations: {}
     ports:

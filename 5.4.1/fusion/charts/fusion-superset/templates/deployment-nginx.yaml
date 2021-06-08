@@ -22,16 +22,11 @@ spec:
     spec:
       imagePullSecrets:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
-      securityContext:
-        fsGroup: 101
+
       containers:
         - name: "{{ .Chart.Name }}-proxy"
           image: "{{ if .Values.proxy.image.repository }}{{ .Values.proxy.image.repository }}/{{ end }}{{ .Values.proxy.image.name }}:{{ .Values.proxy.image.tag }}"
           imagePullPolicy: {{ .Values.proxy.image.imagePullPolicy }}
-          securityContext:
-            #            readOnlyRootFilesystem: true
-            allowPrivilegeEscalation: false
-            privileged: false
           ports:
             - name: http
               containerPort: {{ .Values.proxy.service.port }}

@@ -20,10 +20,7 @@ data:
         jobRunId: "{{`{{JOB_RUN_ID}}`}}"
         jobConfigId: "{{`{{JOB_CONFIG_ID}}`}}"
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
+
       serviceAccountName: "{{`{{SERVICE_ACCOUNT}}`}}"
       entrypoint: workflow
       imagePullSecrets:
@@ -597,10 +594,7 @@ data:
         jobRunId: "{{`{{JOB_RUN_ID}}`}}"
         jobConfigId: "{{`{{JOB_CONFIG_ID}}`}}"
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
+
       serviceAccountName: "{{`{{SERVICE_ACCOUNT}}`}}"
       imagePullSecrets:
         {{ .Values.image.imagePullSecrets | toYaml | nindent 8 }}
@@ -1250,10 +1244,7 @@ data:
         jobRunId: "{{`{{JOB_RUN_ID}}`}}"
         jobConfigId: "{{`{{JOB_CONFIG_ID}}`}}"
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
+
       serviceAccountName: "{{`{{SERVICE_ACCOUNT}}`}}"
       imagePullSecrets:
         {{ .Values.image.imagePullSecrets | toYaml | nindent 8 }}

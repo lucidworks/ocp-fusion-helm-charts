@@ -83,10 +83,6 @@ data:
           labels:
             {{- include "fusion.connector-plugin.labels" . | nindent 12 }}
         spec:
-    {{- if .Values.securityContext }}
-          securityContext:
-    {{- .Values.securityContext | toYaml | nindent 12 }}
-    {{- end }}
         {{- if .Values.nodeSelector }}
           nodeSelector:
             {{ toYaml .Values.nodeSelector | nindent 12 }}
@@ -177,11 +173,7 @@ data:
             - name: connector-plugin
               image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
-              securityContext:
-                readOnlyRootFilesystem: true
-                runAsNonRoot: true
-                allowPrivilegeEscalation: false
-                privileged: false
+
               volumeMounts:
                 - name: application-config-k8s
                   mountPath: "app/config"

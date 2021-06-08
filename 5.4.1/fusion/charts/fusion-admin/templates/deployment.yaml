@@ -27,10 +27,7 @@ spec:
         app.kubernetes.io/component: "fusion-admin"
         app.kubernetes.io/part-of: "fusion"
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
+
       serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.fusion-admin.fullname" . ) }}"
     {{- if .Values.nodeSelector }}
       nodeSelector:
@@ -85,11 +82,7 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-          securityContext:
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            allowPrivilegeEscalation: false
-            privileged: false
+
           env:
             - name: "COMPONENT"
               value: "fusion-admin"

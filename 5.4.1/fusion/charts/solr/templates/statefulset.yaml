@@ -47,9 +47,6 @@ spec:
       {{- if ($nodePool.schedulerName | default $.Values.schedulerName) }}
       schedulerName: {{ ($nodePool.schedulerName | default $.Values.schedulerName) | quote }}
       {{- end }}
-      securityContext:
-        fsGroup: {{ $.Values.securityContext.fsGroup }}
-        runAsUser: {{ $.Values.securityContext.runAsUser }}
       affinity:
 {{ tpl (toYaml ($nodePool.affinity | default $.Values.affinity)) $  | indent 8 }}
       terminationGracePeriodSeconds: {{ $.Values.terminationGracePeriodSeconds }}
@@ -117,11 +114,7 @@ spec:
         - name: check-zk
           image: {{ $.Values.initContainer.image.repository }}/check-fusion-dependency:v1.2.0
           imagePullPolicy: IfNotPresent
-          securityContext:
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            allowPrivilegeEscalation: false
-            privileged: false
+
             runAsUser: {{ $.Values.securityContext.runAsUser }}
           args:
             - zookeeper

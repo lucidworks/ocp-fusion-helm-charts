@@ -69,11 +69,6 @@ spec:
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
       {{- end }}
-      securityContext:
-        {{- if .Values.osUser.nonRootCheckEnabled }}
-        runAsUser: {{ .Values.osUser.uid }}
-        {{- end }}
-        fsGroup: 2000
       serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( printf "%s-secret-hook" ( include "superset.fullname" . )) }}"
       restartPolicy: Never
       volumes:

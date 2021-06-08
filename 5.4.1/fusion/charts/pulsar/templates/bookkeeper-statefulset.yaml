@@ -33,13 +33,6 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
     spec:
-      securityContext:
-{{- if .Values.bookkeeper.securityContext.runAsUser }}
-        runAsUser: {{ .Values.bookkeeper.securityContext.runAsUser }}
-{{- end }}
-{{- if .Values.bookkeeper.securityContext.fsGroup }}
-        fsGroup: {{ .Values.bookkeeper.securityContext.fsGroup }}
-{{- end }}
       imagePullSecrets: {{ toYaml .Values.images.imagePullSecrets | nindent 8 }}
 {{- if $tlsEnabled }}
       serviceAccountName: "{{ .Values.bookkeeper.serviceAccountName | default ( printf "%s-%s" (include "pulsar.fullname" .) ( .Values.bookkeeper.component )) }}"
@@ -64,11 +57,7 @@ spec:
       - name: check-zk
         image: {{ $.Values.initContainer.image.repository }}/check-fusion-dependency:v1.2.0
         imagePullPolicy: IfNotPresent
-        securityContext:
-          readOnlyRootFilesystem: true
-          allowPrivilegeEscalation: false
-          privileged: false
-          runAsUser: {{ .Values.bookkeeper.securityContext.runAsUser }}
+
         args:
           - zookeeper
         resources:

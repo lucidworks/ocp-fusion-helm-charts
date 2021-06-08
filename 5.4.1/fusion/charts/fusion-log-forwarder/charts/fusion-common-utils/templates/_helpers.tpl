@@ -139,14 +139,7 @@
 - name: "setup-keystore-and-properties"
   image: "{{ .keytoolUtils.image.repository }}/{{ .keytoolUtils.image.name }}:{{ .keytoolUtils.image.tag }}"
   imagePullPolicy: "{{ .keytoolUtils.image.imagePullPolicy }}"
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-{{- if .securityContext.runAsUser }}
-    runAsUser: {{ .securityContext.runAsUser }}
-{{- end }}
+
   command:
     - "/bin/bash"
     - "-c"
@@ -334,12 +327,7 @@
 - name: check-zk
   image: {{ .Values.image.repository }}/check-fusion-dependency:v1.2.0
   imagePullPolicy: IfNotPresent
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
+
   args:
     - zookeeper
   resources:
@@ -374,12 +362,7 @@
 - name: check-logstash
   image: {{ .Values.image.repository }}/check-fusion-dependency:v1.2.0
   imagePullPolicy: IfNotPresent
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
+
   resources:
     requests:
       cpu: 200m
@@ -408,12 +391,7 @@
 - name: check-admin
   image: {{ .Values.image.repository }}/check-fusion-dependency:v1.2.0
   imagePullPolicy: IfNotPresent
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
+
   resources:
     requests:
       cpu: 200m
@@ -467,12 +445,7 @@ Define the admin url for pulsar broker
 - name: check-pulsar
   image: {{ .Values.image.repository }}/check-fusion-dependency:v1.2.0
   imagePullPolicy: IfNotPresent
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
+
   resources:
     requests:
       cpu: 200m
