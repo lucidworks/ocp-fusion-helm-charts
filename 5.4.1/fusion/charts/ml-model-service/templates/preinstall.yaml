@@ -69,7 +69,6 @@ spec:
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
       {{- end }}
-      serviceAccountName: "{{ .Values.rbac.hookServiceAccountName | default ( printf "%s-hook" ( include "fusion.ml-model-service.fullname" . )) }}"
       imagePullSecrets: {{ toYaml .Values.preinstall.image.imagePullSecrets | nindent 8 }}
       containers:
         - name: kubectl-runner

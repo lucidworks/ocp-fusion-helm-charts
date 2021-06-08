@@ -95,7 +95,6 @@ spec:
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
       {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( printf "%s-secret-hook" ( include "fusion.fusion-resources.fullname" . )) }}"
       volumes:
         - name: keystore-volume
           emptyDir: {}

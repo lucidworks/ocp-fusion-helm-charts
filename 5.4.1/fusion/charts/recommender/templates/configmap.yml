@@ -21,7 +21,7 @@ data:
         jobConfigId: "{{`{{JOB_CONFIG_ID}}`}}"
     spec:
 
-      serviceAccountName: "{{`{{SERVICE_ACCOUNT}}`}}"
+
       entrypoint: workflow
       imagePullSecrets:
       {{ .Values.image.imagePullSecrets| toYaml | nindent 8 }}
@@ -569,7 +569,7 @@ data:
         jobConfigId: "{{`{{JOB_CONFIG_ID}}`}}"
     spec:
 
-      serviceAccountName: "{{`{{SERVICE_ACCOUNT}}`}}"
+
       entrypoint: workflow
       imagePullSecrets:
       {{ .Values.image.imagePullSecrets| toYaml | nindent 8 }}

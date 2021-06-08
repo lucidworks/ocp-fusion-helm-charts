@@ -41,7 +41,6 @@ spec:
       affinity:
         {{ tpl (toYaml .Values.affinity) . | nindent 8 }}
     {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.fusion-indexing.fullname" . ) }}"
       imagePullSecrets:
         {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
     {{ if .Values.priorityClassName }}

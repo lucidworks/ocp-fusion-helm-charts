@@ -27,8 +27,6 @@ spec:
         app.kubernetes.io/component: "fusion-admin"
         app.kubernetes.io/part-of: "fusion"
     spec:
-
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.fusion-admin.fullname" . ) }}"
     {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}

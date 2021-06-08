@@ -69,7 +69,6 @@ spec:
       initContainers:
       {{-  tpl (toYaml .Values.init.initContainers) . | nindent 6 }}
       {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( printf "%s-db-secret-hook" ( include "superset.fullname" . )) }}"
       containers:
       - name: {{ template "superset.name" . }}-init-db
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"

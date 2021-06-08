@@ -14,8 +14,6 @@ spec:
           labels:
             app.kubernetes.io/name: spark-cleanup
         spec:
-
-          serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.job-launcher.fullname" . ) }}"
         {{- if .Values.sparkCleanup.nodeSelector }}
           nodeSelector:
             {{ toYaml .Values.sparkCleanup.nodeSelector | nindent 12 }}

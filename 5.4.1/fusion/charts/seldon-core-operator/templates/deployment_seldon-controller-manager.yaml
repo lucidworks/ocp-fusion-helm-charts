@@ -152,7 +152,7 @@ spec:
           name: cert
           readOnly: true
 {{- end }}
-      serviceAccountName: '{{ .Values.serviceAccount.name }}'
+
       imagePullSecrets: {{ .Values.image.imagePullSecrets | toYaml | nindent 8 }}
       terminationGracePeriodSeconds: 10
 {{- if not .Values.managerCreateResources }}

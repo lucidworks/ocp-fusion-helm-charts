@@ -20,7 +20,7 @@ data:
         jobRunId: "{{`{{JOB_RUN_ID}}`}}"
         jobConfigId: "{{`{{JOB_CONFIG_ID}}`}}"
     spec:
-      serviceAccountName: "{{`{{SERVICE_ACCOUNT}}`}}"
+
       activeDeadlineSeconds: 300
       imagePullSecrets:
         {{ .Values.image.imagePullSecrets| toYaml | nindent 8 }}

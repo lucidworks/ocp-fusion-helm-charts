@@ -91,7 +91,6 @@ data:
           affinity:
             {{ tpl (toYaml .Values.affinity) . | nindent 12 }}
         {{- end }}
-          serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.connector-plugin.fullname" . ) }}"
           {{ if .Values.priorityClassName }}
           priorityClassName: "{{ .Values.priorityClassName }}"
           {{ end }}

@@ -28,8 +28,6 @@ spec:
         app.kubernetes.io/component: "webapps"
         app.kubernetes.io/part-of: "fusion"
     spec:
-      serviceAccountName: {{ .Values.rbac.serviceAccountName | default (  include "fusion.webapps.fullname" . ) }}
-
       imagePullSecrets:
         {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
       {{- if .Values.priorityClassName }}

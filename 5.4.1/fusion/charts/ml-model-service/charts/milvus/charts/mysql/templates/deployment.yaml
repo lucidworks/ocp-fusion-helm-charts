@@ -46,7 +46,6 @@ spec:
       {{- if .Values.securityContext.enabled }}
 
       {{- end }}
-      serviceAccountName: {{ template "mysql.serviceAccountName" . }}
       initContainers:
       - name: "remove-lost-found"
         image: "{{ .Values.busybox.image}}:{{ .Values.busybox.tag }}"

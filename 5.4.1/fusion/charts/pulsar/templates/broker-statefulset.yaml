@@ -37,7 +37,6 @@ spec:
       imagePullSecrets:
         - name: "artifactory"
         - name: "artifactory-stable"
-      serviceAccountName: "{{ .Values.broker.serviceAccountName | default ( printf "%s-%s-acct" (include "pulsar.fullname" .) ( .Values.broker.component )) }}"
     {{- if .Values.broker.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.broker.nodeSelector | indent 8 }}

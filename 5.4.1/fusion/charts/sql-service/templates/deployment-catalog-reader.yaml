@@ -40,7 +40,6 @@ spec:
 {{ $params := dict "tlsServiceName" "sql-service" "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
 {{ include "fusion.tls.volumes" $params | indent 8 }}
 {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.sql-service.fullname" . ) }}"
       initContainers:
 {{- if $tlsEnabled -}}
 {{ $params := dict "tlsServiceName" "sql-service" "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils "securityContext" $.Values.securityContext }}

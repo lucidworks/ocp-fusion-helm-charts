@@ -40,7 +40,6 @@ spec:
       affinity:
         {{ tpl (toYaml .Values.affinity) . | nindent 8 }}
     {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default (include "fusion.query-pipeline.fullname" .) }}"
       imagePullSecrets:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       {{ if .Values.priorityClassName }}

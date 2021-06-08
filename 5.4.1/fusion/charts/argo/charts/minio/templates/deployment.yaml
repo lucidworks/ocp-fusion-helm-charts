@@ -58,7 +58,7 @@ spec:
   {{- if .Values.priorityClassName }}
       priorityClassName: "{{ .Values.priorityClassName }}"
   {{- end }}
-      serviceAccountName: {{ include "minio.serviceAccountName" . | quote }}
+
 {{- if and .Values.securityContext.enabled .Values.persistence.enabled }}
 {{- end }}
       containers:

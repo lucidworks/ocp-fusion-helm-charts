@@ -34,9 +34,6 @@ spec:
 {{- end }}
     spec:
       imagePullSecrets: {{ toYaml .Values.images.imagePullSecrets | nindent 8 }}
-{{- if $tlsEnabled }}
-      serviceAccountName: "{{ .Values.bookkeeper.serviceAccountName | default ( printf "%s-%s" (include "pulsar.fullname" .) ( .Values.bookkeeper.component )) }}"
-{{- end }}
     {{- if .Values.bookkeeper.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.bookkeeper.nodeSelector | indent 8 }}

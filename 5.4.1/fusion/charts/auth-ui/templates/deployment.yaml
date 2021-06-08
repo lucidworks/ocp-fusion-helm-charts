@@ -56,7 +56,6 @@ spec:
       {{ if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{ end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.auth-ui.fullname" . ) }}"
 
       {{ if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}

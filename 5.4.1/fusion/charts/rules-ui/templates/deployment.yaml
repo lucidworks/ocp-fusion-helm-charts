@@ -37,7 +37,7 @@ spec:
 {{ $params := dict "tlsServiceName" ( include "fusion.rules-ui.serviceName" . ) "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
 {{ include "fusion.tls.volumes" $params | indent 8 }}
 {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.rules-ui.fullname" . ) }}"
+
     {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}

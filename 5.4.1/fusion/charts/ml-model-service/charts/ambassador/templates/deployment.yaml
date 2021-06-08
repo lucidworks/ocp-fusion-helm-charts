@@ -46,7 +46,6 @@ spec:
       {{- end }}
     spec:
       {{- with .Values.securityContext }}
-      serviceAccountName: {{ include "ambassador.serviceAccountName" . }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}

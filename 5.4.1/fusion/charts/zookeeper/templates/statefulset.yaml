@@ -51,9 +51,6 @@ spec:
       priorityClassName: "{{ .Values.priorityClassName }}"
 {{- end }}
 {{- if $tlsEnabled }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "zookeeper.fullname" . ) }}"
-{{- end }}
-{{- if $tlsEnabled }}
       initContainers:
 {{- $params := dict "tlsServiceName" ( include "zookeeper.headless" . ) "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils "securityContext" .Values.securityContext -}}
 {{- include "fusion.tls.init-container-v2" $params | nindent 8 }}

@@ -43,8 +43,6 @@ spec:
 {{ $params := dict "tlsServiceName" "ml-model-service" "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
 {{ include "fusion.tls.volumes" $params | indent 8 }}
 {{- end }}
-
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.ml-model-service.fullname" . ) }}"
       imagePullSecrets:
         {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
       {{ if .Values.priorityClassName }}
