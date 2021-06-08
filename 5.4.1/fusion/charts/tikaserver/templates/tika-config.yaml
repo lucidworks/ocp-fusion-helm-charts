@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tika-config
+  labels:
+    {{ include "fusion.tikaserver.labels" . | nindent 4 }}
+data:
+  tika-config.xml: |
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <properties>
+        <parsers>
+            <!-- This is the default parser - it will pick appropriate parser among the onces available in Tika (http://tika.apache.org/1.25/api/org/apache/tika/parser/Parser.html) DO NOT DISABLE THIS UNLESS YOU WANT ONLY SPECIFIC PARSERS TO WORK -->
+            <parser class="org.apache.tika.parser.DefaultParser"/>
+
+            {{- if .Values.extractInlineImages -}}
+            <!-- Extract and OCR Inline Images in PDF. Load TesseractOCRParser first (could use DefaultParser if you want others too). You need to switch to an image containing tesserect first (with *-full tag) -->
+            <parser class="org.apache.tika.parser.pdf.PDFParser">
+                <params>
+                    <param name="extractInlineImages" type="bool">true</param>
+                </params>
+            </parser>
+            {{- end }}
+        </parsers>
+    </properties>
