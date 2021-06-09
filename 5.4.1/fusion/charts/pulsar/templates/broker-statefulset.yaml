@@ -191,6 +191,8 @@ spec:
             value: "{{ .Values.bookkeeper.tls.keystorePassword }}"
 {{- end }}
         volumeMounts:
+        - name: "{{ template "pulsar.fullname" . }}-{{ .Values.broker.component }}-logs"
+          mountPath: /pulsar/logs
         - name: "writable-volume"
           mountPath: "/tmp"
 {{- if $tlsEnabled }}
