@@ -333,10 +333,10 @@
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   env:
     - name: ZOOKEEPER_CONNECTION_STRING
       value: {{ include "fusion.zkConnectionString" . }}
@@ -366,10 +366,10 @@
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - logstash
   env:
@@ -395,10 +395,10 @@
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - admin
   env:
@@ -449,10 +449,10 @@ Define the admin url for pulsar broker
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - pulsar
   env:

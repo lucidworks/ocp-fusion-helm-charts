@@ -119,11 +119,9 @@ spec:
             requests:
               cpu: 200m
               memory: 50Mi
-              memory: 32Mi
             limits:
               cpu: 200m
               memory: 50Mi
-              memory: 32Mi
           env:
             - name: ZOOKEEPER_CONNECTION_STRING
               value: {{ include "fusion.zkConnectionString" $ }}
