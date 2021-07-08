@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.6.1
+description: Lucidworks Fusion Connectors Service (classic)
+keywords:
+- fusion
+- connectors
+- classic
+- v1
+maintainers:
+- email: matt.mitchell@lucidworks.com
+  name: Matt Mitchell
+name: classic-rest-service
+version: 2.1.12

@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "superset.fullname" . }}-proxy
+  labels:
+    {{ include "superset.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.proxy.replicaCount }}
+  strategy:
+    type: "RollingUpdate"
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+      app.kubernetes.io/component: "superset-proxy"
+      app.kubernetes.io/part-of: "fusion"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+        app.kubernetes.io/component: "superset-proxy"
+        app.kubernetes.io/part-of: "fusion"
+    spec:
+      imagePullSecrets:
+{{ toYaml .Values.image.imagePullSecrets | indent 8 }}
+      securityContext:
+        fsGroup: 101
+      containers:
+        - name: "{{ .Chart.Name }}-proxy"
+          image: "{{ if .Values.proxy.image.repository }}{{ .Values.proxy.image.repository }}/{{ end }}{{ .Values.proxy.image.name }}:{{ .Values.proxy.image.tag }}"
+          imagePullPolicy: {{ .Values.proxy.image.imagePullPolicy }}
+          securityContext:
+            #            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            privileged: false
+          ports:
+            - name: http
+              containerPort: {{ .Values.proxy.service.port }}
+              protocol: TCP
+          volumeMounts:
+            - name: nginx-config
+              mountPath: "/etc/nginx/nginx.conf"
+              subPath: "nginx.conf"
+              readOnly: true
+            {{- if .Values.proxy.auth.enabled }}
+            - name: nginx-basic-auth-creds
+              mountPath: "/etc/nginx/basic-auth-creds"
+              readOnly: true
+            {{- end }}
+          resources:
+{{ toYaml .Values.proxy.resources | indent 12 }}
+    {{- if .Values.proxy.nodeSelector }}
+      nodeSelector:
+        {{ toYaml .Values.proxy.nodeSelector | nindent 8 }}
+    {{- end }}
+    {{- if .Values.proxy.affinity }}
+      affinity:
+        {{ tpl (toYaml .Values.proxy.affinity) . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.proxy.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: {{ template "superset.fullname" . }}-extra-config
+        {{- if .Values.proxy.auth.enabled }}
+        - name: nginx-basic-auth-creds
+          secret:
+            secretName: {{ .Values.proxy.auth.secretName }}
+            items:
+              - key: auth_file
+                path: auth_file
+        {{- end }}
