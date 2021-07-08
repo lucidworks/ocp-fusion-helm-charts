@@ -31,9 +31,6 @@ spec:
         {{- toYaml .Values.extraLabels | nindent 8 }}
       {{- end }}
     spec:
-      {{- if .Values.rbac.create }}
-      serviceAccountName: {{ include "ambassador.serviceAccountName" . }}
-      {{- end }}
       containers:
         - name: kubectl
           image: "k8s.gcr.io/hyperkube:v1.12.1"

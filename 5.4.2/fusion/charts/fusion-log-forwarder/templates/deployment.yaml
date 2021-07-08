@@ -31,10 +31,7 @@ spec:
 {{- if $tlsEnabled }}
       serviceAccount: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.fusion-log-forwarder.fullname" . ) }}"
 {{- end }}
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
+
     {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
@@ -71,11 +68,7 @@ spec:
       - name: fusion-log-forwarder
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
+
         env:
           - name: "PULSAR_TOPIC"
             value: {{ .Values.pulsarTopic | quote }}

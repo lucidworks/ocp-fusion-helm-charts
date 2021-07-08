@@ -139,14 +139,6 @@
 - name: "setup-keystore-and-properties"
   image: "{{ .keytoolUtils.image.repository }}/{{ .keytoolUtils.image.name }}:{{ .keytoolUtils.image.tag }}"
   imagePullPolicy: "{{ .keytoolUtils.image.imagePullPolicy }}"
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-{{- if .securityContext.runAsUser }}
-    runAsUser: {{ .securityContext.runAsUser }}
-{{- end }}
   command:
     - "/bin/bash"
     - "-c"
@@ -334,21 +326,16 @@
 - name: check-zk
   image: {{ .Values.image.repository }}/check-fusion-dependency:v1.2.0
   imagePullPolicy: IfNotPresent
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
+
   args:
     - zookeeper
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   env:
     - name: ZOOKEEPER_CONNECTION_STRING
       value: {{ include "fusion.zkConnectionString" . }}
@@ -374,19 +361,13 @@
 - name: check-logstash
   image: {{ .Values.image.repository }}/check-fusion-dependency:v1.2.0
   imagePullPolicy: IfNotPresent
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - logstash
   env:
@@ -408,19 +389,14 @@
 - name: check-admin
   image: {{ .Values.image.repository }}/check-fusion-dependency:v1.2.0
   imagePullPolicy: IfNotPresent
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
+
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - admin
   env:
@@ -467,19 +443,13 @@ Define the admin url for pulsar broker
 - name: check-pulsar
   image: {{ .Values.image.repository }}/check-fusion-dependency:v1.2.0
   imagePullPolicy: IfNotPresent
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - pulsar
   env:

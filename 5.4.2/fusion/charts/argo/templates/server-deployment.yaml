@@ -25,7 +25,6 @@ spec:
       annotations:
 {{ toYaml .Values.server.podAnnotations | indent 8}}{{- end }}
     spec:
-      serviceAccountName: {{ .Values.server.serviceAccount | quote }}
       imagePullSecrets: {{ toYaml .Values.images.imagePullSecrets | nindent 8 }}
       containers:
         - name: argo-server

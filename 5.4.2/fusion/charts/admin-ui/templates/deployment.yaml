@@ -26,10 +26,7 @@ spec:
         app.kubernetes.io/component: "admin-ui"
         app.kubernetes.io/part-of: "fusion"
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
+
       volumes:
         - name: tmp
           emptyDir: {}
@@ -40,7 +37,6 @@ spec:
 {{ $params := dict "tlsServiceName" ( include "fusion.admin-ui.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils }}
 {{ include "fusion.tls.volumes" $params | indent 8 }}
 {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.admin-ui.fullname" . ) }}"
     {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
@@ -71,11 +67,6 @@ spec:
       - name: admin-ui
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
         lifecycle:
           preStop:
             exec:

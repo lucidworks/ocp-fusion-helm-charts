@@ -80,7 +80,7 @@ prometheusExporter:
   resources: {}
   tag: v0.8.1
 rbac:
-  create: true
+  create: false
   podSecurityPolicies: {}
 readinessProbe:
   failureThreshold: 3

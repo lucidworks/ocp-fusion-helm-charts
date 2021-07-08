@@ -177,11 +177,7 @@ minio:
     replicas: 4
     serviceEndpoint: ""
   secretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-  securityContext:
-    enabled: false
-    fsGroup: 1000
-    runAsGroup: 1000
-    runAsUser: 1000
+
   service:
     annotations: {}
     clusterIP: null
