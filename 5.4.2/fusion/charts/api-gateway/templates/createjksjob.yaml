@@ -72,7 +72,6 @@ spec:
       restartPolicy: OnFailure
       imagePullSecrets:
         {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName  | default ( printf "%s-jks-create" (include "fusion.api-gateway.fullname" .)) }}"
       {{- if .Values.tolerations }}
       tolerations: {{ .Values.tolerations | toYaml | nindent 8 }}
       {{- end }}
