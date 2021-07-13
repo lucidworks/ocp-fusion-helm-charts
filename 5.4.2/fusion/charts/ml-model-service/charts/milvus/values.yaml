@@ -141,8 +141,8 @@ mysql:
   initContainer:
     resources:
       requests:
-        cpu: 10m
-        memory: 10Mi
+        cpu: 100m
+        memory: 50Mi
   initializationFiles:
     grant.sql: |-
       GRANT ALL PRIVILEGES ON milvus.* TO 'root'@'%';

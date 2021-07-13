@@ -23,8 +23,8 @@ imageTag: 5.7.30
 initContainer:
   resources:
     requests:
-      cpu: 10m
-      memory: 10Mi
+      cpu: 100m
+      memory: 50Mi
 initializationFiles: {}
 livenessProbe:
   failureThreshold: 3

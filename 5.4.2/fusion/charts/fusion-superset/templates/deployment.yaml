@@ -59,9 +59,6 @@ spec:
           image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.imagePullPolicy }}
           securityContext:
-            {{- if .Values.osUser.nonRootCheckEnabled }}
-            runAsUser: {{ .Values.osUser.uid }}
-            {{- end }}
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
             privileged: false

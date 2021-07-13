@@ -43,7 +43,6 @@ spec:
             app.kubernetes.io/name: ml-argo-cleanup
         spec:
 
-          serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.job-launcher.fullname" . ) }}"
         {{- if .Values.argoCleanup.nodeSelector }}
           nodeSelector:
             {{ toYaml .Values.argoCleanup.nodeSelector | nindent 12 }}

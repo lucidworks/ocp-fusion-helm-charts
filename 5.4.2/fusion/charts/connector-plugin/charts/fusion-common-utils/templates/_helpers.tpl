@@ -144,9 +144,6 @@
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-{{- if .securityContext.runAsUser }}
-    runAsUser: {{ .securityContext.runAsUser }}
-{{- end }}
   command:
     - "/bin/bash"
     - "-c"
@@ -339,16 +336,15 @@
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   args:
     - zookeeper
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   env:
     - name: ZOOKEEPER_CONNECTION_STRING
       value: {{ include "fusion.zkConnectionString" . }}
@@ -379,14 +375,13 @@
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - logstash
   env:
@@ -413,14 +408,13 @@
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - admin
   env:
@@ -455,14 +449,13 @@
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - indexing
   env:
@@ -513,14 +506,13 @@ Define the admin url for pulsar broker
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - pulsar
   env:
