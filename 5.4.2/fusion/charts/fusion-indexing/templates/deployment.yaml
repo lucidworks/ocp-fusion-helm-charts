@@ -133,6 +133,8 @@ spec:
           - name: secrets
             mountPath: /etc/secrets
             readOnly: true
+          - name: plugin-temp
+            mountPath: /plugins/temp
 {{ if $tlsEnabled }}
           - name: "keystore-volume"
             mountPath: "/etc/ssl/keystores"
@@ -141,6 +143,8 @@ spec:
           {{ toYaml .Values.resources | nindent 10 }}
       volumes:
         - name: tmp
+          emptyDir: {}
+        - name: plugin-temp
           emptyDir: {}
         - name: api-logs
           emptyDir: {}
