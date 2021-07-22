@@ -133,8 +133,8 @@ spec:
           - name: secrets
             mountPath: /etc/secrets
             readOnly: true
-          - name: plugin-temp
-            mountPath: /plugins/temp
+          - name: plugins-dir
+            mountPath: /plugins
 {{ if $tlsEnabled }}
           - name: "keystore-volume"
             mountPath: "/etc/ssl/keystores"
@@ -144,7 +144,7 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {}
-        - name: plugin-temp
+        - name: plugins-dir
           emptyDir: {}
         - name: api-logs
           emptyDir: {}
