@@ -116,7 +116,7 @@ api-gateway:
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -Dreactor.netty.ioWorkerCount=8 -Dreactor.netty.ioSelectCount=2
   jksSetup:
     resources: {}
-  jwtExpirationSecs: 1800
+  jwtExpirationSecs: 86400
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent

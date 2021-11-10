@@ -78,7 +78,7 @@ spec:
         {{- include "fusion.initContainers.checkPulsar-v2" . | nindent 8 }}
       containers:
         - name: {{ .Values.name }}
-          image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          image: "docker.apphn.ocp.na.xom.com:443/lw-support-team/fusion-api:5.5.0-dev.5-64ae022-1631657387061"
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
 
           env:

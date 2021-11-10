@@ -50,6 +50,12 @@ spec:
 {{ tpl (toYaml ($nodePool.affinity | default $.Values.affinity)) $  | indent 8 }}
       terminationGracePeriodSeconds: {{ $.Values.terminationGracePeriodSeconds }}
       volumes:
+        - name: backupa
+          persistentVolumeClaim:
+            claimName: backupa
+        - name: backupb
+          persistentVolumeClaim:
+            claimName: backupb
         - name: shared
           emptyDir: {}
 {{- if $tlsEnabled }}
@@ -59,6 +65,15 @@ spec:
 {{- if $.Values.additionalVolumes }}
         {{ toYaml $.Values.additionalVolumes | nindent 8 }}
 {{- end }}
+        - emptyDir: {}
+          name: solr-logs-dir
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: log4j2.xml
+                path: log4j2.xml
+            name: solr-logging
+          name: solr-logging
 {{- if $.Values.config.solrxml}}
         - name: solr-xml
           configMap:
@@ -175,7 +190,7 @@ spec:
               value: "{{ ($nodePool.solrGcTune| default $.Values.solrGcTune) }}"
 {{- end }}
             - name: "SOLR_OPTS"
-              value: "{{ if not (or ($nodePool.disableNodeType) (eq $nodePool.name "")) }}-D{{ $.Values.nodePoolIdentifier}}={{ $nodePool.name }} {{ end }}{{ $nodePool.solrOpts | default $.Values.solrOpts }} {{- if $tlsEnabled }} -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ $.Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ $.Values.tls.keystorePassword }} {{- end }}"
+              value: "{{ if not (or ($nodePool.disableNodeType) (eq $nodePool.name "")) }}-D{{ $.Values.nodePoolIdentifier}}={{ $nodePool.name }} {{ end }}{{ $nodePool.solrOpts | default $.Values.solrOpts }} {{- if $tlsEnabled }} -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ $.Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ $.Values.tls.keystorePassword }} {{- end }} -Dsolr.allowPaths=/backupa,/backupb -Dsolr.log.dir=/solr-logs -Drollout=1 -Drefine.facets=false"
             - name: "OOM"
               value: "{{ $.Values.memoryBehavior }}"
             - name: "SOLR_JAVA_MEM"
@@ -215,6 +230,8 @@ spec:
               value: "{{ $.Values.tls.needClientAuth }}"
             - name: "SOLR_SSL_CHECK_PEER_NAME"
               value: "{{ $.Values.tls.checkPeerName }}"
+            - name: "LOG4J_PROPS"
+              value: "/opt/solr/server/solr/log4j2.xml"
 {{ end }}
           livenessProbe:
             initialDelaySeconds: {{ $.Values.livenessProbe.initialDelaySeconds }}
@@ -238,12 +255,20 @@ spec:
           volumeMounts:
             - name: {{ template "solr.pvc-name" $ }}{{- if not (eq $nodePool.name "") -}}-{{- end -}}{{ $nodePool.name }}
               mountPath: /var/solr
+            - name: backupa
+              mountPath: /backupa
+            - name: backupb
+              mountPath: /backupb
+            - name: solr-logging
+              mountPath: /opt/solr/server/solr/log4j2.xml
+              subPath: log4j2.xml
+            - name: solr-logs-dir
+              mountPath: /solr-logs
             - name: shared
               mountPath: /docker-entrypoint-initdb.d
 {{- if $.Values.additionalVolumeMounts }}
         {{ toYaml $.Values.additionalVolumeMounts | nindent 12 }}
 {{- end }}
-
 {{- if $.Values.config.solrxml }}
             - name: solr-xml
               mountPath: /opt/solr/server/solr/solr.xml

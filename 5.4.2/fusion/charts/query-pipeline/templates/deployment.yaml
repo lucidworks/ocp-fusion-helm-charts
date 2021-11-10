@@ -133,6 +133,8 @@ spec:
           - name: secrets
             mountPath: "/etc/secrets"
             readOnly: true
+          - name: plugins-dir
+            mountPath: /plugins
           - mountPath: /etc/warming_queries.json
             name: warming-queries
             subPath: warming_queries.json
@@ -149,6 +151,8 @@ spec:
             name: "{{ template "fusion.query-pipeline.fullname" . }}-warming-queries"
           name: warming-queries
         - name: tmp
+          emptyDir: {}
+        - name: plugins-dir
           emptyDir: {}
         - name: secrets
           secret:

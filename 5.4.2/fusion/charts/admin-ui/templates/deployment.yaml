@@ -65,7 +65,7 @@ spec:
 {{- end }}
       containers:
       - name: admin-ui
-        image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        image: "docker.apphn.ocp.na.xom.com:443/lw-support-team/admin-ui:2d5a3d640ad273b60006370829a0109ff1c7797e-1628115773427"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
         lifecycle:
           preStop:
