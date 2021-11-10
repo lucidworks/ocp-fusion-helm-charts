@@ -20,7 +20,7 @@ spec:
         {{- end }}
           containers:
             - name: kubectl-runner
-              image: docker.apphn.ocp.na.xom.com:443/bitnami/kubectl
+              image: bitnami/kubectl
               command: ["sh", "-c", "kubectl delete pods --namespace {{ .Values.sparkNamespace | default .Release.Namespace }} --field-selector=status.phase=Succeeded -l spark-role=driver"]
               resources: {{ toYaml .Values.sparkCleanup.resources | nindent 16 }}
           restartPolicy: Never
@@ -50,7 +50,7 @@ spec:
         {{- end }}
           containers:
             - name: kubectl-runner
-              image: docker.apphn.ocp.na.xom.com:443/bitnami/kubectl
+              image: bitnami/kubectl
               command: ["sh", "-c", "kubectl delete pods --namespace {{ default .Release.Namespace }} --field-selector=status.phase=Succeeded -l workflows.argoproj.io/completed=true"]
               resources: {{ toYaml .Values.argoCleanup.resources | nindent 16 }}
           restartPolicy: Never
