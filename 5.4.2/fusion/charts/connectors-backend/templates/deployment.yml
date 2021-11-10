@@ -63,7 +63,7 @@ spec:
         {{- include "fusion.initContainers.checkIndexing" . | nindent 8 }}
       containers:
         - name: connectors-backend
-          image: "docker.apphn.ocp.na.xom.com:443/lw-support-team/connectors-backend:a155d8bd-1631240068037"
+          image: "gcr.io/lw-support-team/connectors-backend:a3817b4e-1632237613444"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
 
           volumeMounts:
