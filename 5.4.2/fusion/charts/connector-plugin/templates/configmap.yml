@@ -235,6 +235,8 @@ data:
                 - "--pulsar.service-url={{ include "fusion.connector-plugin.pulsarServiceUrl" . }}"
                 - "--pulsar.tenant-name={{ include "fusion.connector-plugin.kubeNamespace" . }}"
               env:
+                - name: "CONNECTORS_PERSISTENT_STORE"
+                  value: "/connector-data"
                 - name: "LOGDIR"
                   value: "/fusion-logs"
                 - name: "COMPONENT"
