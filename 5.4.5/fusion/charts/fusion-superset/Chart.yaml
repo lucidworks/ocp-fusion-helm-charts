@@ -1,0 +1,9 @@
+apiVersion: v2
+appVersion: "1.0"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.5.1
+description: A repackaging of Apache Superset for Lucidworks Fusion 5.x
+name: fusion-superset
+version: 1.0.9
