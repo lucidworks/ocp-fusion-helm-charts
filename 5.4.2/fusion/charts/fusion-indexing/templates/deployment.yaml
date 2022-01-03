@@ -65,7 +65,7 @@ spec:
 {{- include "fusion.initContainers.checkAdmin-v2" . | nindent 8 }}
       containers:
       - name: fusion-indexing
-        image: "gcr.io/lw-support-team/fusion-indexing:5.5.0-dev.3-75179c2-1626719068205"
+        image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
 
         args:
