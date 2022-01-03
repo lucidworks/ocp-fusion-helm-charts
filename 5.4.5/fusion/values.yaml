@@ -994,6 +994,10 @@ connectors-backend:
   zkPort: 2181
   zkReplicaCount: 3
   zkTLSPort: 2281
+  storage:
+    connectorDataPvcEnabled: true
+    requests: 10Gi
+    storageClassName: ""
 devops-ui:
   affinity: {}
   autoscaling:

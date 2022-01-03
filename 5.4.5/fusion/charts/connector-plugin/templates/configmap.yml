@@ -201,10 +201,10 @@ data:
               imagePullPolicy: {{ .Values.image.pullPolicy }}
 
               volumeMounts:
+                - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+                  mountPath: "/connector-data"
                 - name: logs-dir
                   mountPath: /fusion-logs
-                - mountPath: /connector-data
-                  name: connector-data
                 - name: config-volume
                   mountPath: /config-map
                 - name: application-config-k8s
@@ -291,9 +291,6 @@ data:
               resources:
                 {{ toYaml .Values.resources | nindent 16 }}
           volumes:
-            - name: connector-data
-              persistentVolumeClaim:
-                claimName: connector-data
             - name: logs-dir
               emptyDir: {}
             - name: config-volume
@@ -320,6 +317,9 @@ data:
                     path: hazelcast.yml
             - name: heap-dumps
               emptyDir: {}
+            - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+              persistentVolumeClaim:
+                claimName: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
     {{- if ( and $importTrustedCertsEnabled ( not $tlsEnabled )) }}
             - name: truststore
               emptyDir: {}
