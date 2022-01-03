@@ -31,10 +31,7 @@ spec:
       annotations:
         {{ toYaml .Values.pod.annotations | nindent 8 }}
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
+
     {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
@@ -43,7 +40,6 @@ spec:
       affinity:
         {{ tpl (toYaml .Values.affinity) . | nindent 8 }}
     {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default (include "fusion.query-pipeline.fullname" .) }}"
       imagePullSecrets:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       {{ if .Values.priorityClassName }}
@@ -69,11 +65,7 @@ spec:
       - name: query-pipeline
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
+
         args:
           - "--spring.profiles.active={{ include "fusion.query-pipeline.springProfs" . }}{{- if $tlsEnabled }},tls{{- end }}{{- if $jsonOutput }},logjson{{- end }}{{- if $logstashHost }},logstash{{- end }}{{- if $logPulsar }},logpulsar{{- end }}"
           - "--spring.cloud.kubernetes.config.name={{ include "fusion.query-pipeline.fullname" . }}"
@@ -141,6 +133,8 @@ spec:
           - name: secrets
             mountPath: "/etc/secrets"
             readOnly: true
+          - name: plugins-dir
+            mountPath: /plugins
           - mountPath: /etc/warming_queries.json
             name: warming-queries
             subPath: warming_queries.json
@@ -157,6 +151,8 @@ spec:
             name: "{{ template "fusion.query-pipeline.fullname" . }}-warming-queries"
           name: warming-queries
         - name: tmp
+          emptyDir: {}
+        - name: plugins-dir
           emptyDir: {}
         - name: secrets
           secret:

@@ -26,10 +26,7 @@ spec:
             app.kubernetes.io/instance: "{{ .Release.Name }}"
             app.kubernetes.io/component: "solr-backup-runner"
         spec:
-          securityContext:
-            runAsNonRoot: true
-            fsGroup: {{ .Values.prune.fsGroup }}
-            runAsUser: {{ .Values.prune.runAsUser }}
+
           volumes:
             - name: solr-backups
               persistentVolumeClaim:

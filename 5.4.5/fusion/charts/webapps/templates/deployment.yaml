@@ -28,11 +28,6 @@ spec:
         app.kubernetes.io/component: "webapps"
         app.kubernetes.io/part-of: "fusion"
     spec:
-      serviceAccountName: {{ .Values.rbac.serviceAccountName | default (  include "fusion.webapps.fullname" . ) }}
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
       imagePullSecrets:
         {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
       {{- if .Values.priorityClassName }}
@@ -83,11 +78,7 @@ spec:
       - name: webapps
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
+
         args:
           - "--spring.profiles.active=kubernetes,jwt,fusion{{- if $tlsEnabled }},tls{{- end }}{{- if $jsonOutput }},logjson{{- end }}{{- if $logstashHost }},logstash{{- end }}{{- if $logPulsar }},logpulsar{{- end }}"
           - "--spring.cloud.kubernetes.config.name={{ include "fusion.webapps.fullname" . }}"

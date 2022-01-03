@@ -29,10 +29,7 @@ spec:
       labels:
 {{ include "fusion.connectors-backend.labels" . | indent 8 }}
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
+
     {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
@@ -41,7 +38,6 @@ spec:
       affinity:
         {{ tpl (toYaml .Values.affinity) . | nindent 8 }}
     {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.connectors-backend.fullname" . ) }}"
       {{ if .Values.priorityClassName }}
       priorityClassName: "{{ .Values.priorityClassName }}"
       {{ end }}
@@ -69,15 +65,17 @@ spec:
         - name: connectors-backend
           image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          securityContext:
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            allowPrivilegeEscalation: false
-            privileged: false
+
           volumeMounts:
+            - mountPath: /connector-data
+              name: connector-data
             - name: application-config-k8s
               mountPath: "app/config"
               readOnly: true
+            - name: logs-dir
+              mountPath: /backend-logs
+            - name: config-volume
+              mountPath: /config-map
             - name: plugins-dir
               mountPath: "/app/plugins"
             - name: tmp
@@ -96,6 +94,10 @@ spec:
             - "--pulsar.service-url={{ include "fusion.connectors-backend.pulsarServiceUrl" . }}"
             - "--pulsar.tenant-name={{ include "fusion.connectors-backend.kubeNamespace" . }}"
           env:
+            - name: "CONNECTORS_PERSISTENT_STORE"
+              value: "/connector-data"
+            - name: "LOGDIR"
+              value: "/backend-logs"
             - name: "COMPONENT"
               value: "connectors-backend"
             - name: SPRING_PROFILES_ACTIVE
@@ -103,7 +105,7 @@ spec:
             - name: JAVA_TOOL_OPTIONS
               value: "-Dspring.cloud.kubernetes.secrets.paths=/etc/secrets {{ .Values.javaToolOptions }}
 {{- if $tlsEnabled }} -Dlogging.config=classpath:logback-kube-tls.xml {{- else }} -Dlogging.config=classpath:logback-kube.xml {{- end }}
-{{- if $tlsEnabled }} -Djavax.net.ssl.trustStore=/etc/ssl/keystores/truststore.jks -Djavax.net.ssl.trustStorePassword={{ .Values.tls.keystorePassword }} -Djavax.net.ssl.trustStoreType=PKCS12 -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ .Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ .Values.tls.keystorePassword }}{{- end -}}
+{{- if $tlsEnabled }} -Djavax.net.ssl.trustStore=/etc/ssl/keystores/truststore.jks -Djavax.net.ssl.trustStorePassword={{ .Values.tls.keystorePassword }} -Djavax.net.ssl.trustStoreType=PKCS12 -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ .Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ .Values.tls.keystorePassword }}{{- end -}} -Dlogging.config=/config-map/logback.xml
 "
             {{ if $logstashHost }}
             - name: LOGSTASH_HOST
@@ -159,8 +161,17 @@ spec:
           resources:
             {{ toYaml .Values.resources | nindent 12 }}
       volumes:
+        - name: connector-data
+          persistentVolumeClaim:
+            claimName: connector-data
         - name: tmp
           emptyDir: {}
+        - name: logs-dir
+          emptyDir: {}
+        - name: config-volume
+          configMap:
+            name: dataes-connectors-backend
+            defaultMode: 420
         - name: secrets
           secret:
             secretName: service-account-key

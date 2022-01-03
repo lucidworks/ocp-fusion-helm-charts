@@ -1,0 +1,16 @@
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ template "fusion.connector-plugin-service.fullname" . }}-pvc"
+spec:
+  accessModes:
+    ReadWriteMany
+  volumeMode: "Filesystem"
+  resources:
+    requests:
+      storage: {{ .Values.storage.requests | quote }}
+{{ if .Values.storage.storageClassName }}
+  storageClassName: "{{ .Values.storage.storageClassName }}"
+{{ end }}

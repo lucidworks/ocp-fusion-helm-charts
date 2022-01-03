@@ -40,7 +40,6 @@ spec:
 {{ $params := dict "tlsServiceName" "sql-service" "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
 {{ include "fusion.tls.volumes" $params | indent 8 }}
 {{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.sql-service.fullname" . ) }}"
       initContainers:
 {{- if $tlsEnabled -}}
 {{ $params := dict "tlsServiceName" "sql-service" "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils "securityContext" $.Values.securityContext }}
@@ -48,10 +47,7 @@ spec:
 {{- end }}
 {{- include "fusion.initContainers.checkZk-v2" . | nindent 8 }}
 {{- include "fusion.initContainers.checkPulsar-v2" . | nindent 8 }}
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
+
     {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
@@ -78,11 +74,7 @@ spec:
       - name: sql-service
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
+
         env:
           - name: "SQL_JVM_OPTIONS"
             value: "{{ .Values.jvmOptions }}

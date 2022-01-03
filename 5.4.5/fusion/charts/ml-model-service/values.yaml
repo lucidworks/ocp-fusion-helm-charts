@@ -95,8 +95,6 @@ ambassador:
   resources: {}
   scope:
     singleNamespace: true
-  securityContext:
-    runAsUser: 8888
   service:
     annotations: null
     ports:
@@ -164,7 +162,7 @@ keytoolUtils:
     - name: artifactory
     name: keytool-utils
     repository: lucidworks
-    tag: v2.0.0
+    tag: v2.1.0
 livenessProbe:
   failureThreshold: 10
   initialDelaySeconds: 30
@@ -318,8 +316,8 @@ milvus:
     initContainer:
       resources:
         requests:
-          cpu: 10m
-          memory: 10Mi
+          cpu: 100m
+          memory: 50Mi
     initializationFiles:
       grant.sql: |-
         GRANT ALL PRIVILEGES ON milvus.* TO 'root'@'%';
@@ -372,10 +370,6 @@ milvus:
       requests:
         cpu: 100m
         memory: 256Mi
-    securityContext:
-      enabled: false
-      fsGroup: 999
-      runAsUser: 999
     service:
       annotations: {}
       port: 3306

@@ -33,17 +33,7 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
     spec:
-      securityContext:
-{{- if .Values.bookkeeper.securityContext.runAsUser }}
-        runAsUser: {{ .Values.bookkeeper.securityContext.runAsUser }}
-{{- end }}
-{{- if .Values.bookkeeper.securityContext.fsGroup }}
-        fsGroup: {{ .Values.bookkeeper.securityContext.fsGroup }}
-{{- end }}
       imagePullSecrets: {{ toYaml .Values.images.imagePullSecrets | nindent 8 }}
-{{- if $tlsEnabled }}
-      serviceAccountName: "{{ .Values.bookkeeper.serviceAccountName | default ( printf "%s-%s" (include "pulsar.fullname" .) ( .Values.bookkeeper.component )) }}"
-{{- end }}
     {{- if .Values.bookkeeper.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.bookkeeper.nodeSelector | indent 8 }}
@@ -64,20 +54,16 @@ spec:
       - name: check-zk
         image: {{ $.Values.initContainer.image.repository }}/check-fusion-dependency:v1.2.0
         imagePullPolicy: IfNotPresent
-        securityContext:
-          readOnlyRootFilesystem: true
-          allowPrivilegeEscalation: false
-          privileged: false
-          runAsUser: {{ .Values.bookkeeper.securityContext.runAsUser }}
+
         args:
           - zookeeper
         resources:
           requests:
             cpu: 200m
-            memory: 32Mi
+            memory: 50Mi
           limits:
             cpu: 200m
-            memory: 32Mi
+            memory: 50Mi
         env:
           - name: ZOOKEEPER_CONNECTION_STRING
             value: {{ include "fusion.zkConnectionString" $ }}
@@ -224,6 +210,8 @@ spec:
           mountPath: /pulsar/data/bookkeeper/journal
         - name: "{{ template "pulsar.fullname" . }}-{{ .Values.bookkeeper.component }}-{{ .Values.bookkeeper.volumes.ledgers.name }}"
           mountPath: /pulsar/data/bookkeeper/ledgers
+        - name: "{{ template "pulsar.fullname" . }}-{{ .Values.bookkeeper.component }}-logs"
+          mountPath: /pulsar/logs
 {{ if $tlsEnabled }}
         - name: "keystore-volume"
           mountPath: "/etc/ssl/keystores"
@@ -240,6 +228,8 @@ spec:
       - name: log4j-config
         configMap:
           name: "{{ template "pulsar.fullname" . }}-log4j-config"
+      - name: "{{ template "pulsar.fullname" . }}-{{ .Values.bookkeeper.component }}-logs"
+        emptyDir: {}
       {{- if not (and (and .Values.persistence .Values.volumes.persistence) .Values.bookkeeper.volumes.persistence) }}
       - name: "{{ template "pulsar.fullname" . }}-{{ .Values.bookkeeper.component }}-{{ .Values.bookkeeper.volumes.journal.name }}"
         emptyDir: {}

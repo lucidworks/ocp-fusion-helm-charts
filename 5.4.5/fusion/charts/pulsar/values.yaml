@@ -89,9 +89,7 @@ bookkeeper:
     requests:
       cpu: 500m
       memory: 2Gi
-  securityContext:
-    fsGroup: 0
-    runAsUser: 0
+
   service:
     spec:
       publishNotReadyAddresses: true
@@ -130,7 +128,7 @@ broker:
   component: broker
   configData:
     PULSAR_GC: |
-      -XX:+UseG1GC -XX:MaxGCPauseMillis=10 -Dio.netty.leakDetectionLevel=disabled -Dio.netty.recycler.linkCapacity=1024 -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+DoEscapeAnalysis -XX:ParallelGCThreads=4 -XX:ConcGCThreads=4 -XX:G1NewSizePercent=50 -XX:+DisableExplicitGC -XX:-ResizePLAB -XX:+PerfDisableSharedMem
+      -XX:+UseG1GC -XX:MaxGCPauseMillis=10 -Dio.netty.leakDetectionLevel=disabled -Dio.netty.recycler.linkCapacity=1024 -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+DoEscapeAnalysis -XX:ParallelGCThreads=4 -XX:ConcGCThreads=4 -XX:G1NewSizePercent=50 -XX:+DisableExplicitGC -XX:-ResizePLAB -XX:+PerfDisableSharedMem -XX:+ExitOnOutOfMemoryError
     PULSAR_MEM: |
       -XX:+ExitOnOutOfMemoryError -XX:+UseContainerSupport -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=60.0
     backlogQuotaDefaultLimitGB: "10"
@@ -189,9 +187,7 @@ broker:
     requests:
       cpu: 1000m
       memory: 3Gi
-  securityContext:
-    fsGroup: 0
-    runAsUser: 0
+
   service:
     annotations: {}
   tls:
@@ -304,7 +300,7 @@ keytoolUtils:
     path: /
     port: 80
     repository: lucidworks
-    tag: v2.0.0
+    tag: v2.1.0
     tls:
       enabled: false
       secretName: ""
@@ -360,10 +356,6 @@ proxy:
     requests:
       cpu: 0.2
       memory: 128Mi
-  securityContext:
-    fsGroup: 8764
-    runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotations: {}
     type: LoadBalancer

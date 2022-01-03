@@ -27,10 +27,6 @@ spec:
         app.kubernetes.io/component: "auth-ui"
         app.kubernetes.io/part-of: "fusion"
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
       volumes:
         - name: tmp
           emptyDir: {}
@@ -59,7 +55,6 @@ spec:
       {{ if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{ end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.auth-ui.fullname" . ) }}"
 
       {{ if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -73,12 +68,6 @@ spec:
       - name: auth-ui
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
-          runAsUser: {{ .Values.securityContext.runAsUser }}
         # args:
         #   -
         ports:
@@ -102,3 +91,4 @@ spec:
         #     port: jetty
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+

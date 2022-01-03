@@ -37,7 +37,6 @@ data:
       kubernetes:
         authenticate:
           driver:
-            serviceAccountName: "{{ .Values.rbac.sparkServiceAccountName | default (printf "%s-spark" ( include "fusion.job-launcher.fullname" . )) }}"
         driver:
           container:
             image: {{ .Values.image.repository }}/fusion-spark:{{ .Values.image.tag }}

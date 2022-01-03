@@ -44,11 +44,8 @@ spec:
       priorityClassName: "{{ .Values.priorityClassName }}"
       {{- end }}
       {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
+
       {{- end }}
-      serviceAccountName: {{ template "mysql.serviceAccountName" . }}
       initContainers:
       - name: "remove-lost-found"
         image: "{{ .Values.busybox.image}}:{{ .Values.busybox.tag }}"
@@ -159,6 +156,8 @@ spec:
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
         volumeMounts:
+        - name: logdir
+          mountPath: /var/log/mysql
         - name: data
           mountPath: /var/lib/mysql
           {{- if .Values.persistence.subPath }}
@@ -225,6 +224,8 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 10 }}
       {{- end }}
       volumes:
+      - name: logdir
+        emptyDir: {}
       {{- if .Values.configurationFiles }}
       - name: configurations
         configMap:

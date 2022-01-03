@@ -30,10 +30,7 @@ spec:
       annotations:
         {{ toYaml .Values.pod.annotations | nindent 8 }}
     spec:
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
+
     {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
@@ -43,9 +40,8 @@ spec:
         {{ tpl (toYaml .Values.affinity) . | nindent 8 }}
     {{- end }}
       volumes:
-        - name: "jks"
-          secret:
-            secretName: "{{ include "fusion.api-gateway.fullname" . }}-jks"
+        - name: jks
+          emptyDir: {}
         - name: tmp
           emptyDir: {}
 {{- if $tlsEnabled }}
@@ -61,7 +57,7 @@ spec:
             items:
               - key: sa
                 path: security.internal.service-account-key
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.api-gateway.fullname" . ) }}"
+
       imagePullSecrets: {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
       {{ if .Values.priorityClassName }}
       priorityClassName: "{{ .Values.priorityClassName }}"
@@ -76,6 +72,23 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{ end }}
       initContainers:
+        - name: "create-jks"
+          image: "{{ template "fusion.api-gateway.keytoolUtilsRepository" . }}/{{ .Values.keytoolUtils.image.name }}:{{ .Values.keytoolUtils.image.tag }}"
+          imagePullPolicy: "{{ .Values.keytoolUtils.image.imagePullPolicy }}"
+          env:
+            - name: API_GATEWAY_JKS_BASE64
+              valueFrom:
+                secretKeyRef:
+                  name:  dataes-api-gateway-jks
+                  key: api-gateway.jks
+          volumeMounts:
+            - name: jks
+              mountPath: "/etc/ssl/keystores"
+          command:
+            - "/bin/bash"
+            - "-c"
+            - |
+              echo "${API_GATEWAY_JKS_BASE64}" | base64 --decode > /etc/ssl/keystores/api-gateway.jks
 {{- if $tlsEnabled -}}
 {{ $params := dict "tlsServiceName" ( include "fusion.api-gateway.serviceName" . ) "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils "securityContext" $.Values.securityContext }}
 {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
@@ -89,11 +102,7 @@ spec:
       - name: api-gateway
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
+
         args:
           - "--spring.profiles.active={{ include "fusion.api-gateway.springProfs" . }}{{- if $tlsEnabled }},tls{{- end }}{{- if $jsonOutput }},logjson{{- end }}{{- if $logstashHost }},logstash{{- end }}{{- if $logPulsar }},logpulsar{{- end }}"
           - "--spring.cloud.kubernetes.config.name={{ include "fusion.api-gateway.fullname" . }}"
@@ -160,7 +169,7 @@ spec:
             exec:
               command: ["sleep", "{{ .Values.preStopSleepTime }}"]
         volumeMounts:
-          - name: "jks"
+          - name: jks
             mountPath: "/etc/ssl/keystores"
 {{ if $tlsEnabled }}
           - name: "keystore-volume"

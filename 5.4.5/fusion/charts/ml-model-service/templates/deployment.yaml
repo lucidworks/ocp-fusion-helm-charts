@@ -43,11 +43,6 @@ spec:
 {{ $params := dict "tlsServiceName" "ml-model-service" "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
 {{ include "fusion.tls.volumes" $params | indent 8 }}
 {{- end }}
-{{- if .Values.securityContext }}
-      securityContext:
-{{- .Values.securityContext | toYaml | nindent 8 }}
-{{- end }}
-      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.ml-model-service.fullname" . ) }}"
       imagePullSecrets:
         {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
       {{ if .Values.priorityClassName }}
@@ -82,11 +77,7 @@ spec:
       - name: java-service
         image: "{{ .Values.javaService.repository | default .Values.image.repository }}/{{ .Values.javaService.imageName }}:{{ .Values.javaService.tag | default .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
+
         volumeMounts:
           {{- if .Values.gcs.pretrained.enabled }}
           - name: gcs-pretrained-secret
