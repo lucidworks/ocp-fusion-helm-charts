@@ -1,0 +1,50 @@
+{{- if .Values.rbac.create -}}
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    helm.sh/hook: "pre-install"
+    helm.sh/hook-weight: "1"
+    helm.sh/hook-delete-policy: hook-succeeded
+  name: "{{ include "fusion.api-gateway.fullname" . }}-jks-create"
+
+---
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  annotations:
+    helm.sh/hook: "pre-install"
+    helm.sh/hook-weight: "1"
+    helm.sh/hook-delete-policy: hook-succeeded
+  namespace: {{ .Release.Namespace }}
+  name: "{{ include "fusion.api-gateway.fullname" . }}-jks-create"
+rules:
+- apiGroups: [""]
+  resources: [ "secrets" ]
+  verbs: [ "create", "get" ]
+
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  annotations:
+    helm.sh/hook: "pre-install"
+    helm.sh/hook-weight: "2"
+    helm.sh/hook-delete-policy: hook-succeeded
+  name: "{{ include "fusion.api-gateway.fullname" . }}-jks-create"
+  namespace: {{ .Release.Namespace }}
+subjects:
+- kind: ServiceAccount
+  name: "{{ include "fusion.api-gateway.fullname" . }}-jks-create"
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: "{{ include "fusion.api-gateway.fullname" . }}-jks-create"
+  apiGroup: rbac.authorization.k8s.io
+
+{{- end }}
+---

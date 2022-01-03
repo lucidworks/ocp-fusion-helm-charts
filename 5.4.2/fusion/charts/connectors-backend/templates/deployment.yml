@@ -63,7 +63,7 @@ spec:
         {{- include "fusion.initContainers.checkIndexing" . | nindent 8 }}
       containers:
         - name: connectors-backend
-          image: "gcr.io/lw-support-team/connectors-backend:a3817b4e-1632237613444"
+          image: {{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
 
           volumeMounts:

@@ -1,0 +1,19 @@
+{{ if .Values.storage.connectorDataPvcEnabled }}
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: "Filesystem"
+  resources:
+    requests:
+      storage: {{ .Values.storage.requests | quote }}
+{{ if .Values.storage.storageClassName }}
+  storageClassName: "{{ .Values.storage.storageClassName }}"
+{{ end }}
+
+{{ end }}

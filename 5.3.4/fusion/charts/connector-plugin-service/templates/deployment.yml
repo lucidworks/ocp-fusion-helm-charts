@@ -63,6 +63,8 @@ spec:
           image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
+            - name: "{{ template "fusion.connector-plugin-service.fullname" . }}-pvc"
+              mountPath: "/connector-data"
             - name: application-config-k8s
               mountPath: "app/config"
               readOnly: true
@@ -87,6 +89,8 @@ spec:
             - "--pulsar.service-url={{ include "fusion.connector-plugin-service.pulsarServiceUrl" . }}"
             - "--pulsar.tenant-name={{ include "fusion.connector-plugin-service.kubeNamespace" . }}"
           env:
+            - name: CONNECTORS_PERSISTENT_STORE
+              value: "/connector-data"
             - name: "COMPONENT"
               value: "connector-plugin-service"
             - name: SPRING_PROFILES_ACTIVE
@@ -136,6 +140,9 @@ spec:
           resources:
             {{ toYaml .Values.resources | nindent 12 }}
       volumes:
+        - name: "{{ template "fusion.connector-plugin-service.fullname" . }}-pvc"
+          persistentVolumeClaim:
+            claimName: "{{ template "fusion.connector-plugin-service.fullname" . }}-pvc"
         - name: tmp
           emptyDir: {}
         - name: secrets
