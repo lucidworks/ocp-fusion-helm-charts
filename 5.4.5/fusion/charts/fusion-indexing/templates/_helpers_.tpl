@@ -133,3 +133,51 @@ app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 app.kubernetes.io/component: "fusion-indexing"
 app.kubernetes.io/part-of: "fusion"
 {{- end -}}
+
+{{- define "fusion.tikaServerUrl" -}}
+{{- if .Values.tikaServerUrl -}}
+{{- printf "%s" .Values.tikaServerUrl -}}
+{{- else -}}
+{{- printf "http://tikaserver:9998" -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "fusion.initContainers.checkIndexing" -}}
+{{- $tlsEnabled := ( eq (include "fusion.tls.enabled" .) "true" ) -}}
+- name: check-indexing
+  image: {{ .Values.image.repository }}/check-fusion-dependency:v1.3.0
+  imagePullPolicy: IfNotPresent
+  securityContext:
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    privileged: false
+    runAsUser: {{ .Values.securityContext.runAsUser }}
+  resources:
+    requests:
+      cpu: 200m
+      memory: 32Mi
+    limits:
+      cpu: 200m
+      memory: 32Mi
+  args:
+    - indexing
+  env:
+    - name: INDEXING_ENDPOINT
+      value: {{ .Values.indexingEndpoint | default ( printf "%s://indexing" ( ternary "https" "http" $tlsEnabled ) ) }}
+    - name: INDEXING_PORT
+      value: {{ .Values.indexingPort | default 8765 | quote }}
+    - name: CHECK_INTERVAL
+      value: {{ .Values.indexingInitCheckInterval | default "5s" }}
+    - name: CHECK_TIMEOUT
+      value: {{ .Values.indexingInitCheckTimeout | default "2s" }}
+    - name: TIMEOUT
+      value: {{ .Values.indexingInitTimeout | default "2m" }}
+{{- if $tlsEnabled }}
+    - name: ADDITIONAL_CA_CERTIFICATE
+      value: "/tls/ca.crt"
+  volumeMounts:
+    - name: keystore-volume
+      mountPath: /tls
+{{- end }}
+{{- end -}}
