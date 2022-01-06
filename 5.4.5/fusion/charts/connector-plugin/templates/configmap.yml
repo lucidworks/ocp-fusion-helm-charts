@@ -201,8 +201,10 @@ data:
               imagePullPolicy: {{ .Values.image.pullPolicy }}
 
               volumeMounts:
+    {{- if .Values.storage.connectorDataPvcEnabled }}
                 - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
                   mountPath: "/connector-data"
+    {{- end }}
                 - name: logs-dir
                   mountPath: /fusion-logs
                 - name: config-volume
@@ -235,8 +237,10 @@ data:
                 - "--pulsar.service-url={{ include "fusion.connector-plugin.pulsarServiceUrl" . }}"
                 - "--pulsar.tenant-name={{ include "fusion.connector-plugin.kubeNamespace" . }}"
               env:
+    {{- if .Values.storage.connectorDataPvcEnabled }}
                 - name: "CONNECTORS_PERSISTENT_STORE"
                   value: "/connector-data"
+    {{- end }}
                 - name: "LOGDIR"
                   value: "/fusion-logs"
                 - name: "COMPONENT"
@@ -317,9 +321,11 @@ data:
                     path: hazelcast.yml
             - name: heap-dumps
               emptyDir: {}
+    {{- if .Values.storage.connectorDataPvcEnabled }}
             - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
               persistentVolumeClaim:
                 claimName: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+    {{- end }}
     {{- if ( and $importTrustedCertsEnabled ( not $tlsEnabled )) }}
             - name: truststore
               emptyDir: {}
