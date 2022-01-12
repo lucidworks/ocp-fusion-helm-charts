@@ -50,12 +50,6 @@ spec:
 {{ tpl (toYaml ($nodePool.affinity | default $.Values.affinity)) $  | indent 8 }}
       terminationGracePeriodSeconds: {{ $.Values.terminationGracePeriodSeconds }}
       volumes:
-        - name: backupa
-          persistentVolumeClaim:
-            claimName: backupa
-        - name: backupb
-          persistentVolumeClaim:
-            claimName: backupb
         - name: shared
           emptyDir: {}
 {{- if $tlsEnabled }}
@@ -190,7 +184,7 @@ spec:
               value: "{{ ($nodePool.solrGcTune| default $.Values.solrGcTune) }}"
 {{- end }}
             - name: "SOLR_OPTS"
-              value: "{{ if not (or ($nodePool.disableNodeType) (eq $nodePool.name "")) }}-D{{ $.Values.nodePoolIdentifier}}={{ $nodePool.name }} {{ end }}{{ $nodePool.solrOpts | default $.Values.solrOpts }} {{- if $tlsEnabled }} -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ $.Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ $.Values.tls.keystorePassword }} {{- end }} -Dsolr.allowPaths=/backupa,/backupb -Dsolr.log.dir=/solr-logs -Drollout=1 -Drefine.facets=false"
+              value: "{{ if not (or ($nodePool.disableNodeType) (eq $nodePool.name "")) }}-D{{ $.Values.nodePoolIdentifier}}={{ $nodePool.name }} {{ end }}{{ $nodePool.solrOpts | default $.Values.solrOpts }} {{- if $tlsEnabled }} -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ $.Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ $.Values.tls.keystorePassword }} {{- end }} -Dsolr.log.dir=/solr-logs -Drollout=1 -Drefine.facets=false"
             - name: "OOM"
               value: "{{ $.Values.memoryBehavior }}"
             - name: "SOLR_JAVA_MEM"
@@ -255,10 +249,6 @@ spec:
           volumeMounts:
             - name: {{ template "solr.pvc-name" $ }}{{- if not (eq $nodePool.name "") -}}-{{- end -}}{{ $nodePool.name }}
               mountPath: /var/solr
-            - name: backupa
-              mountPath: /backupa
-            - name: backupb
-              mountPath: /backupb
             - name: solr-logging
               mountPath: /opt/solr/server/solr/log4j2.xml
               subPath: log4j2.xml
