@@ -123,3 +123,4 @@ zkReplicaCount: 3
 zkTLSPort: 2281
 storage:
   connectorDataPvcEnabled: true
+  pvcName: pvc-connector-data

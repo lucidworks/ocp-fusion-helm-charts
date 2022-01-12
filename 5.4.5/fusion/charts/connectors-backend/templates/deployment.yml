@@ -190,7 +190,7 @@ spec:
         - name: heap-dumps
           emptyDir: {}
 {{- if .Values.storage.connectorDataPvcEnabled }}
-        - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+        - name: {{ .Values.storage.pvcName }}
           persistentVolumeClaim:
             claimName: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
 {{- end }}
