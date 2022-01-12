@@ -15,7 +15,7 @@ data:
         <Console name="STDOUT" target="SYSTEM_OUT">
         <PatternLayout>
             <Pattern>
-            %maxLen{%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core}] %c{1.} %m%notEmpty{ =>%ex{short}}}{10240}%n
+            %maxLen{%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core}] %c{1.} %m{nolookups}%notEmpty{ =>%ex{short}}}{10240}%n
             </Pattern>
         </PatternLayout>
         </Console>

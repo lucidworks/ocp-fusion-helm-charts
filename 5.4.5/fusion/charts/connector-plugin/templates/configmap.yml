@@ -202,7 +202,7 @@ data:
 
               volumeMounts:
     {{- if .Values.storage.connectorDataPvcEnabled }}
-                - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+                - name: connector-data
                   mountPath: "/connector-data"
     {{- end }}
                 - name: logs-dir
@@ -322,9 +322,9 @@ data:
             - name: heap-dumps
               emptyDir: {}
     {{- if .Values.storage.connectorDataPvcEnabled }}
-            - name: {{ .Values.storage.pvcName }}
+            - name: connector-data
               persistentVolumeClaim:
-                claimName: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+                claimName: {{ .Values.storage.pvcName }}
     {{- end }}
     {{- if ( and $importTrustedCertsEnabled ( not $tlsEnabled )) }}
             - name: truststore

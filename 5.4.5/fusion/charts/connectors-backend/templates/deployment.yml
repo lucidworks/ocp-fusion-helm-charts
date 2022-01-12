@@ -88,7 +88,7 @@ spec:
               mountPath: "/etc/ssl/keystores"
             {{- end }}
             {{- if .Values.storage.connectorDataPvcEnabled }}
-            - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+            - name: connector-data
               mountPath: "/connector-data"
             {{- end }}
           args:
@@ -190,9 +190,9 @@ spec:
         - name: heap-dumps
           emptyDir: {}
 {{- if .Values.storage.connectorDataPvcEnabled }}
-        - name: {{ .Values.storage.pvcName }}
+        - name: connector-data
           persistentVolumeClaim:
-            claimName: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+            claimName: {{ .Values.storage.pvcName }}
 {{- end }}
 {{- if $tlsEnabled }}
 {{ $params := dict "tlsServiceName" ( include "fusion.connectors-backend.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils }}
