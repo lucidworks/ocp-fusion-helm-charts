@@ -171,7 +171,7 @@ spec:
           emptyDir: {}
         - name: config-volume
           configMap:
-            name: dataes-connectors-backend
+            name: "{{ include "fusion.connectors-backend.fullname" . }}"
             defaultMode: 420
         - name: secrets
           secret:

@@ -299,7 +299,7 @@ data:
               emptyDir: {}
             - name: config-volume
               configMap:
-                name: dataes-connector-plugin
+                name: "{{ include "fusion.connector-plugin.fullname" . }}"
                 defaultMode: 420
             - name: tmp
               emptyDir: {}
