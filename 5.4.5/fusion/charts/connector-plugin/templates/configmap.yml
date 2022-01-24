@@ -139,7 +139,7 @@ data:
     {{- end }}
     {{- if $importTrustedCertsEnabled }}
             - name: import-certs
-              image: fusion-dev-docker.ci-artifactory.lucidworks.com/keytool-utils:v2.0.0
+              image: "{{ .Values.image.repository }}/keytool-utils:v2.0.0"
               command:
                 - '/bin/bash'
                 - '-c'
