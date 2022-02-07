@@ -9,7 +9,7 @@ data:
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <properties>
         <parsers>
-            <!-- This is the default parser - it will pick appropriate parser among the onces available in Tika (http://tika.apache.org/1.25/api/org/apache/tika/parser/Parser.html) DO NOT DISABLE THIS UNLESS YOU WANT ONLY SPECIFIC PARSERS TO WORK -->
+            <!-- This is the default parser - it will pick appropriate parser among the onces available in Tika (http://tika.apache.org/1.28/api/org/apache/tika/parser/Parser.html) DO NOT DISABLE THIS UNLESS YOU WANT ONLY SPECIFIC PARSERS TO WORK -->
             <parser class="org.apache.tika.parser.DefaultParser"/>
 
             {{- if .Values.extractInlineImages -}}

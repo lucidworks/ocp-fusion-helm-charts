@@ -4041,7 +4041,7 @@ tikaserver:
     imagePullSecrets: []
     name: tika
     repository: apache
-    tag: "1.25"
+    tag: "1.28"
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent

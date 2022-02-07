@@ -61,7 +61,7 @@ spec:
         command:
           - /bin/sh
           - -c
-          - exec java -jar /tika-server-1.25.jar --spawnChild -h 0.0.0.0 $0 $@
+          - exec java -jar /tika-server-1.28.jar --spawnChild -h 0.0.0.0 $0 $@
           - -c /tika-config.xml
         {{- else }}
         command:
