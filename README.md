@@ -41,8 +41,14 @@ apply the patch
 cp updates_for_${FUSION_VERSION}_ocp.patch ~/f5/ocp-fusion-helm-charts/${FUSION_VERSION}
 cd ~/f5/ocp-fusion-helm-charts/${FUSION_VERSION}
 patch -p1 < updates_for_${FUSION_VERSION}_ocp.patch
-git add .
-git commit -am "ocp specific changes on ${FUSION_VERSION} release"
 ```
 
-and git Push.
+fix the conflicts - see https://stackoverflow.com/questions/16190387/when-applying-a-patch-is-there-any-way-to-resolve-conflicts
+
+when done, commit 
+
+```
+git add .
+git commit -am "ocp specific changes on ${FUSION_VERSION} release"
+git push origin master
+```
