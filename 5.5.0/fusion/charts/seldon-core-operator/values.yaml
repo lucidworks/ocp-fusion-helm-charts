@@ -1,0 +1,160 @@
+ambassador:
+  enabled: true
+  singleNamespace: true
+certManager:
+  enabled: false
+containersSecurityContext:
+  capabilities:
+    drop:
+    - NET_RAW
+controllerId: ""
+crd:
+  annotations: {}
+  create: true
+  forceV1: false
+  forceV1beta1: false
+credentials:
+  gcs:
+    gcsCredentialFileName: gcloud-application-credentials.json
+  s3:
+    s3AccessKeyIDName: awsAccessKeyID
+    s3SecretAccessKeyName: awsSecretAccessKey
+defaultUserID: "8888"
+engine:
+  grpc:
+    port: 5001
+  image:
+    pullPolicy: IfNotPresent
+    registry: docker.io
+    repository: seldonio/engine
+    tag: 1.12.0
+  logMessagesExternally: false
+  port: 8000
+  prometheus:
+    path: /prometheus
+  resources:
+    cpuLimit: 500m
+    cpuRequest: 500m
+    memoryLimit: 512Mi
+    memoryRequest: 512Mi
+  serviceAccount:
+    name: default
+  user: 8888
+executor:
+  image:
+    imagePullSecrets: []
+    pullPolicy: IfNotPresent
+    registry: docker.io
+    repository: seldonio/seldon-core-executor
+    tag: 1.12.0
+  metricsPortName: metrics
+  port: 8000
+  prometheus:
+    path: /prometheus
+  requestLogger:
+    defaultEndpoint: http://default-broker
+    workQueueSize: 10000
+    writeTimeoutMs: 2000
+  resources:
+    cpuLimit: 500m
+    cpuRequest: 500m
+    memoryLimit: 512Mi
+    memoryRequest: 512Mi
+  serviceAccount:
+    name: default
+  user: 8888
+explainer:
+  image: seldonio/alibiexplainer:1.12.0
+  image_v2: seldonio/mlserver:1.0.0.rc1-alibi-explain
+image:
+  imagePullSecrets: []
+  pullPolicy: IfNotPresent
+  registry: docker.io
+  repository: seldonio/seldon-core-operator
+  tag: 1.12.0
+istio:
+  enabled: false
+  gateway: istio-system/seldon-gateway
+  tlsMode: ""
+keda:
+  enabled: false
+kubeflow: false
+manager:
+  annotations: {}
+  containerSecurityContext: {}
+  cpuLimit: 500m
+  cpuRequest: 100m
+  deploymentNameAsPrefix: false
+  leaderElectionID: a33bd623.machinelearning.seldon.io
+  logLevel: INFO
+  memoryLimit: 300Mi
+  memoryRequest: 200Mi
+managerCreateResources: false
+managerUserID: 8888
+namespaceOverride: ""
+predictiveUnit:
+  defaultEnvSecretRefName: ""
+  grpcPort: 9500
+  httpPort: 9000
+  metricsPortName: metrics
+predictor_servers:
+  MLFLOW_SERVER:
+    protocols:
+      kfserving:
+        defaultImageVersion: 1.0.0.rc1-mlflow
+        image: seldonio/mlserver
+      seldon:
+        defaultImageVersion: 1.12.0
+        image: seldonio/mlflowserver
+  SKLEARN_SERVER:
+    protocols:
+      kfserving:
+        defaultImageVersion: 1.0.0.rc1-sklearn
+        image: seldonio/mlserver
+      seldon:
+        defaultImageVersion: 1.12.0
+        image: seldonio/sklearnserver
+  TEMPO_SERVER:
+    protocols:
+      kfserving:
+        defaultImageVersion: 1.0.0.rc1-slim
+        image: seldonio/mlserver
+  TENSORFLOW_SERVER:
+    protocols:
+      seldon:
+        defaultImageVersion: 1.12.0
+        image: seldonio/tfserving-proxy
+      tensorflow:
+        defaultImageVersion: 2.1.0
+        image: tensorflow/serving
+  TRITON_SERVER:
+    protocols:
+      kfserving:
+        defaultImageVersion: 21.08-py3
+        image: nvcr.io/nvidia/tritonserver
+  XGBOOST_SERVER:
+    protocols:
+      kfserving:
+        defaultImageVersion: 1.0.0.rc1-xgboost
+        image: seldonio/mlserver
+      seldon:
+        defaultImageVersion: 1.12.0
+        image: seldonio/xgboostserver
+rbac:
+  configmap:
+    create: true
+  create: true
+serviceAccount:
+  create: true
+  name: seldon-manager
+singleNamespace: true
+storageInitializer:
+  cpuLimit: "1"
+  cpuRequest: 100m
+  image: seldonio/rclone-storage-initializer:1.12.0
+  memoryLimit: 1Gi
+  memoryRequest: 100Mi
+usageMetrics:
+  enabled: false
+webhook:
+  port: 4443

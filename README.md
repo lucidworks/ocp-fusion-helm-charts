@@ -1,23 +1,48 @@
-# Helm Charts that work on OpenShift
+# How to add a new version of Fusion to the list
 
-Here we maintain minor changes to our helm charts to make them work on on-prem openshift.
+Pull down previous version of Fusion helm chart and use it to create a diff file to apply using the `patch` linux command. 
 
-## How to add a new version of Fusion to the list
+Example: 5.4.5
 
-Open Pycharm (or intellij)
+```
+TMP_PATH="/tmp"
+cd $TMP_PATH
+FUSION_VERSION="5.4.5"
+helm fetch lucidworks/fusion --version "${FUSION_VERSION}" --untar --untardir fusion-helm-charts
+mv fusion-helm-charts/ "${FUSION_VERSION}"
+cd "${FUSION_VERSION}"
+git init .
+git add fusion
+git commit -am "initial ${FUSION_VERSION} revision"
+rm -rf fusion
+cp -r ~/f5/ocp-fusion-helm-charts/${FUSION_VERSION}/fusion .
+git commit -am "ocp specific changes on ${FUSION_VERSION} release"
+```
 
-Add the new helm chart folder, example 5.4.2 to and commit it, push it.
+Open intellij
+Open the folder as a project: `$TMP_PATH/${FUSION_VERSION}/fusion`
+Show Git History
+Select the "ocp specific changes on ${FUSION_VERSION} release" commit and click "Create patch"
+Save patch to updates_for_${FUSION_VERSION}_ocp.patch
 
-Open up the Git history of the previous folder, example 5.4.1
+Now grab the next version of Fusion from helm and copy it into the git repo.
 
-Select all the changes and right click "create patch"
+Example: 5.5.0
 
-Change the relative location to the 5.4.1 folder.
+```
+FUSION_VERSION="5.5.0"
+helm fetch lucidworks/fusion --version "${FUSION_VERSION}" --untar --untardir fusion-helm-charts
+mv fusion-helm-charts/ ~/f5/ocp-fusion-helm-charts/${FUSION_VERSION}
+```
 
-Create the patch (takes a bit)
+apply the patch
 
-Open a git bash terminal and cd to the new folder, example 5.4.2.
+```
+cp updates_for_${FUSION_VERSION}_ocp.patch ~/f5/ocp-fusion-helm-charts/${FUSION_VERSION}
+cd ~/f5/ocp-fusion-helm-charts/${FUSION_VERSION}
+patch -p1 < updates_for_${FUSION_VERSION}_ocp.patch
+git add .
+git commit -am "ocp specific changes on ${FUSION_VERSION} release"
+```
 
-Run the patch file "patch -p0 < patchfile.patch"
-
-Commit / Push.
+and git Push.

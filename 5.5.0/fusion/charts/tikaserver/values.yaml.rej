@@ -1,0 +1,11 @@
+--- fusion/charts/tikaserver/values.yaml	(revision ea9c4a2c14fe980cffddb52215ba09b85b2a50a0)
++++ fusion/charts/tikaserver/values.yaml	(revision a44bd3eb0309465462c90bf5a2b655403a8100b4)
+@@ -7,7 +7,7 @@
+   imagePullSecrets: []
+   name: tika
+   repository: apache
+-  tag: "1.25"
++  tag: "1.28"
+ keytoolUtils:
+   image:
+     imagePullPolicy: IfNotPresent

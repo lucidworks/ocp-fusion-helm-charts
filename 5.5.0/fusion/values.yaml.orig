@@ -1,0 +1,4557 @@
+admin-ui:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: admin-ui
+    repository: lucidworks
+    tag: 5.5.0
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  preStopSleepTime: 15
+  rbac:
+    create: true
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    http:
+      annotations: {}
+      port: 8080
+      targetPort: 8080
+      type: ClusterIP
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: false
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+api-gateway:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  config:
+    audit: ""
+    resilience4j: ""
+    security: ""
+    springSecurity: ""
+  datadog:
+    enabled: false
+    port: 8126
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  envVars: []
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: api-gateway
+    repository: lucidworks
+    tag: 5.5.0
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/server-snippet: |
+        location ~* "^/actuator" {
+            deny all;
+            return 403;
+          }
+    enabled: false
+    host: ingress.example.com
+    path: /
+    pathtype: Prefix
+    tls:
+      enabled: false
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError -Dreactor.netty.ioWorkerCount=8 -Dreactor.netty.ioSelectCount=2
+  jksSetup:
+    resources: {}
+  jwtExpirationSecs: 1800
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets: []
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.1.0
+  livenessProbe:
+    failureThreshold: 5
+    initialDelaySeconds: 40
+    periodSeconds: 10
+    timeoutSeconds: 6
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 6764
+  preStopSleepTime: 10
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    annotations: {}
+    port: 6764
+    targetPort: 6764
+    type: LoadBalancer
+  springProfiles: kubernetes,basic,fusion
+  terminationGracePeriodSeconds: 45
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  tracing:
+    enabled: true
+    sampleProbability: 1
+  useForwardHeaders: false
+  zipkin:
+    enabled: false
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+argo:
+  artifactRepository:
+    archiveLogs: false
+    s3:
+      accessKeySecret:
+        key: accesskey
+      insecure: true
+      secretKeySecret:
+        key: secretkey
+  controller:
+    affinity: {}
+    containerRuntimeExecutor: docker
+    image:
+      tag: ""
+    instanceID:
+      enabled: true
+      useReleaseName: true
+    loadBalancerSourceRanges: []
+    logging:
+      globallevel: "0"
+      level: info
+    metricsConfig:
+      enabled: false
+      path: /metrics
+      port: 8080
+    metricsServicePort: 8080
+    metricsServicePortName: metrics
+    name: workflow-controller
+    nodeSelector: {}
+    pdb:
+      enabled: false
+    persistence: {}
+    podAnnotations: {}
+    podLabels: {}
+    replicas: 1
+    resources: {}
+    serviceAccount: argo
+    serviceAccountAnnotations: {}
+    serviceAnnotations: {}
+    serviceLabels: {}
+    serviceMonitor:
+      additionalLabels: {}
+      enabled: false
+    serviceType: ClusterIP
+    telemetryConfig:
+      enabled: false
+      path: /telemetry
+      port: 8081
+    telemetryServicePort: 8081
+    telemetryServicePortName: telemetry
+    tolerations: []
+    workflowDefaults: {}
+    workflowNamespaces:
+    - default
+  crdVersion: v1alpha1
+  createAggregateRoles: true
+  executor:
+    env: {}
+    image:
+      tag: ""
+    resources: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    repository: lucidworks
+  images:
+    controller: workflow-controller
+    executor: argoexec
+    namespace: argoproj
+    pullPolicy: Always
+    server: argocli
+    tag: v2.7.6
+  init:
+    serviceAccount: ""
+  installCRD: false
+  logstashEnabled: true
+  minio:
+    DeploymentUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0
+      type: RollingUpdate
+    StatefulSetUpdate:
+      updateStrategy: RollingUpdate
+    accessKey: AKIAIOSFODNN7EXAMPLE
+    affinity: {}
+    azuregateway:
+      enabled: false
+      replicas: 4
+    b2gateway:
+      enabled: false
+      replicas: 4
+    bucketRoot: ""
+    buckets: []
+    certsPath: /etc/minio/certs/
+    clusterDomain: cluster.local
+    configPathmc: /etc/minio/mc/
+    defaultBucket:
+      enabled: true
+      name: argo-artifacts
+      policy: none
+      purge: false
+    drivesPerNode: 1
+    environment:
+      MINIO_BROWSER: "on"
+    existingSecret: ""
+    extraArgs: []
+    fullnameOverride: ""
+    gcsgateway:
+      enabled: false
+      gcsKeyJson: ""
+      projectId: ""
+      replicas: 4
+    global: {}
+    image:
+      pullPolicy: IfNotPresent
+      repository: minio/minio
+      tag: RELEASE.2020-01-16T22-40-29Z
+    ingress:
+      annotations: {}
+      enabled: false
+      hosts:
+      - chart-example.local
+      labels: {}
+      path: /
+      tls: []
+    install: false
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 5
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 1
+    mcImage:
+      pullPolicy: IfNotPresent
+      repository: minio/mc
+      tag: RELEASE.2020-01-13T22-49-03Z
+    metrics:
+      serviceMonitor:
+        additionalLabels: {}
+        enabled: false
+    mode: standalone
+    mountPath: /export
+    nameOverride: ""
+    nasgateway:
+      enabled: false
+      pv: null
+      replicas: 4
+    networkPolicy:
+      allowExternal: true
+      enabled: false
+    nodeSelector: {}
+    ossgateway:
+      enabled: false
+      endpointURL: ""
+      replicas: 4
+    persistence:
+      VolumeName: ""
+      accessMode: ReadWriteOnce
+      enabled: true
+      existingClaim: ""
+      size: 10Gi
+      storageClass: ""
+      subPath: ""
+    podAnnotations: {}
+    podDisruptionBudget:
+      enabled: false
+      maxUnavailable: 1
+    podLabels: {}
+    priorityClassName: ""
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 60
+      periodSeconds: 15
+      successThreshold: 1
+      timeoutSeconds: 1
+    replicas: 4
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+    s3gateway:
+      enabled: false
+      replicas: 4
+      serviceEndpoint: ""
+    secretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    securityContext:
+      enabled: false
+      fsGroup: 1000
+      runAsGroup: 1000
+      runAsUser: 1000
+    service:
+      annotations: {}
+      clusterIP: null
+      externalIPs: []
+      nodePort: 31311
+      port: 9000
+      type: ClusterIP
+    serviceAccount:
+      create: true
+      name: null
+    tls:
+      certSecret: ""
+      enabled: false
+      privateKey: private.key
+      publicCrt: public.crt
+    tolerations: []
+    zones: 1
+  rbac:
+    create: true
+  server:
+    affinity: {}
+    baseHref: /
+    clusterWorkflowTemplates:
+      enableEditing: true
+    enabled: true
+    extraArgs: []
+    image:
+      tag: ""
+    ingress:
+      enabled: false
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    name: argo-ui
+    nodeSelector: {}
+    pdb:
+      enabled: false
+    podAnnotations: {}
+    podLabels: {}
+    replicas: 1
+    resources: {}
+    serviceAccount: argo-server
+    serviceAccountAnnotations: {}
+    serviceAnnotations: {}
+    serviceLabels: {}
+    servicePort: 2746
+    serviceType: ClusterIP
+    tolerations: []
+  singleNamespace: true
+  useDefaultArtifactRepo: false
+  useStaticCredentials: true
+argo-common-workflows:
+  global: {}
+  image:
+    debug: false
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    repository: lucidworks
+    tag: 5.5.0
+  logstashEnabled: true
+  nodeSelector:
+    default: {}
+    deploy:
+      seldon: null
+  resources:
+    default: {}
+    deploy:
+      seldon: null
+  securityContext:
+    fsGroup: 8764
+  tls:
+    enabled: false
+    keystorePassword: changeit
+  tolerations:
+    default: []
+    deploy:
+      seldon: null
+auth-ui:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: auth-ui
+    repository: lucidworks
+    tag: 5.5.0
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  rbac:
+    create: true
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    http:
+      annotations: {}
+      port: 8080
+      targetPort: 8080
+      type: ClusterIP
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: false
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+classic-rest-service:
+  accessLogEnabled: false
+  affinity: {}
+  annotations: {}
+  bootstrapEnabled: true
+  component: classic-rest-service
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: classic-rest-service
+    pullPolicy: IfNotPresent
+    repository: lucidworks
+    tag: 5.5.0
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
+    -Xss256k -Dhttp.maxConnections=1000
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets: []
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 155
+    periodSeconds: 30
+    timeoutSeconds: 2
+  logdir: /app/logs
+  logstashEnabled: true
+  name: classic-rest-service
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port:
+    external: 9000
+    internal: 9000
+  preStopSleepTime: 15
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 8
+    initialDelaySeconds: 150
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 2
+  replicaCount: 1
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  serviceName: connectors-classic
+  springProfiles: k8s,jwt
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  trustedCertificates:
+    enabled: false
+  volume:
+    accessMode: ReadWriteOnce
+    claimName: classic-rest-service-data-claim
+    name: classic-rest-service-data
+    storage: 10Gi
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+classification:
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    repository: lucidworks
+    tag: 5.5.0
+  logstashEnabled: true
+  nodeSelector:
+    default: {}
+    etl: null
+    seldon: null
+    train: null
+  resources:
+    default: {}
+    etl: null
+    seldon: null
+    train: null
+  securityContext:
+    fsGroup: 8764
+  tls:
+    enabled: false
+    keystorePassword: changeit
+  tolerations:
+    default: []
+    etl: null
+    seldon: null
+    train: null
+config-sync:
+  enabled: false
+connector-plugin:
+  affinity: {}
+  annotations: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  component: connector-plugin
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  hazelcast:
+    yaml:
+      hazelcast:
+        map:
+          shared_cache_*:
+            eviction:
+              eviction-policy: LRU
+              max-size-policy: USED_HEAP_PERCENTAGE
+              size: 10
+            max-idle-seconds: 3600
+        network:
+          join:
+            kubernetes:
+              enabled: true
+              service-name: connector-plugin
+              service-port: 5701
+            multicast:
+              enabled: false
+  hazelcastPort: "5701"
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: connector-plugin
+    pullPolicy: IfNotPresent
+    repository: lucidworks
+    tag: 5.5.0
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=40.0 -Xss256k
+    -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
+    -XX:+StartAttachListener -Djdk.attach.allowAttachSelf=true
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets: []
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 20
+    initialDelaySeconds: 65
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 10
+  logstashEnabled: true
+  name: connector-plugin
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port:
+    external: 9020
+    internal: 9020
+  preStopSleepTime: 15
+  pulsarConnectionsPerBroker: 1
+  pulsarKeepAliveInterval: 30
+  pulsarMaxPendingMessages: "1000"
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  pulsarTcpNoDelay: true
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 20
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 10
+  replicaCount: 0
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  serviceName: connector-plugin
+  springProfiles: k8s,jwt
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  trustedCertificates:
+    enabled: false
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+connectors:
+  accessLogEnabled: false
+  affinity: {}
+  annotations: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  component: connectors
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: connectors
+    pullPolicy: IfNotPresent
+    repository: lucidworks
+    tag: 5.5.0
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
+    -Xss256k -Dhttp.maxConnections=1000
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets: []
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 155
+    periodSeconds: 30
+    timeoutSeconds: 2
+  logdir: /app/logs
+  logstashEnabled: true
+  name: connectors
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  plugins:
+    repository:
+      id: fusion-download-hosting
+      name: lucidworks-connector-plugins
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port:
+    external: 9010
+    internal: 9010
+  preStopSleepTime: 15
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 8
+    initialDelaySeconds: 150
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 2
+  replicaCount: 1
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  serviceName: connectors
+  springProfiles: k8s,jwt
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+connectors-backend:
+  affinity: {}
+  annotations: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  component: connectors-backend
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: connectors-backend
+    pullPolicy: IfNotPresent
+    repository: lucidworks
+    tag: 5.5.0
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
+    -Xss256k -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
+    -XX:+StartAttachListener -Djdk.attach.allowAttachSelf=true
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets: []
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 20
+    initialDelaySeconds: 65
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 10
+  logstashEnabled: true
+  name: connectors-backend
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  plugins:
+    crd:
+      create: true
+    replicas: 1
+    repository:
+      id: fusion-download-hosting
+      name: lucidworks-connector-plugins
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port:
+    mainService:
+      external: 8771
+      internal: 8771
+    pluginService:
+      external: 8772
+      internal: 8772
+  preStopSleepTime: 15
+  pulsarConnectionsPerBroker: 1
+  pulsarKeepAliveInterval: 30
+  pulsarMaxPendingMessages: "1000"
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  pulsarTcpNoDelay: true
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 20
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 10
+  replicaCount: 1
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  serviceName: connectors-backend
+  springProfiles: k8s,jwt
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+devops-ui:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: devops-ui
+    repository: lucidworks
+    tag: 5.5.0
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  preStopSleepTime: 15
+  rbac:
+    create: true
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    http:
+      annotations: {}
+      port: 8080
+      targetPort: 8080
+      type: ClusterIP
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: false
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+fusion-admin:
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: fusion-api
+    pullPolicy: IfNotPresent
+    repository: lucidworks
+    tag: 5.5.0
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    enabled: false
+    host: ingress.example.com
+    tls:
+      enabled: false
+  jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k -Dhttp.maxConnections=1000
+    -XX:PermSize=256m -XX:MaxPermSize=512m
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 5
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 3
+  logstashEnabled: true
+  name: admin
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  podDisruptionBudget:
+    maxUnavailable: 1
+  preStopSleepTime: 15
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    annotation: {}
+    externalPort: 8765
+    internalPort: 8765
+    name: http
+    type: ClusterIP
+  solrAutoscalingPolicyJson:
+    set-cluster-policy:
+    - node: '#ANY'
+      replica: <2
+      shard: '#EACH'
+      strict: false
+    - replica: '#EQUAL'
+      strict: false
+      sysprop.solr_zone: '#EACH'
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+fusion-data-augmentation:
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    repository: lucidworks
+    tag: 5.5.0
+  logstashEnabled: true
+  loguruLogLevel: INFO
+  nodeSelector:
+    augment: null
+    default: {}
+    etl: null
+  resources:
+    augment: null
+    default: {}
+    etl: null
+  tls:
+    enabled: false
+    keystorePassword: changeit
+  tolerations:
+    augment: null
+    default: []
+    etl: null
+fusion-indexing:
+  accessLogEnabled: false
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  datadog:
+    enabled: false
+    port: 8126
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: fusion-indexing
+    repository: lucidworks
+    tag: 5.5.0
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k -Dhttp.maxConnections=1000
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 8765
+  preStopSleepTime: 10
+  pulsar:
+    listenerThreads: 16
+    maxConsumersPerSubscription: 10
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  serverStopTimeout: 5000
+  service:
+    annotations: {}
+    port: 8765
+    targetPort: 8765
+    type: ClusterIP
+  springProfiles: kubernetes,jwt,fusion
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  tracing:
+    enabled: true
+    sampleProbability: 1
+  zipkin:
+    enabled: false
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+fusion-jupyter:
+  affinity: {}
+  enabled: false
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: fusion-jupyter
+    repository: lucidworks
+    tag: 5.5.0
+  logstashEnabled: true
+  mountPath:
+    notebook: /home/jovyan/work
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+  nodeSelector: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  replicaCount: 1
+  resources: {}
+  service:
+    port: 8888
+    targetPort: 8888
+    type: ClusterIP
+  storage:
+    accessModes:
+    - ReadWriteOnce
+    requests: 8Gi
+  zkConnectionString: zk:2181
+  zkPort: 2181
+  zkReplicaCount: 1
+  zookeeper:
+    replicaCount: 1
+fusion-log-forwarder:
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  batchSize: 2000
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: fusion-log-forwarder
+    pullPolicy: Always
+    repository: lucidworks
+    tag: 5.5.0
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.1.0
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 5
+    periodSeconds: 15
+    timeoutSeconds: 1
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  processorCount: 10
+  pulsarBacklogLimit: 1073741824
+  pulsarBacklogPolicy: consumer_backlog_eviction
+  pulsarNamespace: _logs
+  pulsarNamespaceSizeRetention: 0
+  pulsarNamespaceTimeRetention: 0
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  pulsarTopic: system_logs
+  rbac:
+    create: true
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  solrPath: solr
+  solrPort: "8983"
+  solrProtocol: http
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  zkPort: 2181
+  zkReplicaCount: 3
+fusion-resources:
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    repository: lucidworks
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  logstashEnabled: true
+  rbac:
+    create: true
+  securityContext:
+    fsGroup: 8764
+    runAsUser: 8764
+  serviceAccountKey: ""
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+fusion-superset:
+  affinity: {}
+  configFromSecret: '{{ template "superset.fullname" . }}-config'
+  configMountPath: /app/pythonpath
+  configOverrides:
+    oltp_database: |
+      SQLALCHEMY_DATABASE_URL = "sqlite://{{ .Values.internalDBPath }}"
+  enabled: false
+  envFromSecret: '{{ template "superset.fullname" . }}-env'
+  extraConfigMountPath: /app/configs
+  extraConfigs: {}
+  extraEnv:
+    SUPERSET_HOME: /dbpath
+  extraSecretEnv: {}
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: fusion-superset
+    pullPolicy: IfNotPresent
+    repository: lucidworks
+    tag: 5.5.0
+  ingress:
+    annotations: {}
+    enabled: false
+    host: ingress.example.com
+    path: /
+    tls:
+      enabled: false
+  init:
+    command:
+    - /bin/sh
+    - -c
+    - . {{ .Values.configMountPath }}/superset_init.sh
+    enabled: true
+    initscript: |-
+      #!/bin/bash -x
+
+      # Check whether this is the first run that initially creates the database
+      if ! test -e {{ .Values.internalDBPath }} ; then
+        first_use="true"
+      fi
+
+      echo "Upgrading DB schema..."
+      superset db upgrade
+      echo "Initializing roles..."
+      superset init
+
+      if test -n "$first_use" ; then
+        echo "Creating first admin user..."
+        FIRST_USERNAME="{{ .Values.init.supersetUser }}"
+        FIRST_PASSWORD="{{ .Values.init.supersetPassword }}"
+        if [ -z "${FIRST_PASSWORD}" ]; then
+          FIRST_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+        fi
+        superset fab create-admin \
+                        --username ${FIRST_USERNAME} \
+                          --firstname Superset \
+                          --lastname Admin \
+                          --email admin@superset.com \
+                          --password ${FIRST_PASSWORD} || true
+
+        echo "Creating second admin user..."
+        SECOND_USERNAME="{{ .Values.init.secondarySupersetUser }}"
+        SECOND_PASSWORD="{{ .Values.init.secondarySupersetPassword }}"
+        if [ -z "${SECOND_PASSWORD}" ]; then
+          SECOND_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+        fi
+        superset fab create-admin \
+                        --username ${SECOND_USERNAME} \
+                          --firstname Superset \
+                          --lastname Admin \
+                          --email admin@superset.com \
+                          --password ${SECOND_PASSWORD} || true
+
+        kubectl --namespace "{{ .Release.Namespace }}" create secret generic {{ .Values.init.supersetCredentialsSecretName }} --from-literal=user1=${FIRST_USERNAME} --from-literal=password1=${FIRST_PASSWORD} --from-literal=user2=${SECOND_USERNAME} --from-literal=password2=${SECOND_PASSWORD}
+        echo $?
+        {{ if .Values.init.loadExamples }}
+        echo "Loading examples..."
+        superset load_examples
+        {{- end }}
+      else
+        echo "Skipping admin user creation as this is not first bootstrap for database"
+      fi
+    loadExamples: false
+    secondarySupersetPassword: null
+    secondarySupersetUser: alternate_admin
+    supersetCredentialsSecretName: superset-application-creds
+    supersetPassword: null
+    supersetUser: admin
+  internalDBDir: /dbpath
+  internalDBPath: '{{ .Values.internalDBDir }}/superset.db'
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  osUser:
+    nonRootCheckEnabled: true
+    uid: 1000
+  proxy:
+    affinity: {}
+    auth:
+      enabled: true
+      password: ""
+      secretName: superset-proxy-service-creds
+      username: superset_gateway
+    image:
+      name: nginx
+      pullPolicy: IfNotPresent
+      tag: 1.18.0
+    nodeSelector: {}
+    resources: {}
+    service:
+      port: 80
+      type: ClusterIP
+    tolerations: []
+  proxyConfigFromSecret: '{{ template "superset.fullname" . }}-proxy-config'
+  rbac: {}
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 4
+      memory: 8Gi
+    requests:
+      cpu: 4
+      memory: 8Gi
+  service:
+    annotations: {}
+    loadBalancerIP: null
+    port: 8088
+    type: ClusterIP
+  storage:
+    accessModes:
+    - ReadWriteOnce
+    requests: 1Gi
+  supersetNode:
+    command:
+    - /bin/sh
+    - -c
+    - /usr/bin/docker-entrypoint.sh
+    connections:
+      db_name: superset
+      db_pass: superset
+      db_user: superset
+    forceReload: false
+  tolerations: []
+insights:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: insights
+    repository: lucidworks
+    tag: 5.5.0
+  livenessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+  nodeSelector: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 8080
+  rbac:
+    create: true
+  readinessProbe:
+    initialDelaySeconds: 8
+    periodSeconds: 5
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    annotations: {}
+    port: 8080
+    targetPort: 8080
+    type: ClusterIP
+job-launcher:
+  accessLogEnabled: false
+  affinity: {}
+  ambassadorServiceName: local-ml-service-ambassador
+  ambassadorServicePort: "80"
+  argoCleanup:
+    resources: {}
+  argoCleanupSchedule: 0 * * * *
+  argoNamespace: default
+  config:
+    springSecurity: ""
+  configSources: []
+  datadog:
+    enabled: false
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  envVars: []
+  executorInstances: 2
+  extraVolumes: []
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: job-launcher
+    repository: lucidworks
+    tag: 5.5.0
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 5
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 3
+  logLevelRoot: info
+  logstashEnabled: true
+  mlModelServiceName: ml-model-service
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 8083
+  preStopSleepTime: 40
+  prometheus:
+    enabled: false
+    endpoint: 127.0.0.1:9091
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  serverStopTimeout: 5000
+  service:
+    annotations: {}
+    port: 8083
+    targetPort: 8083
+    type: ClusterIP
+  sparkCleanup:
+    resources: {}
+  sparkCleanupSchedule: 0 * * * *
+  sparkNodeSelector: {}
+  springProfiles: kubernetes,jwt,fusion
+  terminationGracePeriodSeconds: 70
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+job-rest-server:
+  accessLogEnabled: false
+  affinity: {}
+  config:
+    springSecurity: ""
+  datadog:
+    enabled: false
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: job-rest-server
+    repository: lucidworks
+    tag: 5.5.0
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 5
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 3
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 8081
+  preStopSleepTime: 15
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  serverStopTimeout: 5000
+  service:
+    annotations: {}
+    port: 8081
+    targetPort: 8081
+    type: ClusterIP
+  springProfiles: kubernetes,jwt,fusion
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+ml-model-service:
+  accessLogEnabled: false
+  affinity: {}
+  ambassador:
+    adminService:
+      annotations: {}
+      create: false
+      port: 8877
+      type: ClusterIP
+    affinity: {}
+    ambassadorConfig: ""
+    autoscaling:
+      enabled: false
+      maxReplicas: 5
+      metrics:
+      - resource:
+          name: cpu
+          targetAverageUtilization: 60
+        type: Resource
+      - resource:
+          name: memory
+          targetAverageUtilization: 60
+        type: Resource
+      minReplicas: 2
+    crds:
+      create: false
+      enabled: false
+      keep: true
+    daemonSet: false
+    deploymentAnnotations: {}
+    dnsPolicy: ClusterFirst
+    enabled: true
+    env: {}
+    fullnameOverride: ""
+    global: {}
+    hostNetwork: false
+    image:
+      pullPolicy: IfNotPresent
+      repository: quay.io/datawire/ambassador
+      tag: 0.86.1
+    imagePullSecrets: []
+    initContainers: []
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 30
+      periodSeconds: 3
+    nameOverride: ""
+    nodeSelector: {}
+    podAnnotations: {}
+    podDisruptionBudget: {}
+    podLabels: {}
+    priorityClassName: ""
+    pro:
+      authService:
+        enabled: true
+        optional_configurations: null
+      devPortal:
+        enabled: false
+      enabled: false
+      env: {}
+      image:
+        customBuildTag: null
+        repository: quay.io/datawire/ambassador_pro
+        tag: 0.11.0
+      licenseKey:
+        secret:
+          create: true
+          enabled: true
+        value: '{{INSERT LICENSE KEY HERE}}'
+      logLevel: info
+      ports:
+        auth: 8500
+        ratelimit: 8500
+      rateLimit:
+        enabled: true
+        redis:
+          annotations:
+            deployment: {}
+            service: {}
+          resources: {}
+      resources: {}
+    prometheusExporter:
+      enabled: false
+      pullPolicy: IfNotPresent
+      repository: prom/statsd-exporter
+      resources: {}
+      tag: v0.8.1
+    rbac:
+      create: true
+      podSecurityPolicies: {}
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 30
+      periodSeconds: 3
+    replicaCount: 1
+    resources: {}
+    scope:
+      singleNamespace: true
+    securityContext:
+      runAsUser: 8888
+    service:
+      annotations: null
+      ports:
+      - name: http
+        port: 80
+        targetPort: 8080
+      - name: https
+        port: 443
+        targetPort: 8443
+      type: ClusterIP
+    serviceAccount:
+      create: true
+      name: null
+    sidecarContainers: []
+    singleNamespace: true
+    tolerations: []
+    volumeMounts: []
+    volumes: []
+  argoNodeSelector:
+    default: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fs:
+    enabled: true
+    workingDir: /tmp/model_repository
+  fusion-common-utils:
+    global: {}
+  gcs:
+    pretrained:
+      enabled: false
+      gcsPretrainedBucket: fusion-pretrained-models
+      gcsProjectName: fusion-download-hosting
+      gcsSecret:
+        key: fusion-download-hosting-3f391ae4694a.json
+        path: /app/gcs-pretrained-secret
+        secretName: fusion-pretrained-models-gcs-secret
+  gcsBaseDirectoryName: ml-models
+  gcsBucketName: fusion-ml-models
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: ml-model-service
+    repository: lucidworks
+    tag: 5.5.0
+  javaService:
+    imageName: ml-model-service
+    resources: {}
+  javaToolOptions: ""
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 3
+  logLevelRoot: info
+  logstashEnabled: true
+  milvus:
+    admin:
+      enabled: false
+      image:
+        pullPolicy: IfNotPresent
+        repository: milvusdb/milvus-em
+        tag: v0.4.0
+      replicas: 1
+      resources:
+        limits:
+          cpu: "2.0"
+          memory: 4Gi
+        requests:
+          cpu: "1.0"
+          memory: 2Gi
+      service:
+        annotations: {}
+        externalIPs: []
+        labels: {}
+        loadBalancerSourceRanges:
+        - 0.0.0.0/0
+        port: 3000
+        type: ClusterIP
+    affinity: {}
+    cache:
+      cacheSize: 4GB
+      insertBufferSize: 1GB
+    cluster:
+      enabled: false
+    enabled: true
+    externalMysql:
+      database: null
+      enabled: false
+      ip: null
+      password: null
+      port: null
+      user: null
+    extraConfigFiles: {}
+    extraContainers: ""
+    extraInitContainers: []
+    extraVolumeMounts: []
+    extraVolumes: []
+    fullnameOverride: milvus
+    global: {}
+    gpu:
+      buildIndexDevices:
+      - gpu0
+      cacheSize: 1GB
+      enabled: false
+      gpuSearchThreshold: 1000
+      searchDevices:
+      - gpu0
+    image:
+      pullPolicy: IfNotPresent
+      repository: milvusdb/milvus
+      resources:
+        limits:
+          cpu: "2.0"
+          memory: 6Gi
+        requests:
+          cpu: "1.0"
+          memory: 4Gi
+      tag: 0.10.2-cpu-d081520-8a2393
+    initContainerImage: alpine:3.8
+    livenessProbe:
+      failureThreshold: 5
+      initialDelaySeconds: 30
+      periodSeconds: 15
+      timeoutSeconds: 10
+    logs:
+      level: debug
+      logRotateNum: 0
+      maxLogFileSize: 1024MB
+      path: /var/lib/milvus/logs
+    logsPersistence:
+      annotations: {}
+      enabled: false
+      mountPath: /var/lib/milvus/logs
+      persistentVolumeClaim:
+        accessModes: ReadWriteMany
+        existingClaim: ""
+        size: 5Gi
+        storageClass: null
+        subPath: ""
+    metrics:
+      address: 127.0.0.1
+      enabled: false
+      port: 9091
+    mishards:
+      debug: true
+      image:
+        pullPolicy: IfNotPresent
+        repository: milvusdb/mishards
+        tag: 0.10.2
+      maxworkers: 50
+      replicas: 1
+      resources:
+        limits:
+          cpu: "2.0"
+          memory: 2Gi
+        requests:
+          cpu: "0.5"
+          memory: 1Gi
+    mysql:
+      affinity: {}
+      args: []
+      busybox:
+        image: busybox
+        tag: 1.31.1
+      configurationFiles:
+        mysql.cnf: |-
+          [mysqld]
+          pid-file        = /var/run/mysqld/mysqld.pid
+          socket          = /var/run/mysqld/mysqld.sock
+          log-error       = /var/log/mysql/error.log # mount out to host
+          skip-name-resolve
+          # By default we only accept connections from localhost
+          bind-address   = 0.0.0.0
+          # Disabling symbolic-links is recommended to prevent assorted security risks
+          symbolic-links=0
+          character-set-server = utf8mb4
+          collation-server = utf8mb4_unicode_ci
+          init_connect='SET NAMES utf8mb4'
+          skip-character-set-client-handshake = true
+          max_connections = 1000
+          wait_timeout = 31536000
+      configurationFilesPath: /etc/mysql/conf.d/
+      deploymentAnnotations: {}
+      enabled: true
+      extraInitContainers: |
+        # - name: do-something
+        #   image: busybox
+        #   command: ['do', 'something']
+      extraVolumeMounts: |
+        # - name: extras
+        #   mountPath: /usr/share/extras
+        #   readOnly: true
+      extraVolumes: |
+        # - name: extras
+        #   emptyDir: {}
+      global: {}
+      image: mysql
+      imagePullPolicy: IfNotPresent
+      imageTag: 5.7.30
+      initContainer:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 10Mi
+      initializationFiles:
+        grant.sql: |-
+          GRANT ALL PRIVILEGES ON milvus.* TO 'root'@'%';
+          FLUSH PRIVILEGES;
+      livenessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      metrics:
+        annotations: {}
+        enabled: false
+        flags: []
+        image: prom/mysqld-exporter
+        imagePullPolicy: IfNotPresent
+        imageTag: v0.10.0
+        livenessProbe:
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources: {}
+        serviceMonitor:
+          additionalLabels: {}
+          enabled: false
+      mysqlDatabase: milvus
+      mysqlPassword: milvus
+      mysqlRootPassword: milvusroot
+      mysqlUser: milvus
+      name: mysql
+      nodeSelector: {}
+      persistence:
+        accessMode: ReadWriteOnce
+        annotations: {}
+        enabled: true
+        existingClaim: ""
+        size: 4Gi
+        storageClass: null
+      podAnnotations: {}
+      podLabels: {}
+      readinessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      securityContext:
+        enabled: false
+        fsGroup: 999
+        runAsUser: 999
+      service:
+        annotations: {}
+        port: 3306
+        type: ClusterIP
+      serviceAccount:
+        create: false
+      ssl:
+        certificates: null
+        enabled: false
+        secret: mysql-ssl-certs
+      strategy:
+        type: Recreate
+      testFramework:
+        enabled: false
+        image: dduportal/bats
+        tag: 0.4.0
+      tolerations: []
+    network:
+      httpEnabled: true
+      httpPort: 19121
+    nodeSelector: {}
+    persistence:
+      annotations: {}
+      enabled: true
+      mountPath: /var/lib/milvus/db
+      persistentVolumeClaim:
+        accessModes: ReadWriteMany
+        existingClaim: milvuspvc
+        size: 50Gi
+        storageClass: null
+        subPath: ""
+    podAnnotations: {}
+    primaryPath: /var/lib/milvus
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 15
+      periodSeconds: 15
+      timeoutSeconds: 10
+    readonly:
+      cache:
+        cacheSize: 4GB
+        insertBufferSize: 1GB
+      gpu:
+        buildIndexDevices:
+        - gpu0
+        cacheSize: 1GB
+        enabled: false
+        gpuSearchThreshold: 1000
+        searchDevices:
+        - gpu0
+      logs:
+        level: debug
+        logRotateNum: 0
+        maxLogFileSize: 1024MB
+        path: /var/lib/milvus/logs
+      replicas: 1
+      resources:
+        limits:
+          cpu: "2.0"
+          memory: 6Gi
+        requests:
+          cpu: "1.0"
+          memory: 4Gi
+    replicas: 1
+    restartPolicy: Always
+    service:
+      annotations: {}
+      externalIPs: []
+      labels: {}
+      loadBalancerSourceRanges:
+      - 0.0.0.0/0
+      port: 19530
+      type: ClusterIP
+    serviceAccounts:
+      mishards:
+        create: false
+        name: null
+    storage:
+      autoFlushInterval: 1
+    terminationGracePeriodSeconds: 30
+    timeZone: UTC+8
+    tolerations: []
+    version: 0.5
+    wal:
+      bufferSize: 256MB
+      enabled: true
+      path: /var/lib/milvus/db/wal
+      recoveryErrorIgnore: false
+  milvuspvc:
+    enabled: true
+    size: 30Gi
+  modelRepoImpl: fusion
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 8086
+  preinstall:
+    image:
+      imagePullSecrets: []
+      name: kubectl
+      repository: bitnami
+      tag: latest
+    resources: {}
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  pythonService:
+    imageName: ml-python-image
+    resources: {}
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    successThreshold: 1
+    timeoutSeconds: 3
+  replicaCount: 1
+  runLabelNamespaceJob: true
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    annotations: {}
+    port: 8086
+    targetPort: 8086
+    type: ClusterIP
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+pm-ui:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: pm-ui
+    repository: lucidworks
+    tag: 5.5.0
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  rbac:
+    create: true
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    http:
+      annotations: {}
+      port: 8080
+      targetPort: 8080
+      type: ClusterIP
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: false
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+pulsar:
+  auth:
+    authentication:
+      enabled: false
+      jwt:
+        secretKey: sa
+        secretKeyName: service-account-key
+        usingSecretKey: false
+      provider: jwt
+    authorization:
+      enabled: false
+    superUsers:
+      broker: broker-admin
+      client: admin
+      proxy: proxy-admin
+  autorecovery:
+    affinity: {}
+    annotations: {}
+    component: recovery
+    configData:
+      BOOKIE_MEM: |
+        " -XX:+ExitOnOutOfMemoryError -Xms64m -Xmx64m "
+    gracePeriod: 30
+    initContainer:
+      resources: {}
+    ports:
+      http: 8000
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 0.05
+        memory: 64Mi
+  bookkeeper:
+    affinity: {}
+    annotations: {}
+    component: bookkeeper
+    configData:
+      BOOKIE_EXTRA_OPTS: |
+        -Dvertx.cacheDirBase=/tmp/vertx-cache
+      PULSAR_GC: |
+        -XX:+UseG1GC -XX:MaxGCPauseMillis=10 -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+DoEscapeAnalysis -XX:ParallelGCThreads=4 -XX:ConcGCThreads=4 -XX:G1NewSizePercent=50 -XX:+DisableExplicitGC -XX:-ResizePLAB -XX:+ExitOnOutOfMemoryError -XX:+PerfDisableSharedMem -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCApplicationStoppedTime -XX:+PrintHeapAtGC -verbosegc -Xloggc:/var/log/bookie-gc.log -XX:G1LogLevel=finest
+      PULSAR_MEM: |
+        -XX:+ExitOnOutOfMemoryError -XX:+UseContainerSupport -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=60.0
+      dbStorage_readAheadCacheMaxSizeMb: "256"
+      dbStorage_rocksDB_blockCacheSize: "16777216"
+      dbStorage_rocksDB_writeBufferSizeMB: "64"
+      dbStorage_writeCacheMaxSizeMb: "256"
+      journalMaxSizeMB: "2048"
+      nettyMaxFrameSizeBytes: "20981760"
+    gracePeriod: 30
+    initContainer:
+      resources: {}
+    networkPolicy:
+      additionalEgressRules: []
+      additionalIngressRules: []
+      dnsAccess:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+      enabled: false
+      kubernetesAccess:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+    pdb:
+      maxUnavailable: 1
+      usePolicy: true
+    podManagementPolicy: OrderedReady
+    ports:
+      bookie: 3181
+      http: 8000
+    probe:
+      liveness:
+        enabled: true
+        failureThreshold: 60
+        initialDelaySeconds: 10
+        periodSeconds: 30
+      readiness:
+        enabled: true
+        failureThreshold: 60
+        initialDelaySeconds: 10
+        periodSeconds: 30
+      startup:
+        enabled: false
+        failureThreshold: 30
+        initialDelaySeconds: 60
+        periodSeconds: 30
+    replicaCount: 3
+    resources:
+      limits:
+        memory: 5Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
+    securityContext:
+      fsGroup: 0
+      runAsUser: 0
+    service:
+      spec:
+        publishNotReadyAddresses: true
+    tls:
+      caSecret:
+        name: ""
+      certSecret:
+        name: ""
+      clusterDomain: svc.cluster.local
+      duration: 8760h
+      enabled: false
+      generateCert: true
+      generateJKS: true
+      generatePasswdFile: true
+      issuerRef:
+        kind: Issuer
+        name: fusion-ca-issuer
+      keystorePassword: changeit
+      renewBefore: 8464h
+    tolerations: []
+    updateStrategy:
+      type: RollingUpdate
+    volumes:
+      journal:
+        local_storage: true
+        name: journal
+        size: 50Gi
+      ledgers:
+        local_storage: true
+        name: ledgers
+        size: 50Gi
+      persistence: true
+  broker:
+    affinity: {}
+    annotations: {}
+    component: broker
+    configData:
+      PULSAR_GC: |
+        -XX:+UseG1GC -XX:MaxGCPauseMillis=10 -Dio.netty.leakDetectionLevel=disabled -Dio.netty.recycler.linkCapacity=1024 -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+DoEscapeAnalysis -XX:ParallelGCThreads=4 -XX:ConcGCThreads=4 -XX:G1NewSizePercent=50 -XX:+DisableExplicitGC -XX:-ResizePLAB -XX:+PerfDisableSharedMem
+      PULSAR_MEM: |
+        -XX:+ExitOnOutOfMemoryError -XX:+UseContainerSupport -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=60.0
+      backlogQuotaDefaultLimitGB: "10"
+      deduplicationEnabled: "false"
+      defaultRetentionSizeInMB: "5120"
+      defaultRetentionTimeInMinutes: "1440"
+      managedLedgerDefaultAckQuorum: "2"
+      managedLedgerDefaultEnsembleSize: "2"
+      managedLedgerDefaultWriteQuorum: "2"
+      maxMessageSize: "20971520"
+    gracePeriod: 30
+    initContainer:
+      resources: {}
+    networkPolicy:
+      additionalEgressRules: []
+      additionalIngressRules: []
+      dnsAccess:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+      enabled: false
+      kubernetesAccess:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+    pdb:
+      maxUnavailable: 1
+      usePolicy: true
+    ports:
+      http: 8080
+      https: 8443
+      pulsar: 6650
+      pulsarssl: 6651
+    probe:
+      liveness:
+        enabled: true
+        failureThreshold: 10
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        timeoutSeconds: 5
+        topic: _system/_signals_ingest
+      readiness:
+        enabled: true
+        failureThreshold: 10
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        timeoutSeconds: 5
+      startup:
+        enabled: false
+        failureThreshold: 30
+        initialDelaySeconds: 60
+        periodSeconds: 10
+        timeoutSeconds: 5
+    replicaCount: 2
+    resources:
+      limits:
+        memory: 4Gi
+      requests:
+        cpu: 1000m
+        memory: 3Gi
+    securityContext:
+      fsGroup: 0
+      runAsUser: 0
+    service:
+      annotations: {}
+    tls:
+      caSecret:
+        name: ""
+      certSecret:
+        name: ""
+      clusterDomain: svc.cluster.local
+      duration: 8760h
+      enabled: false
+      generateCert: true
+      generateJKS: true
+      issuerRef:
+        kind: Issuer
+        name: fusion-ca-issuer
+      keystorePassword: changeit
+      renewBefore: 8464h
+    tolerations: []
+  certs:
+    internal_issuer:
+      component: internal-cert-issuer
+      enabled: false
+      type: selfsigning
+    issuers:
+      selfsigning: null
+  clusterDomain: svc.cluster.local
+  clusterName: pulsar-cluster
+  components:
+    autorecovery: false
+    bookkeeper: true
+    broker: true
+    functions: false
+    proxy: false
+    pulsar_manager: false
+    toolset: false
+    zookeeper: false
+  dashboard:
+    annotations: {}
+    component: dashboard
+    gracePeriod: 0
+    image:
+      pullPolicy: IfNotPresent
+      repository: apachepulsar/pulsar-dashboard
+      tag: latest
+    ingress:
+      enabled: false
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 250m
+        memory: 1Gi
+    service:
+      annotations: {}
+      ports:
+      - name: server
+        port: 80
+    tolerations: []
+  extra:
+    autoRecovery: false
+    bastion: false
+    dashboard: false
+    functionsAsPods: false
+    proxy: false
+    pulsar_manager: false
+  functions:
+    component: functions-worker
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: fusion-pulsar-proxy
+    repository: lucidworks
+    tag: 5.5.0
+  images:
+    autorecovery:
+      pullPolicy: IfNotPresent
+      repository: apachepulsar/pulsar-all
+      tag: 2.6.3
+    bookie:
+      pullPolicy: IfNotPresent
+      repository: apachepulsar/pulsar-all
+      tag: 2.6.3
+    broker:
+      pullPolicy: IfNotPresent
+      repository: apachepulsar/pulsar-all
+      tag: 2.6.3
+    functions:
+      repository: apachepulsar/pulsar-all
+      tag: 2.6.3
+    imagePullSecrets: []
+    pulsar_manager:
+      hasCommand: false
+      pullPolicy: IfNotPresent
+      repository: apachepulsar/pulsar-manager
+      tag: v0.1.0
+    zookeeper:
+      pullPolicy: IfNotPresent
+      repository: apachepulsar/pulsar-all
+      tag: 2.6.3
+  initContainer:
+    image:
+      repository: lucidworks
+  keytoolUtils:
+    image:
+      annotations: {}
+      hostname: ""
+      imagePullPolicy: IfNotPresent
+      name: keytool-utils
+      path: /
+      port: 80
+      repository: lucidworks
+      tag: v2.0.0
+      tls:
+        enabled: false
+        secretName: ""
+  logstashEnabled: true
+  metadataPrefix: /pulsar
+  namespace: ""
+  namespaceCreate: false
+  persistence: true
+  proxy:
+    affinity: {}
+    annotations: {}
+    component: pulsar-proxy
+    configData:
+      PULSAR_GC: |
+        -XX:+UseG1GC -XX:MaxGCPauseMillis=10 -Dio.netty.leakDetectionLevel=disabled -Dio.netty.recycler.linkCapacity=1024 -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+DoEscapeAnalysis -XX:ParallelGCThreads=4 -XX:ConcGCThreads=4 -XX:G1NewSizePercent=50 -XX:+DisableExplicitGC -XX:-ResizePLAB -XX:+PerfDisableSharedMem
+      PULSAR_MEM: |
+        -XX:+ExitOnOutOfMemoryError -XX:+UseContainerSupport -XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0
+      authenticationEnabled: "true"
+      authenticationProviders: com.lucidworks.pulsar.security.FusionTokenAuthenticationProvider
+    gracePeriod: 30
+    initContainer:
+      resources: {}
+    pdb:
+      maxUnavailable: 1
+      usePolicy: true
+    ports:
+      http: 80
+      https: 443
+      pulsar: 6650
+      pulsarssl: 6651
+    probe:
+      liveness:
+        enabled: true
+        failureThreshold: 10
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        timeoutSeconds: 5
+      readiness:
+        enabled: true
+        failureThreshold: 10
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        timeoutSeconds: 5
+      startup:
+        enabled: false
+        failureThreshold: 30
+        initialDelaySeconds: 60
+        periodSeconds: 10
+        timeoutSeconds: 5
+    replicaCount: 1
+    resources:
+      limits:
+        memory: 256Mi
+      requests:
+        cpu: 0.2
+        memory: 128Mi
+    securityContext:
+      fsGroup: 8764
+      runAsNonRoot: true
+      runAsUser: 8764
+    service:
+      annotations: {}
+      type: LoadBalancer
+    tls:
+      caSecret:
+        name: ""
+      certSecret:
+        name: ""
+      clusterDomain: svc.cluster.local
+      duration: 8760h
+      enabled: false
+      generateCert: true
+      generateJKS: true
+      generatePasswdFile: true
+      issuerRef:
+        kind: Issuer
+        name: fusion-ca-issuer
+      keystorePassword: changeit
+      renewBefore: 8464h
+    tolerations: []
+  pulsar_manager:
+    admin:
+      password: pulsar
+      user: pulsar
+    annotations: {}
+    component: pulsar-manager
+    configData:
+      DRIVER_CLASS_NAME: org.postgresql.Driver
+      LOG_LEVEL: DEBUG
+      REDIRECT_HOST: http://127.0.0.1
+      REDIRECT_PORT: "9527"
+      URL: jdbc:postgresql://127.0.0.1:5432/pulsar_manager
+    gracePeriod: 30
+    port: 9527
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 0.1
+        memory: 250Mi
+    service:
+      annotations: {}
+      port: 9527
+      targetPort: 9527
+      type: LoadBalancer
+    tolerations: []
+  pulsar_metadata:
+    component: pulsar-init
+    configurationStoreMetadataPrefix: ""
+    configurationStorePort: 2181
+    image:
+      pullPolicy: IfNotPresent
+      repository: apachepulsar/pulsar-all
+      tag: 2.6.3
+  rbac:
+    create: true
+  tls:
+    enabled: false
+    keystorePassword: changeit
+  toolset:
+    annotations: {}
+    component: toolset
+    configData:
+      PULSAR_MEM: |
+        -XX:+UseContainerSupport -XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0
+    gracePeriod: 30
+    replicaCount: 1
+    resources:
+      limits:
+        memory: 256Mi
+      requests:
+        cpu: 0.1
+        memory: 256Mi
+    tolerations: []
+    useProxy: true
+  volumes:
+    local_storage: false
+    persistence: true
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+  zookeeper:
+    affinity: {}
+    annotations: {}
+    component: zookeeper
+    configData:
+      PULSAR_GC: |
+        -XX:+UseG1GC -XX:MaxGCPauseMillis=10 -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+DoEscapeAnalysis -XX:+DisableExplicitGC -XX:+PerfDisableSharedMem
+      PULSAR_MEM: |
+        -XX:+ExitOnOutOfMemoryError -XX:+UseContainerSupport -XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=80.0 -Dcom.sun.management.jmxremote -Djute.maxbuffer=10485760 -Dzookeeper.forceSync=no
+    enabled: false
+    gracePeriod: 30
+    pdb:
+      maxUnavailable: 1
+      usePolicy: true
+    podManagementPolicy: OrderedReady
+    ports:
+      client: 2181
+      clientTls: 2281
+      follower: 2888
+      leaderElection: 3888
+    probe:
+      liveness:
+        enabled: true
+        failureThreshold: 10
+        initialDelaySeconds: 10
+        periodSeconds: 30
+      readiness:
+        enabled: true
+        failureThreshold: 10
+        initialDelaySeconds: 10
+        periodSeconds: 30
+      startup:
+        enabled: false
+        failureThreshold: 30
+        initialDelaySeconds: 10
+        periodSeconds: 30
+    replicaCount: 3
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 0.2
+        memory: 512Mi
+    service:
+      annotations:
+        service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+    tls:
+      caSecret:
+        name: ""
+      certSecret:
+        name: ""
+      clusterDomain: svc.cluster.local
+      duration: 8760h
+      enabled: false
+      generateCert: true
+      generateJKS: false
+      issuerRef:
+        kind: Issuer
+        name: fusion-ca-issuer
+      keystorePassword: changeit
+      renewBefore: 8464h
+    tolerations: []
+    updateStrategy:
+      type: RollingUpdate
+    volumes:
+      data:
+        local_storage: true
+        name: data
+        size: 20Gi
+      persistence: true
+query-pipeline:
+  accessLogEnabled: false
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  datadog:
+    enabled: false
+    port: 8126
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: query-pipeline
+    repository: lucidworks
+    tag: 5.5.0
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 3
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 8787
+  preStopSleepTime: 10
+  pulsar:
+    blockIfQueueFull: false
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    successThreshold: 1
+    timeoutSeconds: 3
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  serverStopTimeout: 5000
+  service:
+    annotations: {}
+    port: 8787
+    targetPort: 8787
+    type: ClusterIP
+  springProfiles: kubernetes,jwt,fusion
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  useAvailabilityZoneRouting: true
+  warmingQueryJson:
+    pipelines: []
+    profiles: []
+  zipkinEnabled: "false"
+  zipkinUrl: localhost:9411
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+question-answering:
+  global: {}
+  image:
+    debug: false
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    repository: lucidworks
+    tag: 5.5.0
+  logstashEnabled: true
+  nodeSelector:
+    coldstart:
+      seldon: null
+      sparkSolrEtl: null
+      train: null
+    default: {}
+    deploy:
+      seldon: null
+    evaluation:
+      sparkSolrEtl: null
+      train: null
+    supervised:
+      seldon: null
+      sparkSolrEtl: null
+      train: null
+  rbac:
+    create: true
+  resources:
+    coldstart:
+      seldon: {}
+      sparkSolrEtl: {}
+      train: {}
+    default: {}
+    deploy:
+      seldon: {}
+    evaluation:
+      seldon: {}
+      sparkSolrEtl: {}
+      train: {}
+    supervised:
+      seldon: {}
+      sparkSolrEtl: {}
+      train: {}
+  securityContext:
+    fsGroup: 8764
+  tls:
+    enabled: false
+    keystorePassword: changeit
+  tolerations:
+    coldstart:
+      seldon: null
+      sparkSolrEtl: null
+      train: null
+    default: []
+    evaluation:
+      seldon: null
+      sparkSolrEtl: null
+      train: null
+    supervised:
+      seldon: null
+      sparkSolrEtl: null
+      train: null
+recommender:
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    repository: lucidworks
+    tag: 5.5.0
+  logstashEnabled: true
+  nodeSelector:
+    content:
+      etl: null
+      train: null
+    default: {}
+    user:
+      etl: null
+      train: null
+  resources:
+    content:
+      etl: {}
+      train: {}
+    default: {}
+    user:
+      etl: {}
+      train: {}
+  securityContext:
+    fsGroup: 8764
+  tls:
+    enabled: false
+    keystorePassword: changeit
+  tolerations:
+    content:
+      etl: null
+      train: null
+    default: []
+    user:
+      etl: null
+      train: null
+rules-ui:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: rules-ui
+    repository: lucidworks
+    tag: 5.5.0
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  rbac:
+    create: true
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    http:
+      annotations: {}
+      port: 8080
+      targetPort: 8080
+      type: ClusterIP
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: false
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+seldon-core-operator:
+  ambassador:
+    enabled: true
+    singleNamespace: true
+  certManager:
+    enabled: false
+  containersSecurityContext:
+    capabilities:
+      drop:
+      - NET_RAW
+  controllerId: ""
+  crd:
+    annotations: {}
+    create: true
+    forceV1: false
+    forceV1beta1: false
+  credentials:
+    gcs:
+      gcsCredentialFileName: gcloud-application-credentials.json
+    s3:
+      s3AccessKeyIDName: awsAccessKeyID
+      s3SecretAccessKeyName: awsSecretAccessKey
+  defaultUserID: "8888"
+  engine:
+    grpc:
+      port: 5001
+    image:
+      pullPolicy: IfNotPresent
+      registry: docker.io
+      repository: seldonio/engine
+      tag: 1.12.0
+    logMessagesExternally: false
+    port: 8000
+    prometheus:
+      path: /prometheus
+    resources:
+      cpuLimit: 500m
+      cpuRequest: 500m
+      memoryLimit: 512Mi
+      memoryRequest: 512Mi
+    serviceAccount:
+      name: default
+    user: 8888
+  executor:
+    image:
+      imagePullSecrets: []
+      pullPolicy: IfNotPresent
+      registry: docker.io
+      repository: seldonio/seldon-core-executor
+      tag: 1.12.0
+    metricsPortName: metrics
+    port: 8000
+    prometheus:
+      path: /prometheus
+    requestLogger:
+      defaultEndpoint: http://default-broker
+      workQueueSize: 10000
+      writeTimeoutMs: 2000
+    resources:
+      cpuLimit: 500m
+      cpuRequest: 500m
+      memoryLimit: 512Mi
+      memoryRequest: 512Mi
+    serviceAccount:
+      name: default
+    user: 8888
+  explainer:
+    image: seldonio/alibiexplainer:1.12.0
+    image_v2: seldonio/mlserver:1.0.0.rc1-alibi-explain
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    pullPolicy: IfNotPresent
+    registry: docker.io
+    repository: seldonio/seldon-core-operator
+    tag: 1.12.0
+  istio:
+    enabled: false
+    gateway: istio-system/seldon-gateway
+    tlsMode: ""
+  keda:
+    enabled: false
+  kubeflow: false
+  logstashEnabled: true
+  manager:
+    annotations: {}
+    containerSecurityContext: {}
+    cpuLimit: 500m
+    cpuRequest: 100m
+    deploymentNameAsPrefix: false
+    leaderElectionID: a33bd623.machinelearning.seldon.io
+    logLevel: INFO
+    memoryLimit: 300Mi
+    memoryRequest: 200Mi
+  managerCreateResources: false
+  managerUserID: 8888
+  namespaceOverride: ""
+  predictiveUnit:
+    defaultEnvSecretRefName: ""
+    grpcPort: 9500
+    httpPort: 9000
+    metricsPortName: metrics
+  predictor_servers:
+    MLFLOW_SERVER:
+      protocols:
+        kfserving:
+          defaultImageVersion: 1.0.0.rc1-mlflow
+          image: seldonio/mlserver
+        seldon:
+          defaultImageVersion: 1.12.0
+          image: seldonio/mlflowserver
+    SKLEARN_SERVER:
+      protocols:
+        kfserving:
+          defaultImageVersion: 1.0.0.rc1-sklearn
+          image: seldonio/mlserver
+        seldon:
+          defaultImageVersion: 1.12.0
+          image: seldonio/sklearnserver
+    TEMPO_SERVER:
+      protocols:
+        kfserving:
+          defaultImageVersion: 1.0.0.rc1-slim
+          image: seldonio/mlserver
+    TENSORFLOW_SERVER:
+      protocols:
+        seldon:
+          defaultImageVersion: 1.12.0
+          image: seldonio/tfserving-proxy
+        tensorflow:
+          defaultImageVersion: 2.1.0
+          image: tensorflow/serving
+    TRITON_SERVER:
+      protocols:
+        kfserving:
+          defaultImageVersion: 21.08-py3
+          image: nvcr.io/nvidia/tritonserver
+    XGBOOST_SERVER:
+      protocols:
+        kfserving:
+          defaultImageVersion: 1.0.0.rc1-xgboost
+          image: seldonio/mlserver
+        seldon:
+          defaultImageVersion: 1.12.0
+          image: seldonio/xgboostserver
+  rbac:
+    configmap:
+      create: true
+    create: true
+  serviceAccount:
+    create: true
+    name: seldon-manager
+  singleNamespace: true
+  storageInitializer:
+    cpuLimit: "1"
+    cpuRequest: 100m
+    image: seldonio/rclone-storage-initializer:1.12.0
+    memoryLimit: 1Gi
+    memoryRequest: 100Mi
+  usageMetrics:
+    enabled: false
+  webhook:
+    port: 4443
+solr:
+  affinity: {}
+  annotations: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  config:
+    solrlog4j: ""
+    solrxml: ""
+  exporter:
+    affinity: {}
+    configDir: /opt/solr/contrib/prometheus-exporter/conf
+    configFile: solr-exporter-config.xml
+    enabled: false
+    javaMem: -Xmx1g
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 20
+      periodSeconds: 10
+      timeoutSeconds: 2
+    networkPolicy:
+      additionalEgressRules: []
+      additionalIngressRules: []
+      dnsAccess:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+      enabled: false
+    podAnnotations: {}
+    port: 9983
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 15
+      periodSeconds: 5
+      successThreshold: 1
+      timeoutSeconds: 2
+    resources: {}
+    service:
+      annotations: {}
+      type: ClusterIP
+    threads: 7
+    updateStrategy: {}
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    pullPolicy: IfNotPresent
+    repository: solr
+    tag: 8.11.1
+  initContainer:
+    image:
+      repository: lucidworks
+      solrzoneImageName: bitnami/kubectl:1.15-debian-9
+    resources: {}
+  javaMem: -Xms2g -Xmx3g
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets: []
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 2
+  logLevel: INFO
+  logstashEnabled: true
+  memoryBehavior: exit
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodePoolIdentifier: fusion_node_type
+  nodePools:
+  - name: ""
+  podAnnotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  podManagementPolicy: OrderedReady
+  port: 8983
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 15
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 2
+  replicaCount: 3
+  resources: {}
+  securityContext:
+    fsGroup: 8983
+    runAsUser: 8983
+  service:
+    annotations: {}
+    type: ClusterIP
+  serviceDnsName: ""
+  setAvailabilityZone: true
+  solrJavaStackSize: -Xss512k
+  solrOpts: ""
+  solrRequestLogEnabled: false
+  terminationGracePeriodSeconds: 180
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    checkPeerName: "false"
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    needClientAuth: "false"
+    renewBefore: 8464h
+    wantClientAuth: "false"
+  updateStrategy:
+    type: OnDelete
+  volumeClaimTemplates:
+    accessModes:
+    - ReadWriteOnce
+    storageClassName: ""
+    storageSize: 20Gi
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+  zookeeper:
+    affinity: {}
+    command:
+    - /bin/bash
+    - -xec
+    - if [ -d /data/data/version-2/ ]; then if ! ls /data/data/version-2/snapshot*
+      > /dev/null 2>&1; then wget -O /data/data/version-2/snapshot.0 https://issues.apache.org/jira/secure/attachment/12928686/snapshot.0;
+      fi; fi && /config-scripts/run
+    enabled: false
+    env:
+      JMXAUTH: "false"
+      JMXDISABLE: "false"
+      JMXPORT: 1099
+      JMXSSL: "false"
+      ZK_DATA_DIR: /data/data
+      ZK_HEAP_SIZE: 1G
+      ZK_PURGE_INTERVAL: 1
+      ZK_SYNC_LIMIT: 10
+      ZK_TICK_TIME: 2000
+      ZOO_AUTOPURGE_PURGEINTERVAL: 1
+      ZOO_AUTOPURGE_SNAPRETAINCOUNT: 3
+      ZOO_INIT_LIMIT: 5
+      ZOO_MAX_CLIENT_CNXNS: 60
+      ZOO_PORT: 2181
+      ZOO_STANDALONE_ENABLED: false
+      ZOO_TICK_TIME: 2000
+    exporters:
+      jmx:
+        config:
+          lowercaseOutputName: false
+          rules:
+          - name: zookeeper_$2
+            pattern: org.apache.ZooKeeperService<name0=ReplicatedServer_id(\d+)><>(\w+)
+          - labels:
+              replicaId: $2
+            name: zookeeper_$3
+            pattern: org.apache.ZooKeeperService<name0=ReplicatedServer_id(\d+), name1=replica.(\d+)><>(\w+)
+          - labels:
+              memberType: $3
+              replicaId: $2
+            name: zookeeper_$4
+            pattern: org.apache.ZooKeeperService<name0=ReplicatedServer_id(\d+), name1=replica.(\d+),
+              name2=(\w+)><>(\w+)
+          - labels:
+              memberType: $3
+              replicaId: $2
+            name: zookeeper_$4_$5
+            pattern: org.apache.ZooKeeperService<name0=ReplicatedServer_id(\d+), name1=replica.(\d+),
+              name2=(\w+), name3=(\w+)><>(\w+)
+          startDelaySeconds: 30
+        enabled: false
+        env: {}
+        image:
+          pullPolicy: IfNotPresent
+          repository: sscaling/jmx-prometheus-exporter
+          tag: 0.3.0
+        livenessProbe:
+          failureThreshold: 8
+          httpGet:
+            path: /metrics
+            port: jmxxp
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 60
+        path: /metrics
+        ports:
+          jmxxp:
+            containerPort: 9404
+            protocol: TCP
+        readinessProbe:
+          failureThreshold: 8
+          httpGet:
+            path: /metrics
+            port: jmxxp
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 60
+        resources: {}
+        serviceMonitor:
+          interval: 30s
+          scheme: http
+          scrapeTimeout: 30s
+      zookeeper:
+        config:
+          logLevel: info
+          resetOnScrape: "true"
+        enabled: false
+        env: {}
+        image:
+          pullPolicy: IfNotPresent
+          repository: josdotso/zookeeper-exporter
+          tag: v1.1.2
+        livenessProbe:
+          failureThreshold: 8
+          httpGet:
+            path: /metrics
+            port: zookeeperxp
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 60
+        path: /metrics
+        ports:
+          zookeeperxp:
+            containerPort: 9141
+            protocol: TCP
+        readinessProbe:
+          failureThreshold: 8
+          httpGet:
+            path: /metrics
+            port: zookeeperxp
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 60
+        resources: {}
+        serviceMonitor:
+          interval: 30s
+          scheme: http
+          scrapeTimeout: 30s
+    fusion-common-utils:
+      global: {}
+    global: {}
+    headless:
+      annotations: {}
+    image:
+      imagePullSecrets: []
+      pullPolicy: IfNotPresent
+      repository: zookeeper
+      tag: 3.6.2
+    jobs:
+      chroots:
+        activeDeadlineSeconds: 300
+        backoffLimit: 5
+        completions: 1
+        config:
+          create: []
+        enabled: false
+        env: []
+        parallelism: 1
+        resources: {}
+        restartPolicy: Never
+    jvmFlags: -XX:+ExitOnOutOfMemoryError
+    keytoolUtils:
+      image:
+        imagePullPolicy: IfNotPresent
+        imagePullSecrets: []
+        name: keytool-utils
+        repository: lucidworks
+        tag: v2.1.0
+    networkPolicy:
+      additionalEgressRules: []
+      additionalIngressRules: []
+      dnsAccess:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+      enabled: false
+      kubernetesAccess:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+    nodeSelector: {}
+    persistence:
+      accessMode: ReadWriteOnce
+      enabled: true
+      size: 5Gi
+    podAnnotations: {}
+    podDisruptionBudget:
+      maxUnavailable: 1
+    podLabels: {}
+    podManagementPolicy: OrderedReady
+    ports:
+      client:
+        containerPort: 2181
+        protocol: TCP
+      election:
+        containerPort: 3888
+        protocol: TCP
+      server:
+        containerPort: 2888
+        protocol: TCP
+      tlsclient:
+        containerPort: 2281
+        protocol: TCP
+    priorityClassName: ""
+    prometheus:
+      serviceMonitor:
+        enabled: false
+        selector: {}
+    rbac:
+      create: true
+    replicaCount: 3
+    resources: {}
+    securityContext:
+      fsGroup: 1000
+      runAsUser: 1000
+    service:
+      annotations: {}
+      ports:
+        client:
+          port: 2181
+          protocol: TCP
+          targetPort: client
+        tlsclient:
+          port: 2281
+          protocol: TCP
+          targetPort: tlsclient
+      type: ClusterIP
+    terminationGracePeriodSeconds: 1800
+    tls:
+      caSecret:
+        name: ""
+      certSecret:
+        name: ""
+      clusterDomain: svc.cluster.local
+      duration: 8760h
+      enabled: false
+      generateCert: true
+      generateJKS: true
+      issuerRef:
+        kind: Issuer
+        name: fusion-ca-issuer
+      keystorePassword: changeit
+      renewBefore: 8464h
+    tolerations: []
+    updateStrategy:
+      type: RollingUpdate
+    zkInstallDir: /apache-zookeeper-*
+  zookeeperClientPort: 2181
+solr-backup-runner:
+  backup:
+    backoffLimit: 2
+    collection_schedules:
+      '*': 0 */6 * * *
+    concurrencyPolicy: Forbid
+    executorCount: 10
+    failedJobsHistoryLimit: 1
+    fsGroup: 8983
+    networkPolicy:
+      additionalEgressRules: []
+      additionalIngressRules: []
+      dnsAccess:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+      enabled: false
+    podAnnotations: {}
+    resources: {}
+    restartPolicy: Never
+    runAsUser: 8983
+    successfulJobsHistoryLimit: 3
+  enabled: false
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: solr-backup-runner
+    pullPolicy: IfNotPresent
+    repository: lucidworks
+    tag: 5.5.0
+  localBackupDirectory: /mnt/solr-backups/collection-backups
+  logstashEnabled: true
+  prune:
+    backoffLimit: 1
+    concurrencyPolicy: Forbid
+    enabled: true
+    executorCount: 10
+    failedJobsHistoryLimit: 1
+    fsGroup: 8983
+    networkPolicy:
+      additionalEgressRules: []
+      additionalIngressRules: []
+      dnsAccess:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+      enabled: false
+    podAnnotations: {}
+    resources: {}
+    restartPolicy: Never
+    retentionPolicyConfig:
+      retention:
+        policies:
+        - all: true
+          for: 24h
+        - for: 144h
+          keep: 6
+        - for: 504h
+          keep: 3
+        - for: 2016h
+          keep: 3
+    runAsUser: 8983
+    schedule: 0 0 * * *
+    successfulJobsHistoryLimit: 3
+  solrBackupDirectory: /mnt/solr-backups/collection-backups
+  solrPath: solr
+  solrPort: "8983"
+  solrProtocol: http
+sql-service:
+  affinity: {}
+  config:
+    springSecurity: ""
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: sql-service
+    repository: lucidworks
+    tag: 5.5.0
+  jvmOptions: -XX:+ExitOnOutOfMemoryError -XX:+UseG1GC -XX:+PrintGC -Xloggc:/work/sql-gc-%t.log
+    -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=2M -Xms4g
+    -Xmx4g
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    initialDelaySeconds: 420
+    periodSeconds: 10
+    timeoutSeconds: 10
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 8085
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    initialDelaySeconds: 25
+    periodSeconds: 5
+    timeoutSeconds: 10
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 2
+      memory: 12Gi
+    requests:
+      cpu: 500m
+      memory: 8Gi
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    http:
+      annotations: {}
+      port: 8085
+      targetPort: 8085
+      type: ClusterIP
+    thrift:
+      annotations: {}
+      port: 8088
+      targetPort: 8088
+      type: LoadBalancer
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+templating:
+  accessLogEnabled: false
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  datadog:
+    enabled: false
+    port: 8126
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: templating
+    repository: lucidworks
+    tag: 5.5.0
+  javaToolOptions: ""
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 3
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 5250
+  preStopSleepTime: 10
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    successThreshold: 1
+    timeoutSeconds: 3
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  serverStopTimeout: 5000
+  service:
+    annotations: {}
+    port: 5250
+    targetPort: 5250
+    type: ClusterIP
+  springProfiles: kubernetes,jwt,fusion
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  zipkinEnabled: "false"
+  zipkinUrl: localhost:9411
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+tikaserver:
+  affinity: {}
+  extractInlineImages: false
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: tika
+    repository: apache
+    tag: 1.28.1
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 2
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  pod:
+    annotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 9998
+  preStopSleepTime: 10
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 15
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 2
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  serverStopTimeout: 5000
+  service:
+    annotations: {}
+    port: 9998
+    targetPort: 9998
+    type: ClusterIP
+  tls:
+    enabled: false
+webapps:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 70
+      type: Resource
+    minReplicas: 1
+  deploymentStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  fusion-common-utils:
+    global: {}
+  global: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: webapps
+    repository: lucidworks
+    tag: 5.5.0
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xmx1g
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: artifactory
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.0.0
+  livenessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+  logLevelRoot: info
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  port: 8780
+  preStopSleepTime: 15
+  pulsarPort: "8080"
+  pulsarServicePort: "6650"
+  pulsarServiceTLSPort: "6651"
+  pulsarTLSPort: "8443"
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    fsGroup: 8764
+    runAsNonRoot: true
+    runAsUser: 8764
+  service:
+    annotations: {}
+    port: 8780
+    targetPort: 8780
+    type: ClusterIP
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  zkPort: 2181
+  zkReplicaCount: 3
+  zkTLSPort: 2281
+zookeeper:
+  affinity: {}
+  command:
+  - /bin/bash
+  - -xec
+  - if [ -d /data/data/version-2/ ]; then if ! ls /data/data/version-2/snapshot* >
+    /dev/null 2>&1; then wget -O /data/data/version-2/snapshot.0 https://issues.apache.org/jira/secure/attachment/12928686/snapshot.0;
+    fi; fi && /config-scripts/run
+  env:
+    JMXAUTH: "false"
+    JMXDISABLE: "false"
+    JMXPORT: 1099
+    JMXSSL: "false"
+    ZK_DATA_DIR: /data/data
+    ZK_HEAP_SIZE: 1G
+    ZK_PURGE_INTERVAL: 1
+    ZK_SYNC_LIMIT: 10
+    ZK_TICK_TIME: 2000
+    ZOO_AUTOPURGE_PURGEINTERVAL: 1
+    ZOO_AUTOPURGE_SNAPRETAINCOUNT: 3
+    ZOO_INIT_LIMIT: 5
+    ZOO_MAX_CLIENT_CNXNS: 60
+    ZOO_PORT: 2181
+    ZOO_STANDALONE_ENABLED: false
+    ZOO_TICK_TIME: 2000
+  exporters:
+    jmx:
+      config:
+        lowercaseOutputName: false
+        rules:
+        - name: zookeeper_$2
+          pattern: org.apache.ZooKeeperService<name0=ReplicatedServer_id(\d+)><>(\w+)
+        - labels:
+            replicaId: $2
+          name: zookeeper_$3
+          pattern: org.apache.ZooKeeperService<name0=ReplicatedServer_id(\d+), name1=replica.(\d+)><>(\w+)
+        - labels:
+            memberType: $3
+            replicaId: $2
+          name: zookeeper_$4
+          pattern: org.apache.ZooKeeperService<name0=ReplicatedServer_id(\d+), name1=replica.(\d+),
+            name2=(\w+)><>(\w+)
+        - labels:
+            memberType: $3
+            replicaId: $2
+          name: zookeeper_$4_$5
+          pattern: org.apache.ZooKeeperService<name0=ReplicatedServer_id(\d+), name1=replica.(\d+),
+            name2=(\w+), name3=(\w+)><>(\w+)
+        startDelaySeconds: 30
+      enabled: false
+      env: {}
+      image:
+        pullPolicy: IfNotPresent
+        repository: sscaling/jmx-prometheus-exporter
+        tag: 0.3.0
+      livenessProbe:
+        failureThreshold: 8
+        httpGet:
+          path: /metrics
+          port: jmxxp
+        initialDelaySeconds: 30
+        periodSeconds: 15
+        successThreshold: 1
+        timeoutSeconds: 60
+      path: /metrics
+      ports:
+        jmxxp:
+          containerPort: 9404
+          protocol: TCP
+      readinessProbe:
+        failureThreshold: 8
+        httpGet:
+          path: /metrics
+          port: jmxxp
+        initialDelaySeconds: 30
+        periodSeconds: 15
+        successThreshold: 1
+        timeoutSeconds: 60
+      resources: {}
+      serviceMonitor:
+        interval: 30s
+        scheme: http
+        scrapeTimeout: 30s
+    zookeeper:
+      config:
+        logLevel: info
+        resetOnScrape: "true"
+      enabled: false
+      env: {}
+      image:
+        pullPolicy: IfNotPresent
+        repository: josdotso/zookeeper-exporter
+        tag: v1.1.2
+      livenessProbe:
+        failureThreshold: 8
+        httpGet:
+          path: /metrics
+          port: zookeeperxp
+        initialDelaySeconds: 30
+        periodSeconds: 15
+        successThreshold: 1
+        timeoutSeconds: 60
+      path: /metrics
+      ports:
+        zookeeperxp:
+          containerPort: 9141
+          protocol: TCP
+      readinessProbe:
+        failureThreshold: 8
+        httpGet:
+          path: /metrics
+          port: zookeeperxp
+        initialDelaySeconds: 30
+        periodSeconds: 15
+        successThreshold: 1
+        timeoutSeconds: 60
+      resources: {}
+      serviceMonitor:
+        interval: 30s
+        scheme: http
+        scrapeTimeout: 30s
+  fusion-common-utils:
+    global: {}
+  global: {}
+  headless:
+    annotations: {}
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    pullPolicy: IfNotPresent
+    repository: zookeeper
+    tag: 3.6.2
+  jobs:
+    chroots:
+      activeDeadlineSeconds: 300
+      backoffLimit: 5
+      completions: 1
+      config:
+        create: []
+      enabled: false
+      env: []
+      parallelism: 1
+      resources: {}
+      restartPolicy: Never
+  jvmFlags: -XX:+ExitOnOutOfMemoryError
+  keytoolUtils:
+    image:
+      imagePullPolicy: IfNotPresent
+      imagePullSecrets: []
+      name: keytool-utils
+      repository: lucidworks
+      tag: v2.1.0
+  logstashEnabled: true
+  networkPolicy:
+    additionalEgressRules: []
+    additionalIngressRules: []
+    dnsAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    enabled: false
+    kubernetesAccess:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  nodeSelector: {}
+  persistence:
+    accessMode: ReadWriteOnce
+    enabled: true
+    size: 5Gi
+  podAnnotations: {}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  podLabels: {}
+  podManagementPolicy: OrderedReady
+  ports:
+    client:
+      containerPort: 2181
+      protocol: TCP
+    election:
+      containerPort: 3888
+      protocol: TCP
+    server:
+      containerPort: 2888
+      protocol: TCP
+    tlsclient:
+      containerPort: 2281
+      protocol: TCP
+  priorityClassName: ""
+  prometheus:
+    serviceMonitor:
+      enabled: false
+      selector: {}
+  rbac:
+    create: true
+  replicaCount: 3
+  resources: {}
+  securityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+  service:
+    annotations: {}
+    ports:
+      client:
+        port: 2181
+        protocol: TCP
+        targetPort: client
+      tlsclient:
+        port: 2281
+        protocol: TCP
+        targetPort: tlsclient
+    type: ClusterIP
+  terminationGracePeriodSeconds: 1800
+  tls:
+    caSecret:
+      name: ""
+    certSecret:
+      name: ""
+    clusterDomain: svc.cluster.local
+    duration: 8760h
+    enabled: false
+    generateCert: true
+    generateJKS: true
+    issuerRef:
+      kind: Issuer
+      name: fusion-ca-issuer
+    keystorePassword: changeit
+    renewBefore: 8464h
+  tolerations: []
+  updateStrategy:
+    type: RollingUpdate
+  zkInstallDir: /apache-zookeeper-*

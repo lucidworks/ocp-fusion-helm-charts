@@ -1,0 +1,11 @@
+apiVersion: v2
+appVersion: 1.28.1
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.5.1
+description: Tika server deployment
+keywords:
+- tikaserver
+name: tikaserver
+version: 1.0.11

@@ -1,0 +1,21 @@
+--- fusion/charts/tikaserver/templates/deployment.yaml	(revision ea9c4a2c14fe980cffddb52215ba09b85b2a50a0)
++++ fusion/charts/tikaserver/templates/deployment.yaml	(revision a44bd3eb0309465462c90bf5a2b655403a8100b4)
+@@ -56,16 +53,12 @@
+       - name: tikaserver
+         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
+-        securityContext:
+-          readOnlyRootFilesystem: true
+-          runAsNonRoot: true
+-          allowPrivilegeEscalation: false
+-          privileged: false
++
+         {{- if not $tlsEnabled }}
+         command:
+           - /bin/sh
+           - -c
+-          - exec java -jar /tika-server-1.25.jar --spawnChild -h 0.0.0.0 $0 $@
++          - exec java -jar /tika-server-1.28.jar --spawnChild -h 0.0.0.0 $0 $@
+           - -c /tika-config.xml
+         {{- else }}
+         command:
