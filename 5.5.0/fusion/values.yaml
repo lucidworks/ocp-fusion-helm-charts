@@ -3280,10 +3280,6 @@ seldon-core-operator:
     singleNamespace: true
   certManager:
     enabled: false
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   controllerId: ""
   crd:
     annotations: {}

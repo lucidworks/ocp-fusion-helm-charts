@@ -27,6 +27,7 @@ image:
   name: job-launcher
   repository: lucidworks
   tag: latest
+  kubectlImage: bitnami/kubectl
 javaToolOptions: -XX:+ExitOnOutOfMemoryError
 keytoolUtils:
   image:

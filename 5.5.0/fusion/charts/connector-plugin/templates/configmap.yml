@@ -13,33 +13,6 @@ metadata:
   annotations:
 {{ toYaml .Values.annotations | indent 4 }}
 data:
-  logback.xml: |-
-    <configuration>
-        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder class="com.lucidworks.logging.logback.classic.LucidworksPatternLayoutEncoder">
-                <pattern>%d - %-5p [%t:%C{3.}@%L] - %m%n</pattern>
-                <charset>utf8</charset>
-            </encoder>
-        </appender>
-
-        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${LOGDIR}/connector.log</file>
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <!-- rollover daily -->
-                <fileNamePattern>${LOGDIR}/connector-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-                <maxFileSize>50MB</maxFileSize>
-                <totalSizeCap>10GB</totalSizeCap>
-            </rollingPolicy>
-            <encoder class="com.lucidworks.logging.logback.classic.LucidworksPatternLayoutEncoder">
-                <pattern>%d - %-5p [%t:%C{3.}@%L] - %m%n</pattern>
-                <charset>utf8</charset>
-            </encoder>
-        </appender>
-
-        <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-        </root>
-    </configuration>
   application-k8s.yml: |-
     spring:
       profiles:
@@ -205,10 +178,6 @@ data:
                 - name: connector-data
                   mountPath: "/connector-data"
     {{- end }}
-                - name: logs-dir
-                  mountPath: /fusion-logs
-                - name: config-volume
-                  mountPath: /config-map
                 - name: application-config-k8s
                   mountPath: "app/config"
                   readOnly: true
@@ -241,14 +210,12 @@ data:
                 - name: "CONNECTORS_PERSISTENT_STORE"
                   value: "/connector-data"
     {{- end }}
-                - name: "LOGDIR"
-                  value: "/fusion-logs"
                 - name: "COMPONENT"
                   value: "connector-plugin"
                 - name: SPRING_PROFILES_ACTIVE
                   value: "{{ .Values.springProfiles }}{{- if $tlsEnabled }},tls{{- end }}{{- if $jsonOutput }},logjson{{- end }}{{- if $logstashHost }},logstash{{- end }}{{- if $logPulsar }},logpulsar{{- end }}"
                 - name: JAVA_TOOL_OPTIONS
-                  value: "-Dlogging.config=/config-map/logback.xml
+                  value: "
     {{- if ( and $importTrustedCertsEnabled ( not $tlsEnabled )) }} -Djavax.net.ssl.trustStore=/etc/ssl/truststore/truststore.jks -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.ssl.trustStoreType=PKCS12{{- end }}
     {{- if $tlsEnabled }} -Djavax.net.ssl.trustStore=/etc/ssl/keystores/truststore.jks -Djavax.net.ssl.trustStorePassword={{ .Values.tls.keystorePassword }} -Djavax.net.ssl.trustStoreType=PKCS12 -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ .Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ .Values.tls.keystorePassword }}{{- end }} -Dspring.cloud.kubernetes.secrets.paths=/etc/secrets {{ .Values.javaToolOptions }}"
                 {{ if $logstashHost }}
@@ -295,12 +262,6 @@ data:
               resources:
                 {{ toYaml .Values.resources | nindent 16 }}
           volumes:
-            - name: logs-dir
-              emptyDir: {}
-            - name: config-volume
-              configMap:
-                name: "{{ include "fusion.connector-plugin.fullname" . }}"
-                defaultMode: 420
             - name: tmp
               emptyDir: {}
             - name: secrets
