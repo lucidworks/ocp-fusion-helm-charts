@@ -82,7 +82,7 @@ spec:
             - name: API_GATEWAY_JKS_BASE64
               valueFrom:
                 secretKeyRef:
-                  name:  dataes-api-gateway-jks
+                  name:  "{{ .Release.Name }}-api-gateway-jks"
                   key: api-gateway.jks
           volumeMounts:
             - name: jks
