@@ -1,0 +1,183 @@
+{{- $tlsEnabled := .Values.tls.enabled -}}
+{{- if .Values.global -}}
+{{- if .Values.global.tlsEnabled -}}
+{{ $tlsEnabled = true }}
+{{- end }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "argo-upload-model-workflow"
+data:
+  application.yaml: |-
+    apiVersion: argoproj.io/v1alpha1
+    kind: Workflow
+    metadata:
+      generateName: upload-model-to-cloud-
+      labels:
+        workflows.argoproj.io/controller-instanceid: "{{`{{INSTANCEID}}`}}"
+        jobRunId: "{{`{{JOB_RUN_ID}}`}}"
+        jobConfigId: "{{`{{JOB_CONFIG_ID}}`}}"
+    spec:
+
+      activeDeadlineSeconds: 600
+
+      imagePullSecrets:
+        {{ if .Values.image.imagePullSecrets }}
+          {{ .Values.image.imagePullSecrets| toYaml | nindent 8 }}
+        {{ end }}
+        - name: "{{`{{MODEL_DOCKER_SECRET}}`}}"
+        
+      volumeClaimTemplates:
+        - metadata:
+            name: workspace
+          spec:
+            accessModes: [ "ReadWriteOnce" ]
+            resources:
+              requests:
+                storage: 1Gi
+      volumes:
+    {{- if $tlsEnabled }}
+      - name: fusion-truststore
+        secret:
+          secretName: fusion-truststore
+    {{- end }}
+      - name: secrets
+        secret:
+          secretName: service-account-key
+          items:
+          - key: sa
+            path: service-account-key
+          
+      arguments:
+        parameters:
+        - name: model_name
+          value: "{{`{{MODEL_NAME}}`}}"
+        - name: ml_model_service_host
+          value: "{{`{{ML_MODEL_SERVICE}}`}}"
+        - name: namespace
+          value: "{{ .Release.Namespace }}"
+        - name: fusion_docker_repo
+          value: "{{ .Values.image.repository }}"
+        - name: fusion_docker_secret
+          value: "{{`{{FUSION_DOCKER_SECRET}}`}}"
+        - name: image_pull_policy
+          value: "IfNotPresent"
+        - name: utilities_tag
+          value: "{{`{{workflowUtilitiesTag}}`}}"
+        - name: cloud_path
+          value: "{{`{{CLOUD_PATH}}`}}"
+        - name: cloud_secret
+          value: "{{`{{CLOUD_SECRET}}`}}"
+      entrypoint: workflow
+
+      templates:
+      - name: workflow
+        steps:
+        - - name: get-version-number
+            template: get-version-number
+        - - name: download-model-parameters
+            template: download-model-parameters
+        - - name: upload-to-cloud
+            template: upload-to-cloud
+            arguments:
+              parameters:
+              - name: version-number
+                value: "{{`{{steps.get-version-number.outputs.result}}`}}"
+
+      - name: download-model-parameters
+        metadata:
+          labels:
+            app.kubernetes.io/component: ml-service-workflow
+            app.kubernetes.io/part-of: fusion
+            app.kubernetes.io/instance: "{{ .Release.Name }}"
+        nodeSelector:
+          {{ .Values.nodeSelector.default | toYaml | nindent 10  }}
+        tolerations:
+          {{ .Values.tolerations.default | toYaml | nindent 10  }}
+        container:
+          image: "{{`{{workflow.parameters.fusion_docker_repo}}`}}/fusion-workflow-utilities:{{`{{workflow.parameters.utilities_tag}}`}}"
+          imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
+          resources:
+          command: [ tini, --, python, transfer_blobs.py ]
+          args: [ "download",
+                  "--service-protocol={{ ternary "https" "http" $tlsEnabled }}",
+                  "--service-host={{`{{workflow.parameters.ml_model_service_host}}`}}",
+                  "--service-port=8086",
+                  "--path=ml-models/{{`{{workflow.parameters.model_name}}`}}",
+                  "--key-path=/etc/secrets/service-account-key",
+                  "--jks-url={{- ternary "https" "http" $tlsEnabled -}}://proxy:6764/api/internal",
+                  "--download-location=/workspace/",
+                  "--pass-in-config=False",
+          ]
+          env:
+            - name: "FUSION_PROTOCOL"
+              value: "{{ $tlsEnabled | ternary "https" "http"  }}"
+    {{- if $tlsEnabled }}
+            - name: "REQUESTS_CA_BUNDLE"
+              value: "/etc/ssl/truststore/ca.pem"
+    {{- end }}
+          volumeMounts:
+            - name: workspace
+              mountPath: /workspace
+            - name: secrets
+              mountPath: "/etc/secrets"
+    {{- if $tlsEnabled }}
+            - name: "fusion-truststore"
+              mountPath: "/etc/ssl/truststore"
+              readOnly: true
+    {{- end }}          
+
+      - name: upload-to-cloud
+        inputs:
+          parameters:
+          - name: version-number
+        metadata:
+          labels:
+            app.kubernetes.io/component: ml-service-workflow
+            app.kubernetes.io/part-of: fusion
+            app.kubernetes.io/instance: "{{ .Release.Name }}"
+        nodeSelector:
+          {{ .Values.nodeSelector.default | toYaml | nindent 10  }}
+        tolerations:
+          {{ .Values.tolerations.default | toYaml | nindent 10  }}
+        container:
+          image: "{{`{{workflow.parameters.fusion_docker_repo}}`}}/fusion-workflow-utilities:{{`{{workflow.parameters.utilities_tag}}`}}"
+          imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
+          resources:
+          command: [ tini, --, python, transfer_blobs.py ]
+          args: [ "upload_model",
+                  "--local-path=/workspace/{{`{{workflow.parameters.model_name}}`}}",
+                  "--cloud-path={{`{{workflow.parameters.cloud_path}}`}}-{{`{{inputs.parameters.version-number}}`}}"
+          ]
+          volumeMounts:
+            - name: workspace
+              mountPath: /workspace
+            - name: cloud-secret
+              mountPath: /etc/secrets
+        volumes:
+        - name: cloud-secret
+          secret:
+            secretName: "{{`{{workflow.parameters.cloud_secret}}`}}"
+            items:
+            - key: "{{`{{workflow.parameters.cloud_secret}}`}}.json"
+              path: secret.json
+
+      - name: get-version-number
+        nodeSelector:
+          {{ .Values.nodeSelector.default | toYaml | nindent 10  }}
+        tolerations:
+          {{ .Values.tolerations.default | toYaml | nindent 10  }}
+        metadata:
+          labels:
+            app.kubernetes.io/component: ml-service-workflow
+            app.kubernetes.io/part-of: fusion
+            app.kubernetes.io/instance: "{{ .Release.Name }}"
+        script:
+          image: bitnami/kubectl:latest
+          command: [bash]
+          source: |
+            modelVersion=`kubectl get -n {{`{{workflow.parameters.namespace}}`}} sdep {{`{{workflow.parameters.model_name}}`}} -o jsonpath="{.spec.predictors[0].labels.version}"`
+            echo $modelVersion
+

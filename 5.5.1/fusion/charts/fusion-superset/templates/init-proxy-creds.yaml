@@ -1,0 +1,108 @@
+
+# Create a service account to use when creating the basic-auth secret used at the NGINX proxy placed in front of Superset
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    helm.sh/hook-weight: "1"
+    "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
+  name: "{{ include "superset.fullname" . }}-secret-hook"
+
+---
+
+# Create a role with the ability to create the proxy auth secret
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    helm.sh/hook-weight: "2"
+    "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
+  namespace: {{ .Release.Namespace }}
+  name: "{{ include "superset.fullname" . }}-secret-hook"
+rules:
+- apiGroups: [ "" ]
+  resources: [ "secrets" ]
+  verbs: [ "get", "create" ]
+
+---
+
+
+# Bind the new role to the new service-account
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    helm.sh/hook-weight: "3"
+    "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
+  name: "{{ include "superset.fullname" . }}-secret-hook"
+  namespace: {{ .Release.Namespace }}
+subjects:
+- kind: ServiceAccount
+  name: "{{ include "superset.fullname" . }}-secret-hook"
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: "{{ include "superset.fullname" . }}-secret-hook"
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+{{- if .Values.proxy.auth.enabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "superset.name" . }}-create-proxy-auth-secret
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    helm.sh/hook-weight: "4"
+    "helm.sh/hook-delete-policy": "hook-succeeded"
+spec:
+  template: 
+    spec:
+      {{- if .Values.tolerations }}
+      tolerations: {{ .Values.tolerations | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{ toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end }}
+      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( printf "%s-secret-hook" ( include "superset.fullname" . )) }}"
+      restartPolicy: Never
+      volumes:
+        - name: workspace
+          emptyDir: {}
+      imagePullSecrets: {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
+      containers:
+      - name: "create-superset-auth-secret"
+        image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
+        command:
+          - "/bin/bash"
+          - "-c"
+          - |
+            set -e 
+            
+            WORKSPACE="/workspace"
+            SECRET_NAME={{ .Values.proxy.auth.secretName }}
+            USERNAME={{ .Values.proxy.auth.username }}
+            PASSWORD="{{ .Values.proxy.auth.password }}"
+            if [ -z "${PASSWORD}" ]; then
+              PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+            fi
+
+            cd "${WORKSPACE}"
+            if kubectl --namespace "{{ .Release.Namespace }}" get secret "${SECRET_NAME}"; then
+              # Secret already exists; no need to create
+              exit 0
+            fi
+
+            htpasswd -b -c auth "${USERNAME}" "${PASSWORD}"
+            kubectl --namespace "{{ .Release.Namespace }}" create secret generic {{ .Values.proxy.auth.secretName }} --from-literal=user=${USERNAME} --from-literal=password=${PASSWORD} --from-file=auth_file=auth
+            rm auth
+        volumeMounts:
+          - name: "workspace"
+            mountPath: "/workspace"
+{{- end }}

@@ -1,0 +1,157 @@
+affinity: {}
+configFromSecret: '{{ template "superset.fullname" . }}-config'
+configMountPath: /app/pythonpath
+configOverrides:
+  oltp_database: |
+    SQLALCHEMY_DATABASE_URL = "sqlite://{{ .Values.internalDBPath }}"
+containersSecurityContext:
+  capabilities:
+    drop:
+    - NET_RAW
+envFromSecret: '{{ template "superset.fullname" . }}-env'
+extraConfigMountPath: /app/configs
+extraConfigs: {}
+extraEnv:
+  SUPERSET_HOME: /dbpath
+extraSecretEnv: {}
+fusion-common-utils:
+  global: {}
+image:
+  imagePullSecrets: []
+  name: fusion-superset
+  pullPolicy: IfNotPresent
+  repository: lucidworks
+  tag: latest
+ingress:
+  annotations: {}
+  enabled: false
+  host: ingress.example.com
+  path: /
+  pathtype: Prefix
+  port: 80
+  tls:
+    enabled: false
+init:
+  command:
+  - /bin/sh
+  - -c
+  - . {{ .Values.configMountPath }}/superset_init.sh
+  enabled: true
+  initscript: |-
+    #!/bin/bash -x
+
+    # Check whether this is the first run that initially creates the database
+    if ! test -e {{ .Values.internalDBPath }} ; then
+      first_use="true"
+    fi
+
+    echo "Upgrading DB schema..."
+    superset db upgrade
+    echo "Initializing roles..."
+    superset init
+
+    if test -n "$first_use" ; then
+      echo "Creating first admin user..."
+      FIRST_USERNAME="{{ .Values.init.supersetUser }}"
+      FIRST_PASSWORD="{{ .Values.init.supersetPassword }}"
+      if [ -z "${FIRST_PASSWORD}" ]; then
+        FIRST_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+      fi
+      superset fab create-admin \
+                      --username ${FIRST_USERNAME} \
+                        --firstname Superset \
+                        --lastname Admin \
+                        --email admin@superset.com \
+                        --password ${FIRST_PASSWORD} || true
+
+      echo "Creating second admin user..."
+      SECOND_USERNAME="{{ .Values.init.secondarySupersetUser }}"
+      SECOND_PASSWORD="{{ .Values.init.secondarySupersetPassword }}"
+      if [ -z "${SECOND_PASSWORD}" ]; then
+        SECOND_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+      fi
+      superset fab create-admin \
+                      --username ${SECOND_USERNAME} \
+                        --firstname Superset \
+                        --lastname Admin \
+                        --email admin@superset.com \
+                        --password ${SECOND_PASSWORD} || true
+
+      kubectl --namespace "{{ .Release.Namespace }}" create secret generic {{ .Values.init.supersetCredentialsSecretName }} --from-literal=user1=${FIRST_USERNAME} --from-literal=password1=${FIRST_PASSWORD} --from-literal=user2=${SECOND_USERNAME} --from-literal=password2=${SECOND_PASSWORD}
+      echo $?
+      {{ if .Values.init.loadExamples }}
+      echo "Loading examples..."
+      superset load_examples
+      {{- end }}
+    else
+      echo "Skipping admin user creation as this is not first bootstrap for database"
+    fi
+  loadExamples: false
+  secondarySupersetPassword: null
+  secondarySupersetUser: alternate_admin
+  supersetCredentialsSecretName: superset-application-creds
+  supersetPassword: null
+  supersetUser: admin
+internalDBDir: /dbpath
+internalDBPath: '{{ .Values.internalDBDir }}/superset.db'
+networkPolicy:
+  additionalEgressRules: []
+  additionalIngressRules: []
+  dnsAccess:
+  - ipBlock:
+      cidr: 0.0.0.0/0
+  enabled: false
+  kubernetesAccess:
+  - ipBlock:
+      cidr: 0.0.0.0/0
+nodeSelector: {}
+osUser:
+  nonRootCheckEnabled: true
+  uid: 1000
+proxy:
+  affinity: {}
+  auth:
+    enabled: true
+    password: ""
+    secretName: superset-proxy-service-creds
+    username: superset_gateway
+  image:
+    name: nginx
+    pullPolicy: IfNotPresent
+    tag: 1.18.0
+  nodeSelector: {}
+  resources: {}
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+proxyConfigFromSecret: '{{ template "superset.fullname" . }}-proxy-config'
+rbac: {}
+replicaCount: 1
+resources:
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 4
+    memory: 8Gi
+service:
+  annotations: {}
+  loadBalancerIP: null
+  port: 8088
+  type: ClusterIP
+storage:
+  accessModes:
+  - ReadWriteOnce
+  requests: 1Gi
+supersetNode:
+  command:
+  - /bin/sh
+  - -c
+  - /usr/bin/docker-entrypoint.sh
+  connections:
+    db_name: superset
+    db_pass: superset
+    db_user: superset
+  forceReload: false
+tolerations: []
