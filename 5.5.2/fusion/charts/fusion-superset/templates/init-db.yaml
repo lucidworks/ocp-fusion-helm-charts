@@ -1,0 +1,123 @@
+# Create a service account to use when creating the basic-auth secret used at the NGINX proxy placed in front of Superset
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    "helm.sh/hook": post-install
+    helm.sh/hook-weight: "1"
+    "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
+  name: "{{ include "superset.fullname" . }}-db-secret-hook"
+
+---
+
+# Create a role with the ability to create the proxy auth secret
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  annotations:
+    "helm.sh/hook": post-install
+    helm.sh/hook-weight: "2"
+    "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
+  namespace: {{ .Release.Namespace }}
+  name: "{{ include "superset.fullname" . }}-db-secret-hook"
+rules:
+- apiGroups: [ "" ]
+  resources: [ "secrets" ]
+  verbs: [ "get", "create" ]
+
+---
+
+
+# Bind the new role to the new service-account
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  annotations:
+    "helm.sh/hook": post-install
+    helm.sh/hook-weight: "3"
+    "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
+  name: "{{ include "superset.fullname" . }}-db-secret-hook"
+  namespace: {{ .Release.Namespace }}
+subjects:
+- kind: ServiceAccount
+  name: "{{ include "superset.fullname" . }}-db-secret-hook"
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: "{{ include "superset.fullname" . }}-db-secret-hook"
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+{{- if .Values.init.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "superset.name" . }}-init-db
+  annotations:
+    "helm.sh/hook": post-install
+    helm.sh/hook-weight: "5"
+    "helm.sh/hook-delete-policy": "hook-succeeded"
+spec:
+  template:
+    metadata:
+      name: {{ template "superset.name" . }}-init-db
+    spec:
+      imagePullSecrets:
+{{ toYaml .Values.image.imagePullSecrets | indent 8 }}
+      {{- if .Values.init.initContainers }}
+      initContainers:
+      {{-  tpl (toYaml .Values.init.initContainers) . | nindent 6 }}
+      {{- end }}
+      containers:
+      - name: {{ template "superset.name" . }}-init-db
+        image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        {{ if .Values.extraEnv }}
+        env:
+          {{- range $key, $value := .Values.extraEnv }}
+          - name: {{ $key | quote }}
+            value: {{ $value | quote }}
+          {{- end }}
+        {{- end }}
+        envFrom:
+          - secretRef:
+              name: {{ tpl .Values.envFromSecret . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+          - name: superset-config
+            mountPath: {{ .Values.configMountPath | quote }}
+            readOnly: true
+        {{ if .Values.extraConfigs }}
+          - name: superset-extra-config
+            mountPath: {{ .Values.extraConfigMountPath | quote }}
+            readOnly: true
+        {{- end }}
+          - name: {{ template "superset.fullname" .}}-internal-db
+            mountPath: {{ .Values.internalDBDir }}
+        command: {{  tpl (toJson .Values.init.command) . }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{ toYaml .Values.nodeSelector | nindent 8 }}
+    {{- end }}
+    {{- if .Values.affinity }}
+      affinity:
+        {{ tpl (toYaml .Values.affinity) . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      volumes:
+        - name: superset-config
+          secret:
+            secretName: {{ tpl .Values.configFromSecret . }}
+        {{- if .Values.extraConfigs }}
+        - name: superset-extra-config
+          configMap:
+            name: {{ template "superset.fullname" . }}-extra-config
+        {{- end }}
+        - name: {{ template "superset.fullname" . }}-internal-db
+          persistentVolumeClaim:
+            claimName: {{ template "superset.fullname" . }}-pvc
+      restartPolicy: Never
+{{- end }}

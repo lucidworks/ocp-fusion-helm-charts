@@ -1,0 +1,89 @@
+{{- $tlsEnabled := ( eq (include "fusion.tls.enabled" .) "true" ) -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fusion.connectors-backend.fullname" . }}
+  labels:
+{{ include "fusion.connectors-backend.labels" . | indent 4 }}
+  annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+data:
+  logback.xml: |-
+    <configuration>
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="com.lucidworks.logging.logback.classic.LucidworksPatternLayoutEncoder">
+                <pattern>%d - %-5p [%t:%C{3.}@%L] - %m%n</pattern>
+                <charset>utf8</charset>
+            </encoder>
+        </appender>
+
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOGDIR}/backend.log</file>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <!-- rollover daily -->
+                <fileNamePattern>${LOGDIR}/backend-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+                <maxFileSize>50MB</maxFileSize>
+                <totalSizeCap>10GB</totalSizeCap>
+            </rollingPolicy>
+            <encoder class="com.lucidworks.logging.logback.classic.LucidworksPatternLayoutEncoder">
+                <pattern>%d - %-5p [%t:%C{3.}@%L] - %m%n</pattern>
+                <charset>utf8</charset>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+    </configuration>
+  application-k8s.yml: |-
+    spring:
+      profiles:
+        include: default
+      cloud:
+        kubernetes:
+          enabled: true
+          ribbon:
+            enabled: true
+          secrets:
+            enabled: true
+        zookeeper:
+          discovery:
+            enabled: false
+    ribbon:
+      zookeeper:
+        enabled: false
+    services:
+      zookeeper:
+         connect-string: {{ include "fusion.zkConnectionString" . }}
+    pulsar:
+      max-pending-messages: {{ .Values.pulsarMaxPendingMessages }}
+    app:
+      connectors-backend:
+         name: {{ template "fusion.connectors-backend.fullname" . }}
+      plugins:
+         repository:
+           id: {{ .Values.plugins.repository.id }}
+           name: {{ .Values.plugins.repository.name }}
+         replicas: {{ .Values.plugins.replicas }}
+         crd-create: {{ .Values.plugins.crd.create }}
+      grpc:
+         tlsEnabled: {{ $tlsEnabled }}
+         serverCertChainFile: /etc/ssl/keystores/tls.crt
+         serverPrivateKey: /etc/ssl/keystores/tls.key
+         trustCertCollectionFile: /etc/ssl/keystores/ca.crt
+      pulsar:
+        keep-alive-interval: {{ .Values.pulsarKeepAliveInterval }}
+        connections-per-broker: {{ .Values.pulsarConnectionsPerBroker }}
+        tcp-no-delay: {{ .Values.pulsarTcpNoDelay }}
+{{- if  $tlsEnabled  }}
+    server:
+      ssl:
+        key-store-type: pkcs12
+        key-store: /etc/ssl/keystores/keystore.jks
+        key-store-password: {{ .Values.tls.keystorePassword }}
+        trust-store: /etc/ssl/keystores/truststore.jks
+        trust-store-password: {{ .Values.tls.keystorePassword }}
+{{- end }}

@@ -1,0 +1,26 @@
+image:
+  debug: false
+  imagePullPolicy: IfNotPresent
+  imagePullSecrets: []
+  repository: lucidworks
+  tag: latest
+nodeSelector:
+  default: {}
+  deploy:
+    seldon: null
+resources:
+  default: {}
+  deploy:
+    seldon: null
+securityContext:
+  capabilities:
+    drop:
+    - NET_RAW
+  fsGroup: 8764
+tls:
+  enabled: false
+  keystorePassword: changeit
+tolerations:
+  default: []
+  deploy:
+    seldon: null
