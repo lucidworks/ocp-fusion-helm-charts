@@ -1404,7 +1404,7 @@ fusion-log-forwarder:
   podDisruptionBudget:
     maxUnavailable: 1
   processorCount: 10
-  pulsarBacklogLimit: 1073741824
+  pulsarBacklogLimit: 3073741824
   pulsarBacklogPolicy: consumer_backlog_eviction
   pulsarNamespace: _logs
   pulsarNamespaceSizeRetention: 0

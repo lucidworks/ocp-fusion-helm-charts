@@ -105,6 +105,8 @@ spec:
           - name: tika-config
             mountPath: "/tika-config.xml"
             subPath: "tika-config.xml"
+	resouces:
+	  {{- toYaml .Values.resources | nindent 10 }}
       volumes:
         - name: tmp
           emptyDir: { }
