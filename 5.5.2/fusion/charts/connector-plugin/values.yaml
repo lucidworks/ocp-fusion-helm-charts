@@ -42,7 +42,7 @@ image:
   pullPolicy: IfNotPresent
   repository: lucidworks
   tag: latest
-javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=40.0 -Xss256k -Dhttp.maxConnections=1000
+javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=40.0 -Xss256k
   -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps -XX:+StartAttachListener
   -Djdk.attach.allowAttachSelf=true
 keytoolUtils:

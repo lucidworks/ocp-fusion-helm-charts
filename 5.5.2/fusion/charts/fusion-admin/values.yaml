@@ -26,7 +26,7 @@ ingress:
   host: ingress.example.com
   tls:
     enabled: false
-jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k -Dhttp.maxConnections=1000
+jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k
   -XX:PermSize=256m -XX:MaxPermSize=512m
 keytoolUtils:
   image:
