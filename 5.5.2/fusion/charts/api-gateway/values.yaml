@@ -13,10 +13,6 @@ config:
   resilience4j: ""
   security: ""
   springSecurity: ""
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 datadog:
   enabled: false
   port: 8126

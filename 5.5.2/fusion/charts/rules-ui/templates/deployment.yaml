@@ -26,7 +26,6 @@ spec:
         app.kubernetes.io/component: "rules-ui"
         app.kubernetes.io/part-of: "fusion"
     spec:
-
       volumes:
         - name: tmp
           emptyDir: {}
@@ -61,19 +60,13 @@ spec:
       {{ end }}
 {{- if $tlsEnabled }}
       initContainers:
-{{ $params := dict "tlsServiceName" ( include "fusion.rules-ui.serviceName" . ) "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils "securityContext" $.Values.securityContext}}
+{{ $params := dict "tlsServiceName" ( include "fusion.rules-ui.serviceName" . ) "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
 {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
 {{- end }}
       containers:
       - name: rules-ui
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         # args:
         #   -
         ports:

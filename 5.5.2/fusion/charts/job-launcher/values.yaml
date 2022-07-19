@@ -9,10 +9,6 @@ argoNamespace: default
 config:
   springSecurity: ""
 configSources: []
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 datadog:
   enabled: false
 deploymentStrategy:

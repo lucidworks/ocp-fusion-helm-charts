@@ -1,8 +1,4 @@
 affinity: {}
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 extractInlineImages: false
 fusion-common-utils:
   global: {}

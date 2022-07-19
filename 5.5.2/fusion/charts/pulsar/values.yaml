@@ -89,7 +89,6 @@ bookkeeper:
     requests:
       cpu: 500m
       memory: 2Gi
-
   service:
     spec:
       publishNotReadyAddresses: true
@@ -224,10 +223,6 @@ components:
   pulsar_manager: false
   toolset: false
   zookeeper: false
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 dashboard:
   annotations: {}
   component: dashboard

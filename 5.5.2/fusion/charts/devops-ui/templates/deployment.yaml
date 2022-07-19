@@ -67,7 +67,6 @@ spec:
       - name: devops-ui
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         lifecycle:
           preStop:
             exec:

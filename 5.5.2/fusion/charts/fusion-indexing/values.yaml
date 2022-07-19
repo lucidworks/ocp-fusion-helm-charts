@@ -9,10 +9,6 @@ autoscaling:
       targetAverageUtilization: 70
     type: Resource
   minReplicas: 1
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 datadog:
   enabled: false
   port: 8126
@@ -29,7 +25,7 @@ image:
   name: fusion-indexing
   repository: lucidworks
   tag: latest
-javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k -Dhttp.maxConnections=1000
+javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k
 keytoolUtils:
   image:
     imagePullPolicy: IfNotPresent
@@ -73,10 +69,6 @@ readinessProbe:
   periodSeconds: 10
 replicaCount: 1
 resources: {}
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 serverStopTimeout: 5000
 service:
   annotations: {}

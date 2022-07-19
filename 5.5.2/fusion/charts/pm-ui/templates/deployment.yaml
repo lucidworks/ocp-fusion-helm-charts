@@ -69,8 +69,6 @@ spec:
       - name: pm-ui
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
-
         # args:
         #   -
         ports:

@@ -63,12 +63,7 @@ spec:
       - name: job-rest-server
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
+
         args:
           - "--spring.cloud.kubernetes.config.name={{ include "fusion.job-rest-server.fullname" . }}"
           - "--spring.profiles.active={{ include "fusion.job-rest-server.springProfs" . }}{{- if $tlsEnabled }},tls{{- end }}{{- if $jsonOutput }},logjson{{- end }}{{- if $logstashHost }},logstash{{- end }}{{- if $logPulsar }},logpulsar{{- end }}"

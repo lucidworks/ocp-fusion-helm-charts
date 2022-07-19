@@ -47,7 +47,6 @@ spec:
 {{- end }}
 {{- include "fusion.initContainers.checkZk-v2" . | nindent 8 }}
 {{- include "fusion.initContainers.checkPulsar-v2" . | nindent 8 }}
-
     {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 8 }}
@@ -74,7 +73,6 @@ spec:
       - name: sql-service
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         env:
           - name: "SQL_JVM_OPTIONS"
             value: "{{ .Values.jvmOptions }}

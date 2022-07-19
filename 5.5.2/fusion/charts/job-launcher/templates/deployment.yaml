@@ -78,7 +78,6 @@ spec:
       - name: job-launcher
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         volumeMounts:
           - name: secrets
             mountPath: "/etc/secrets"

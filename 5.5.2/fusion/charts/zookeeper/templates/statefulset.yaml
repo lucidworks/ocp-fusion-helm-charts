@@ -89,8 +89,6 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 2
             successThreshold: 1
-          securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 12 }}
           env:
             - name: ZK_CONF_DIR
               value: /tmp

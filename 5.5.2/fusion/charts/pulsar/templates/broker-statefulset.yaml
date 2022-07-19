@@ -48,7 +48,7 @@ spec:
         {{ toYaml .Values.images.imagePullSecrets | nindent 8 }}
       initContainers:
 {{- if $tlsEnabled -}}
-{{ $params := dict "Release" .Release "global" .Values.global "tls" .Values.broker.tls "tlsServiceName" (printf "%s-%s" ( include "pulsar.fullname" . ) .Values.broker.component ) "keytoolUtils" .Values.keytoolUtils "securityContext" .Values.broker.securityContext  }}
+{{ $params := dict "Release" .Release "global" .Values.global "tls" .Values.broker.tls "tlsServiceName" (printf "%s-%s" ( include "pulsar.fullname" . ) .Values.broker.component ) "keytoolUtils" .Values.keytoolUtils "securityContext" .Values.broker.securityContext }}
 {{ include "fusion.tls.init-container-v2" $params | indent 6 }}
 {{- end }}
       # This initContainer will wait for bookkeeper initnewcluster to complete
@@ -203,8 +203,6 @@ spec:
         image: "{{ .Values.images.broker.repository }}:{{ .Values.images.broker.tag }}"
         imagePullPolicy: {{ .Values.images.broker.pullPolicy }}
         {{- if .Values.broker.probe.liveness.enabled }}
-        securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         livenessProbe:
           initialDelaySeconds: {{ .Values.broker.probe.liveness.initialDelaySeconds }}
           periodSeconds: {{ .Values.broker.probe.liveness.periodSeconds }}
