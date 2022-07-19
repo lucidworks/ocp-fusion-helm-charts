@@ -34,6 +34,9 @@ spec:
 {{- end }}
     spec:
       imagePullSecrets: {{ toYaml .Values.images.imagePullSecrets | nindent 8 }}
+{{- if $tlsEnabled }}
+      serviceAccountName: "{{ .Values.bookkeeper.serviceAccountName | default ( printf "%s-%s" (include "pulsar.fullname" .) ( .Values.bookkeeper.component )) }}"
+{{- end }}
     {{- if .Values.bookkeeper.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.bookkeeper.nodeSelector | indent 8 }}
@@ -156,8 +159,6 @@ spec:
       - name: "{{ template "pulsar.fullname" . }}-{{ .Values.bookkeeper.component }}"
         image: "{{ .Values.images.bookie.repository }}:{{ .Values.images.bookie.tag }}"
         imagePullPolicy: {{ .Values.images.bookie.pullPolicy }}
-        securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         {{- if .Values.bookkeeper.probe.liveness.enabled }}
         livenessProbe:
           httpGet:

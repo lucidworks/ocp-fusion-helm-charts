@@ -3,10 +3,6 @@ ambassador:
   singleNamespace: true
 certManager:
   enabled: false
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 controllerId: ""
 crd:
   annotations: {}
@@ -81,7 +77,6 @@ keda:
 kubeflow: false
 manager:
   annotations: {}
-  containerSecurityContext: {}
   cpuLimit: 500m
   cpuRequest: 100m
   deploymentNameAsPrefix: false

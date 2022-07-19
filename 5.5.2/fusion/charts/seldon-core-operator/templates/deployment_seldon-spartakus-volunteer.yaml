@@ -22,8 +22,6 @@ spec:
         - /bin/sh
         image: gcr.io/google_containers/spartakus-amd64:v1.1.0
         name: seldon-spartakus-volunteer
-        securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         volumeMounts:
         - mountPath: /etc/config
           name: seldon-spartakus-config-volume

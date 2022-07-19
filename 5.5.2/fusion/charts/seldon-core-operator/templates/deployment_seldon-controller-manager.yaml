@@ -176,16 +176,12 @@ spec:
           requests:
             cpu: '{{ .Values.manager.cpuRequest }}'
             memory: '{{ .Values.manager.memoryRequest }}'
-        securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
 {{- if not .Values.managerCreateResources }}
         volumeMounts:
         - mountPath: /tmp/k8s-webhook-server/serving-certs
           name: cert
           readOnly: true
 {{- end }}
-      securityContext:
-        runAsUser: {{ .Values.managerUserID }}
       imagePullSecrets: {{ .Values.image.imagePullSecrets | toYaml | nindent 8 }}
       terminationGracePeriodSeconds: 10
 {{- if not .Values.managerCreateResources }}

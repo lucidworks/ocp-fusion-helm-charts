@@ -9,10 +9,6 @@ admin-ui:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -92,10 +88,6 @@ api-gateway:
     resilience4j: ""
     security: ""
     springSecurity: ""
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   datadog:
     enabled: false
     port: 8126
@@ -217,10 +209,7 @@ argo:
       insecure: true
       secretKeySecret:
         key: secretkey
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
+
   controller:
     affinity: {}
     containerRuntimeExecutor: k8sapi
@@ -309,10 +298,6 @@ argo:
     certsPath: /etc/minio/certs/
     clusterDomain: cluster.local
     configPathmc: /etc/minio/mc/
-    containersSecurityContext:
-      capabilities:
-        drop:
-        - NET_RAW
     defaultBucket:
       enabled: true
       name: argo-artifacts
@@ -488,10 +473,6 @@ auth-ui:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -561,10 +542,6 @@ classic-rest-service:
   annotations: {}
   bootstrapEnabled: true
   component: classic-rest-service
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -821,10 +798,6 @@ connectors:
       type: Resource
     minReplicas: 1
   component: connectors
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -927,10 +900,6 @@ connectors-backend:
       type: Resource
     minReplicas: 1
   component: connectors-backend
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -1046,10 +1015,6 @@ devops-ui:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -1124,10 +1089,6 @@ fusion-admin:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   fusion-common-utils:
     global: {}
   global: {}
@@ -1258,10 +1219,6 @@ fusion-indexing:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   datadog:
     enabled: false
     port: 8126
@@ -1536,10 +1493,6 @@ job-launcher:
   config:
     springSecurity: ""
   configSources: []
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   datadog:
     enabled: false
   deploymentStrategy:
@@ -1643,10 +1596,6 @@ job-rest-server:
   affinity: {}
   config:
     springSecurity: ""
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   datadog:
     enabled: false
   deploymentStrategy:
@@ -1860,10 +1809,6 @@ ml-model-service:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -2280,10 +2225,6 @@ pm-ui:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -2574,10 +2515,6 @@ pulsar:
     pulsar_manager: false
     toolset: false
     zookeeper: false
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   dashboard:
     annotations: {}
     component: dashboard
@@ -2875,10 +2812,6 @@ query-pipeline:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   datadog:
     enabled: false
     port: 8126
@@ -2978,10 +2911,6 @@ query-pipeline:
   zkReplicaCount: 3
   zkTLSPort: 2281
 question-answering:
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   global: {}
   image:
     debug: false
@@ -3042,10 +2971,6 @@ question-answering:
       sparkSolrEtl: null
       train: null
 recommender:
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   global: {}
   image:
     imagePullPolicy: IfNotPresent
@@ -3092,10 +3017,6 @@ rules-ui:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -3242,7 +3163,6 @@ seldon-core-operator:
   logstashEnabled: true
   manager:
     annotations: {}
-    containerSecurityContext: {}
     cpuLimit: 500m
     cpuRequest: 100m
     deploymentNameAsPrefix: false
@@ -3334,10 +3254,6 @@ solr:
   config:
     solrlog4j: ""
     solrxml: ""
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   exporter:
     affinity: {}
     configDir: /opt/solr/contrib/prometheus-exporter/conf
@@ -3476,10 +3392,6 @@ solr:
     - if [ -d /data/data/version-2/ ]; then if ! ls /data/data/version-2/snapshot*
       > /dev/null 2>&1; then wget -O /data/data/version-2/snapshot.0 https://issues.apache.org/jira/secure/attachment/12928686/snapshot.0;
       fi; fi && /config-scripts/run
-    containersSecurityContext:
-      capabilities:
-        drop:
-        - NET_RAW
     enabled: false
     env:
       JMXAUTH: "false"
@@ -3770,10 +3682,6 @@ sql-service:
   affinity: {}
   config:
     springSecurity: ""
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -3879,10 +3787,6 @@ templating:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   datadog:
     enabled: false
     port: 8126
@@ -3977,10 +3881,6 @@ templating:
   zkTLSPort: 2281
 tikaserver:
   affinity: {}
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   extractInlineImages: false
   fusion-common-utils:
     global: {}
@@ -4049,10 +3949,6 @@ webapps:
         targetAverageUtilization: 70
       type: Resource
     minReplicas: 1
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   deploymentStrategy:
     rollingUpdate:
       maxSurge: 25%
@@ -4142,10 +4038,6 @@ zookeeper:
   - if [ -d /data/data/version-2/ ]; then if ! ls /data/data/version-2/snapshot* >
     /dev/null 2>&1; then wget -O /data/data/version-2/snapshot.0 https://issues.apache.org/jira/secure/attachment/12928686/snapshot.0;
     fi; fi && /config-scripts/run
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   env:
     JMXAUTH: "false"
     JMXDISABLE: "false"

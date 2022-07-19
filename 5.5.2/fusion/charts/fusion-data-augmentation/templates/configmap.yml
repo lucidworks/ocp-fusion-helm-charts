@@ -186,9 +186,6 @@ data:
         container:
           image: busybox
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.default  | toYaml | nindent 12  }}
 
@@ -212,9 +209,6 @@ data:
           # Using fusion-data-augmentation image to make sure the right user is used
           image: "{{`{{workflow.parameters.docker_repo}}`}}/fusion-data-augmentation:{{`{{workflow.parameters.data_augmentation_tag}}`}}"
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.default  | toYaml | nindent 12 }}
 
@@ -239,9 +233,6 @@ data:
           # Using fusion-data-augmentation image to make sure the right user is used
           image: "{{`{{workflow.parameters.docker_repo}}`}}/fusion-data-augmentation:{{`{{workflow.parameters.data_augmentation_tag}}`}}"
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.default  | toYaml | nindent 12  }}
 
@@ -267,9 +258,6 @@ data:
           # Using fusion-data-augmentation image to make sure the right user is used
           image: "{{`{{workflow.parameters.docker_repo}}`}}/fusion-data-augmentation:{{`{{workflow.parameters.data_augmentation_tag}}`}}"
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.default  | toYaml | nindent 12  }}
 
@@ -295,9 +283,6 @@ data:
           # Using fusion-data-augmentation image to make sure the right user is used
           image: "{{`{{workflow.parameters.docker_repo}}`}}/fusion-data-augmentation:{{`{{workflow.parameters.data_augmentation_tag}}`}}"
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.default  | toYaml | nindent 12  }}
 
@@ -332,9 +317,6 @@ data:
         container:
           image: "{{`{{workflow.parameters.docker_repo}}`}}/spark-solr-etl:{{`{{workflow.parameters.spark_solr_tag}}`}}"
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.etl | default .Values.resources.default | toYaml | nindent 12  }}
 
@@ -431,9 +413,6 @@ data:
         container:
           image: "{{`{{workflow.parameters.docker_repo}}`}}/fusion-workflow-utilities:{{`{{workflow.parameters.utilities_tag}}`}}"
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.default  | toYaml | nindent 12 }}
           command: [ tini, --, python, transfer_blobs.py ]
@@ -500,9 +479,6 @@ data:
         container:
           image: "{{`{{workflow.parameters.docker_repo}}`}}/fusion-workflow-utilities:{{`{{workflow.parameters.utilities_tag}}`}}"
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.default  | toYaml | nindent 12 }}
           command: [ tini, --, python, transfer_blobs.py ]
@@ -546,9 +522,6 @@ data:
         container:
           image: "{{`{{workflow.parameters.docker_repo}}`}}/fusion-data-augmentation:{{`{{workflow.parameters.data_augmentation_tag}}`}}"
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.augment | default .Values.resources.default | toYaml | nindent 12  }}
           env:
@@ -583,9 +556,6 @@ data:
         container:
           image: "{{`{{workflow.parameters.docker_repo}}`}}/spark-solr-etl:{{`{{workflow.parameters.spark_solr_tag}}`}}"
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.etl | default .Values.resources.default | toYaml | nindent 12  }}
           args: ["push",
@@ -618,9 +588,6 @@ data:
         container:
           image: "{{`{{workflow.parameters.docker_repo}}`}}/spark-solr-etl:{{`{{workflow.parameters.spark_solr_tag}}`}}"
           imagePullPolicy: "{{`{{workflow.parameters.image_pull_policy}}`}}"
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
           resources:
             {{ .Values.resources.etl | default .Values.resources.default | toYaml | nindent 12 }}
 

@@ -1,7 +1,3 @@
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 image:
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []

@@ -107,7 +107,7 @@ data:
             {{- toYaml .Values.image.imagePullSecrets | nindent 12 }}
           initContainers:
     {{- if $tlsEnabled -}}
-    {{ $params := dict "tlsServiceName" ( include "fusion.connector-plugin.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils "securityContext" $.Values.securityContext }}
+    {{ $params := dict "tlsServiceName" ( include "fusion.connector-plugin.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils }}
     {{ include "fusion.tls.init-container-v2" $params | nindent 12 }}
     {{- end }}
     {{- if $importTrustedCertsEnabled }}
@@ -214,7 +214,7 @@ data:
                 - name: SPRING_PROFILES_ACTIVE
                   value: "{{ .Values.springProfiles }}{{- if $tlsEnabled }},tls{{- end }}{{- if $jsonOutput }},logjson{{- end }}{{- if $logstashHost }},logstash{{- end }}{{- if $logPulsar }},logpulsar{{- end }}"
                 - name: JAVA_TOOL_OPTIONS
-                  value: "
+                  value: "-Dlogging.config=classpath:logback-kube.xml 
     {{- if ( and $importTrustedCertsEnabled ( not $tlsEnabled )) }} -Djavax.net.ssl.trustStore=/etc/ssl/truststore/truststore.jks -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.ssl.trustStoreType=PKCS12{{- end }}
     {{- if $tlsEnabled }} -Djavax.net.ssl.trustStore=/etc/ssl/keystores/truststore.jks -Djavax.net.ssl.trustStorePassword={{ .Values.tls.keystorePassword }} -Djavax.net.ssl.trustStoreType=PKCS12 -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ .Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ .Values.tls.keystorePassword }}{{- end }} -Dspring.cloud.kubernetes.secrets.paths=/etc/secrets {{ .Values.javaToolOptions }}"
                 {{ if $logstashHost }}

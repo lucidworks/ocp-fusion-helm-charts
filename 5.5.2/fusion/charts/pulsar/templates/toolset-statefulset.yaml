@@ -38,8 +38,6 @@ spec:
       - name: "{{ template "pulsar.fullname" . }}-{{ .Values.toolset.component }}"
         image: "{{ .Values.images.broker.repository }}:{{ .Values.images.broker.tag }}"
         imagePullPolicy: {{ .Values.images.broker.pullPolicy }}
-        securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
       {{- if .Values.toolset.resources }}
         resources:
 {{ toYaml .Values.toolset.resources | indent 10 }}

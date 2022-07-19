@@ -35,8 +35,6 @@ spec:
         - name: "{{ template "pulsar.fullname" . }}-{{ .Values.pulsar_manager.component }}"
           image: "{{ .Values.images.pulsar_manager.repository }}:{{ .Values.images.pulsar_manager.tag }}"
           imagePullPolicy: {{ .Values.images.pulsar_manager.pullPolicy }}
-          securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 12 }}
         {{- if .Values.pulsar_manager.resources }}
           resources:
 {{ toYaml .Values.pulsar_manager.resources | indent 12 }}

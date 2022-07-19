@@ -45,7 +45,7 @@ spec:
         {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
       initContainers:
 {{- if $tlsEnabled -}}
-{{ $params := dict "Release" .Release "global" .Values.global "tls" .Values.proxy.tls "tlsServiceName" (printf "%s-%s" ( include "pulsar.fullname" . ) .Values.proxy.component ) "keytoolUtils" .Values.keytoolUtils "securityContext" .Values.proxy.securityContext  }}
+{{ $params := dict "Release" .Release "global" .Values.global "tls" .Values.proxy.tls "tlsServiceName" (printf "%s-%s" ( include "pulsar.fullname" . ) .Values.proxy.component ) "keytoolUtils" .Values.keytoolUtils  "securityContext" .Values.proxy.securityContext }}
 {{ include "fusion.tls.init-container-v2" $params | indent 6 }}
 {{- end }}
       # This init container will wait for at least one broker to be ready before
@@ -68,8 +68,6 @@ spec:
       - name: "{{ template "pulsar.fullname" . }}-{{ .Values.proxy.component }}"
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.imagePullPolicy }}
-        securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         {{- if .Values.proxy.probe.liveness.enabled }}
         livenessProbe:
           httpGet:

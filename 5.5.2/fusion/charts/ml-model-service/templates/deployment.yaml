@@ -77,7 +77,6 @@ spec:
       - name: java-service
         image: "{{ .Values.javaService.repository | default .Values.image.repository }}/{{ .Values.javaService.imageName }}:{{ .Values.javaService.tag | default .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         volumeMounts:
           {{- if .Values.gcs.pretrained.enabled }}
           - name: gcs-pretrained-secret

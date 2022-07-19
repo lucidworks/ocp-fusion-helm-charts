@@ -95,10 +95,6 @@ readinessProbe:
   successThreshold: 1
   timeoutSeconds: 10
 replicaCount: 0
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 serviceName: connector-plugin
 springProfiles: k8s,jwt
 tls:

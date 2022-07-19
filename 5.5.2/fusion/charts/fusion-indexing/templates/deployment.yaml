@@ -57,7 +57,7 @@ spec:
     {{ end }}
       initContainers:
 {{- if $tlsEnabled -}}
-{{ $params := dict "tlsServiceName" ( include "fusion.fusion-indexing.serviceName" . ) "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils "securityContext" $.Values.securityContext }}
+{{ $params := dict "tlsServiceName" ( include "fusion.fusion-indexing.serviceName" . ) "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
 {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
 {{- end }}
 {{- include "fusion.initContainers.checkZk-v2" . | nindent 8 }}
@@ -67,7 +67,6 @@ spec:
       - name: fusion-indexing
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         args:
           - "--spring.profiles.active={{ include "fusion.fusion-indexing.springProfs" . }}{{- if $tlsEnabled }},tls{{- end }}{{- if $jsonOutput }},logjson{{- end }}{{- if $logstashHost }},logstash{{- end }}{{- if $logPulsar }},logpulsar{{- end }}"
           - "--spring.cloud.kubernetes.config.name={{ include "fusion.fusion-indexing.fullname" . }}"

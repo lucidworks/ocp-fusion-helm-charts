@@ -41,8 +41,6 @@ spec:
       - name: "{{ template "pulsar.fullname" . }}-{{ .Values.dashboard.component }}"
         image: "{{ .Values.dashboard.image.repository }}:{{ .Values.dashboard.image.tag }}"
         imagePullPolicy: {{ .Values.dashboard.image.pullPolicy }}
-        securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
       {{- if .Values.dashboard.resources }}
         resources:
 {{ toYaml .Values.dashboard.resources | indent 10 }}

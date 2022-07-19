@@ -147,12 +147,6 @@ app.kubernetes.io/part-of: "fusion"
 - name: check-indexing
   image: {{ .Values.image.repository }}/check-fusion-dependency:v1.3.0
   imagePullPolicy: IfNotPresent
-  securityContext:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m

@@ -12,10 +12,6 @@ autoscaling:
 config:
   solrlog4j: ""
   solrxml: ""
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 exporter:
   affinity: {}
   configDir: /opt/solr/contrib/prometheus-exporter/conf
@@ -151,10 +147,6 @@ zookeeper:
   - if [ -d /data/data/version-2/ ]; then if ! ls /data/data/version-2/snapshot* >
     /dev/null 2>&1; then wget -O /data/data/version-2/snapshot.0 https://issues.apache.org/jira/secure/attachment/12928686/snapshot.0;
     fi; fi && /config-scripts/run
-  containersSecurityContext:
-    capabilities:
-      drop:
-      - NET_RAW
   env:
     JMXAUTH: "false"
     JMXDISABLE: "false"

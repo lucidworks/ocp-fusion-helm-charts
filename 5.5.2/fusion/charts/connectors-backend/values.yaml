@@ -10,10 +10,6 @@ autoscaling:
     type: Resource
   minReplicas: 1
 component: connectors-backend
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 deploymentStrategy:
   rollingUpdate:
     maxSurge: 25%
@@ -91,10 +87,6 @@ readinessProbe:
   successThreshold: 1
   timeoutSeconds: 10
 replicaCount: 1
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 serviceName: connectors-backend
 springProfiles: k8s,jwt
 tls:
