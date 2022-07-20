@@ -17,7 +17,7 @@ image:
   repository: lucidworks
   tag: latest
 javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-  -Xss256k -Dhttp.maxConnections=1000
+  -Xss256k
 keytoolUtils:
   image:
     imagePullPolicy: IfNotPresent
@@ -64,10 +64,6 @@ readinessProbe:
   successThreshold: 1
   timeoutSeconds: 2
 replicaCount: 1
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 serviceName: connectors-classic
 springProfiles: k8s,jwt
 tls:

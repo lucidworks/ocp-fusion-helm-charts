@@ -56,12 +56,6 @@ spec:
       - name: tikaserver
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          privileged: false
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         {{- if not $tlsEnabled }}
         command:
           - /bin/sh

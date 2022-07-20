@@ -17,10 +17,6 @@ buckets: []
 certsPath: /etc/minio/certs/
 clusterDomain: cluster.local
 configPathmc: /etc/minio/mc/
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 defaultBucket:
   enabled: false
   name: bucket

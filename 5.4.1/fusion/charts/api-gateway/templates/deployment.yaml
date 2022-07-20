@@ -79,7 +79,7 @@ spec:
             - name: API_GATEWAY_JKS_BASE64
               valueFrom:
                 secretKeyRef:
-                  name:  dataes-api-gateway-jks
+                  name:  {{ .Release.Name }}-api-gateway-jks
                   key: api-gateway.jks
           volumeMounts:
             - name: jks
@@ -90,7 +90,7 @@ spec:
             - |
               echo "${API_GATEWAY_JKS_BASE64}" | base64 --decode > /etc/ssl/keystores/api-gateway.jks
 {{- if $tlsEnabled -}}
-{{ $params := dict "tlsServiceName" ( include "fusion.api-gateway.serviceName" . ) "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils "securityContext" $.Values.securityContext }}
+{{ $params := dict "tlsServiceName" ( include "fusion.api-gateway.serviceName" . ) "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
 {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
 {{- end }}
 {{- include "fusion.initContainers.checkZk-v2" . | nindent 8 }}

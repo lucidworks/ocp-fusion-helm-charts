@@ -63,10 +63,6 @@ readinessProbe:
   timeoutSeconds: 3
 replicaCount: 1
 resources: {}
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 service:
   annotations: {}
   port: 8780

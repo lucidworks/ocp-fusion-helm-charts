@@ -69,7 +69,7 @@ spec:
 {{- end }}
       initContainers:
 {{- if $tlsEnabled -}}
-{{ $params := dict "tlsServiceName" "webapps" "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils "securityContext" $.Values.securityContext }}
+{{ $params := dict "tlsServiceName" "webapps" "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
 {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
 {{- end }}
 {{- include "fusion.initContainers.checkZk-v2" . | nindent 8 }}

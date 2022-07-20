@@ -57,15 +57,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
-          securityContext:
-            {{- if .Values.osUser.nonRootCheckEnabled }}
-            runAsUser: {{ .Values.osUser.uid }}
-            {{- end }}
-            readOnlyRootFilesystem: true
-            allowPrivilegeEscalation: false
-            privileged: false
-          command: {{  tpl (toJson .Values.supersetNode.command) . }}
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}          command: {{  tpl (toJson .Values.supersetNode.command) . }}
           env:
             - name: "SUPERSET_PORT"
               value: {{ .Values.service.port | quote}}

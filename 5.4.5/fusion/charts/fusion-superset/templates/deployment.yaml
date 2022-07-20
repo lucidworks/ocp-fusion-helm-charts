@@ -58,10 +58,6 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.imagePullPolicy }}
-          securityContext:
-            readOnlyRootFilesystem: true
-            allowPrivilegeEscalation: false
-            privileged: false
           command: {{  tpl (toJson .Values.supersetNode.command) . }}
           env:
             - name: "SUPERSET_PORT"

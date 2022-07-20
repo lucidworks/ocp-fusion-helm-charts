@@ -546,7 +546,7 @@ classic-rest-service:
     repository: lucidworks
     tag: 5.3.4
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-    -Xss256k -Dhttp.maxConnections=1000
+    -Xss256k
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent
@@ -778,7 +778,7 @@ connector-plugin-service:
     repository: lucidworks
     tag: 5.3.4
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-    -Xss256k -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
+    -Xss256k -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent
@@ -947,7 +947,7 @@ fusion-admin:
     host: ingress.example.com
     tls:
       enabled: false
-  jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k -Dhttp.maxConnections=1000
+  jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k
     -XX:PermSize=256m -XX:MaxPermSize=512m
   keytoolUtils:
     image:
@@ -1053,7 +1053,7 @@ fusion-indexing:
     name: fusion-indexing
     repository: lucidworks
     tag: 5.3.4
-  javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k -Dhttp.maxConnections=1000
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent
@@ -2858,7 +2858,7 @@ rest-service:
     repository: lucidworks
     tag: 5.3.4
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-    -Xss256k -Dhttp.maxConnections=1000
+    -Xss256k
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent
@@ -2960,7 +2960,7 @@ rpc-service:
     repository: lucidworks
     tag: 5.3.4
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-    -Xss256k -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
+    -Xss256k -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent

@@ -54,7 +54,7 @@ spec:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       initContainers:
 {{- if $tlsEnabled -}}
-{{ $params := dict "tlsServiceName" ( include "fusion.connectors-backend.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils "securityContext" $.Values.securityContext }}
+{{ $params := dict "tlsServiceName" ( include "fusion.connectors-backend.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils }}
 {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
 {{- end }}
         {{- include "fusion.initContainers.checkZk-v2" . | nindent 8 }}
@@ -65,11 +65,6 @@ spec:
         - name: connectors-backend
           image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          securityContext:
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            allowPrivilegeEscalation: false
-            privileged: false
 {{- .Values.containersSecurityContext | toYaml | nindent 12 }}
           volumeMounts:
             - name: application-config-k8s
@@ -102,7 +97,7 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: "{{ .Values.springProfiles }}{{- if $tlsEnabled }},tls{{- end }}{{- if $jsonOutput }},logjson{{- end }}{{- if $logstashHost }},logstash{{- end }}{{- if $logPulsar }},logpulsar{{- end }}"
             - name: JAVA_TOOL_OPTIONS
-              value: "-Dspring.cloud.kubernetes.secrets.paths=/etc/secrets {{ .Values.javaToolOptions }}
+              value: "-Dkubernetes.connection.timeout=240000 -Dkubernetes.request.timeout=240000 -Dlogging.config=classpath:logback-kube.xml -Dspring.cloud.kubernetes.secrets.paths=/etc/secrets {{ .Values.javaToolOptions }}
 {{- if $tlsEnabled }} -Djavax.net.ssl.trustStore=/etc/ssl/keystores/truststore.jks -Djavax.net.ssl.trustStorePassword={{ .Values.tls.keystorePassword }} -Djavax.net.ssl.trustStoreType=PKCS12 -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ .Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ .Values.tls.keystorePassword }}{{- end -}}
 "
             {{ if $logstashHost }}

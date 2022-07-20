@@ -116,7 +116,7 @@ spec:
 {{- if not (eq $nodePool.name "" ) -}}
 {{- $sep = "-" -}}
 {{- end }}
-{{- $params := dict "Release" $.Release "global" $.Values.global "tls" $.Values.tls "tlsServiceName" ( printf "%s%s%s-headless" (include "solr.fullname" $) $sep ($nodePool.name) )  "keytoolUtils" $.Values.keytoolUtils  "additionalServices" (list ( include "solr.service-name" $ )) "securityContext" $.Values.securityContext }}
+{{- $params := dict "Release" $.Release "global" $.Values.global "tls" $.Values.tls "tlsServiceName" ( printf "%s%s%s-headless" (include "solr.fullname" $) $sep ($nodePool.name) )  "keytoolUtils" $.Values.keytoolUtils  "additionalServices" (list ( include "solr.service-name" $ )) }}
 {{- include "fusion.tls.init-container-v2" $params | nindent 8 }}
 {{- end }}
         - name: check-zk
@@ -246,9 +246,7 @@ spec:
               scheme: "{{ $tlsEnabled | ternary "HTTPS" "HTTP" }}"
               path: /solr/admin/info/health
               port: {{ $.Values.port }}
-          securityContext:
-            capabilities:
-                drop: ["NET_RAW"]
+
           volumeMounts:
             - name: {{ template "solr.pvc-name" $ }}{{- if not (eq $nodePool.name "") -}}-{{- end -}}{{ $nodePool.name }}
               mountPath: /var/solr

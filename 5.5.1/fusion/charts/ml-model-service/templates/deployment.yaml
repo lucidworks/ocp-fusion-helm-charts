@@ -67,7 +67,7 @@ spec:
     {{- end }}
       initContainers:
 {{- if $tlsEnabled -}}
-{{ $params := dict "tlsServiceName" "ml-model-service" "Release" $.Release "global" $.Values.global "securityContext" $.Values.securityContext "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
+{{ $params := dict "tlsServiceName" "ml-model-service" "Release" $.Release "global" $.Values.global "tls" $.Values.tls  "keytoolUtils" $.Values.keytoolUtils }}
 {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
 {{- end }}
 {{- if eq .Values.modelRepoImpl "fusion" }}
@@ -77,7 +77,6 @@ spec:
       - name: java-service
         image: "{{ .Values.javaService.repository | default .Values.image.repository }}/{{ .Values.javaService.imageName }}:{{ .Values.javaService.tag | default .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         volumeMounts:
           {{- if .Values.gcs.pretrained.enabled }}
           - name: gcs-pretrained-secret

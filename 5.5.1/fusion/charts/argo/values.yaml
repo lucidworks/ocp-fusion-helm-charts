@@ -6,10 +6,6 @@ artifactRepository:
     insecure: true
     secretKeySecret:
       key: secretkey
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 controller:
   affinity: {}
   containerRuntimeExecutor: docker

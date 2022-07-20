@@ -58,10 +58,6 @@ rbac:
   create: true
 replicaCount: 1
 resources: {}
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 solrPath: solr
 solrPort: "8983"
 solrProtocol: http

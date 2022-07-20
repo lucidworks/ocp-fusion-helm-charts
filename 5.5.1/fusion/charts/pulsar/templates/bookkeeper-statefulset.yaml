@@ -157,7 +157,6 @@ spec:
         image: "{{ .Values.images.bookie.repository }}:{{ .Values.images.bookie.tag }}"
         imagePullPolicy: {{ .Values.images.bookie.pullPolicy }}
         securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         {{- if .Values.bookkeeper.probe.liveness.enabled }}
         livenessProbe:
           httpGet:

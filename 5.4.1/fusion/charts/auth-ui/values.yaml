@@ -47,10 +47,6 @@ rbac:
   create: true
 replicaCount: 1
 resources: {}
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 service:
   http:
     annotations: {}

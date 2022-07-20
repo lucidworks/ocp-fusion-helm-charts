@@ -134,7 +134,7 @@ data:
             {{- toYaml .Values.image.imagePullSecrets | nindent 12 }}
           initContainers:
     {{- if $tlsEnabled -}}
-    {{ $params := dict "tlsServiceName" ( include "fusion.connector-plugin.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils "securityContext" $.Values.securityContext }}
+    {{ $params := dict "tlsServiceName" ( include "fusion.connector-plugin.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils }}
     {{ include "fusion.tls.init-container-v2" $params | nindent 12 }}
     {{- end }}
     {{- if $importTrustedCertsEnabled }}

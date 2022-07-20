@@ -24,7 +24,7 @@ image:
   repository: lucidworks
   tag: latest
 javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-  -Xss256k -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
+  -Xss256k -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
 keytoolUtils:
   image:
     imagePullPolicy: IfNotPresent
@@ -86,10 +86,6 @@ readinessProbe:
   successThreshold: 1
   timeoutSeconds: 10
 replicaCount: 1
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 serviceName: connectors-backend
 springProfiles: k8s,jwt
 tls:

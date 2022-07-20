@@ -204,7 +204,6 @@ spec:
         imagePullPolicy: {{ .Values.images.broker.pullPolicy }}
         {{- if .Values.broker.probe.liveness.enabled }}
         securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         livenessProbe:
           initialDelaySeconds: {{ .Values.broker.probe.liveness.initialDelaySeconds }}
           periodSeconds: {{ .Values.broker.probe.liveness.periodSeconds }}

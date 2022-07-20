@@ -12,10 +12,6 @@ autoscaling:
 config:
   solrlog4j: ""
   solrxml: ""
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 exporter:
   affinity: {}
   configDir: /opt/solr/contrib/prometheus-exporter/conf

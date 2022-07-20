@@ -3,10 +3,6 @@ command:
 - /bin/bash
 - -xec
 - /config-scripts/run
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 env:
   JMXAUTH: "false"
   JMXDISABLE: "false"

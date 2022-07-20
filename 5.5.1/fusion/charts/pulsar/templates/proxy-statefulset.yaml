@@ -69,7 +69,6 @@ spec:
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.imagePullPolicy }}
         securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         {{- if .Values.proxy.probe.liveness.enabled }}
         livenessProbe:
           httpGet:

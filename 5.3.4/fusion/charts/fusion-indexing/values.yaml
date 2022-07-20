@@ -25,7 +25,7 @@ image:
   name: fusion-indexing
   repository: lucidworks
   tag: latest
-javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k -Dhttp.maxConnections=1000
+javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k
 keytoolUtils:
   image:
     imagePullPolicy: IfNotPresent

@@ -17,7 +17,7 @@ image:
   repository: lucidworks
   tag: latest
 javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-  -Xss256k -Dhttp.maxConnections=1000
+  -Xss256k
 keytoolUtils:
   image:
     imagePullPolicy: IfNotPresent

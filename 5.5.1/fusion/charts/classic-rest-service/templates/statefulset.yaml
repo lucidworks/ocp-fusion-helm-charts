@@ -54,7 +54,7 @@ spec:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       initContainers:
 {{- if $tlsEnabled -}}
-{{ $params := dict "tlsServiceName" ( include "fusion.classic-rest-service.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils "securityContext" $.Values.securityContext }}
+{{ $params := dict "tlsServiceName" ( include "fusion.classic-rest-service.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils }}
 {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
 {{- end }}
         {{- include "fusion.initContainers.checkZk-v2" . | nindent 8 }}
@@ -121,7 +121,6 @@ spec:
       - name: classic-rest-service
         image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         env:
           - name: "COMPONENT"
             value: "connectors-classic"

@@ -557,7 +557,7 @@ classic-rest-service:
     repository: lucidworks
     tag: 5.5.0
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-    -Xss256k -Dhttp.maxConnections=1000
+    -Xss256k
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent
@@ -709,7 +709,7 @@ connector-plugin:
     repository: lucidworks
     tag: 5.5.0
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=40.0 -Xss256k
-    -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
+    -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
     -XX:+StartAttachListener -Djdk.attach.allowAttachSelf=true
   keytoolUtils:
     image:
@@ -814,7 +814,7 @@ connectors:
     repository: lucidworks
     tag: 5.5.0
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-    -Xss256k -Dhttp.maxConnections=1000
+    -Xss256k
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent
@@ -916,7 +916,7 @@ connectors-backend:
     repository: lucidworks
     tag: 5.5.0
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-    -Xss256k -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
+    -Xss256k -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
     -XX:+StartAttachListener -Djdk.attach.allowAttachSelf=true
   keytoolUtils:
     image:
@@ -1106,7 +1106,7 @@ fusion-admin:
     host: ingress.example.com
     tls:
       enabled: false
-  jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k -Dhttp.maxConnections=1000
+  jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k
     -XX:PermSize=256m -XX:MaxPermSize=512m
   keytoolUtils:
     image:
@@ -1236,7 +1236,7 @@ fusion-indexing:
     name: fusion-indexing
     repository: lucidworks
     tag: 5.5.0
-  javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k -Dhttp.maxConnections=1000
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent
@@ -3357,7 +3357,6 @@ seldon-core-operator:
   logstashEnabled: true
   manager:
     annotations: {}
-    containerSecurityContext: {}
     cpuLimit: 500m
     cpuRequest: 100m
     deploymentNameAsPrefix: false

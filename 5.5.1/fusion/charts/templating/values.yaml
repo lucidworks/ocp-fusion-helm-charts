@@ -9,10 +9,6 @@ autoscaling:
       targetAverageUtilization: 70
     type: Resource
   minReplicas: 1
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 datadog:
   enabled: false
   port: 8126
@@ -75,10 +71,6 @@ readinessProbe:
   timeoutSeconds: 3
 replicaCount: 1
 resources: {}
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 serverStopTimeout: 5000
 service:
   annotations: {}

@@ -61,10 +61,6 @@ resources:
   requests:
     cpu: 500m
     memory: 8Gi
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 service:
   http:
     annotations: {}

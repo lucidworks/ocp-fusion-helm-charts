@@ -62,7 +62,6 @@ spec:
         image: "{{ .Values.images.autorecovery.repository }}:{{ .Values.images.autorecovery.tag }}"
         imagePullPolicy: {{ .Values.images.autorecovery.pullPolicy }}
         securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
       {{- if .Values.autorecovery.resources }}
         resources:
 {{ toYaml .Values.autorecovery.resources | indent 10 }}

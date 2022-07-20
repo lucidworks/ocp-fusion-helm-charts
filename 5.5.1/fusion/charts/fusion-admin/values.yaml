@@ -7,10 +7,6 @@ autoscaling:
       targetAverageUtilization: 70
     type: Resource
   minReplicas: 1
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 fusion-common-utils:
   global: {}
 image:
@@ -26,7 +22,7 @@ ingress:
   host: ingress.example.com
   tls:
     enabled: false
-jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k -Dhttp.maxConnections=1000
+jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k
   -XX:PermSize=256m -XX:MaxPermSize=512m
 keytoolUtils:
   image:
@@ -69,10 +65,6 @@ readinessProbe:
   timeoutSeconds: 3
 replicaCount: 1
 resources: {}
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 service:
   annotation: {}
   externalPort: 8765

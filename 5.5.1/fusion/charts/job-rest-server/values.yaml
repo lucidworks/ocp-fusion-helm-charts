@@ -2,10 +2,6 @@ accessLogEnabled: false
 affinity: {}
 config:
   springSecurity: ""
-containersSecurityContext:
-  capabilities:
-    drop:
-    - NET_RAW
 datadog:
   enabled: false
 deploymentStrategy:
@@ -64,10 +60,6 @@ readinessProbe:
   periodSeconds: 10
 replicaCount: 1
 resources: {}
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 serverStopTimeout: 5000
 service:
   annotations: {}
