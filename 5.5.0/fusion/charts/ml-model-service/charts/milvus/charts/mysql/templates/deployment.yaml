@@ -43,9 +43,6 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: "{{ .Values.priorityClassName }}"
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-
-      {{- end }}
       initContainers:
       - name: "remove-lost-found"
         image: "{{ .Values.busybox.image}}:{{ .Values.busybox.tag }}"

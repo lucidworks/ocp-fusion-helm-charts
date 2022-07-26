@@ -248,7 +248,7 @@ milvus:
     enabled: false
     mountPath: /var/lib/milvus/logs
     persistentVolumeClaim:
-      accessModes: ReadWriteMany
+      accessModes: [ "ReadWriteMany" ]
       existingClaim: ""
       size: 5Gi
       storageClass: null
@@ -396,7 +396,7 @@ milvus:
     enabled: true
     mountPath: /var/lib/milvus/db
     persistentVolumeClaim:
-      accessModes: ReadWriteMany
+      accessModes: [ "ReadWriteMany" ]
       existingClaim: milvuspvc
       size: 50Gi
       storageClass: null
@@ -502,10 +502,6 @@ readinessProbe:
   timeoutSeconds: 3
 replicaCount: 1
 runLabelNamespaceJob: true
-securityContext:
-  fsGroup: 8764
-  runAsNonRoot: true
-  runAsUser: 8764
 service:
   annotations: {}
   port: 8086

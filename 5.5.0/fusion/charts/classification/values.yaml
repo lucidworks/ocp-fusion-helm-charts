@@ -13,8 +13,7 @@ resources:
   etl: null
   seldon: null
   train: null
-securityContext:
-  fsGroup: 8764
+
 tls:
   enabled: false
   keystorePassword: changeit

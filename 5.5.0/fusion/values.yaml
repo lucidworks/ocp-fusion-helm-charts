@@ -1,3 +1,6 @@
+global:
+  logging:
+    disablePulsar: true
 admin-ui:
   affinity: {}
   autoscaling:
@@ -557,7 +560,7 @@ classic-rest-service:
     repository: lucidworks
     tag: 5.5.0
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-    -Xss256k -Dhttp.maxConnections=1000
+    -Xss256k
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent
@@ -709,7 +712,7 @@ connector-plugin:
     repository: lucidworks
     tag: 5.5.0
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=40.0 -Xss256k
-    -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
+    -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
     -XX:+StartAttachListener -Djdk.attach.allowAttachSelf=true
   keytoolUtils:
     image:
@@ -814,7 +817,7 @@ connectors:
     repository: lucidworks
     tag: 5.5.0
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-    -Xss256k -Dhttp.maxConnections=1000
+    -Xss256k
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent
@@ -916,7 +919,7 @@ connectors-backend:
     repository: lucidworks
     tag: 5.5.0
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
-    -Xss256k -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
+    -Xss256k -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
     -XX:+StartAttachListener -Djdk.attach.allowAttachSelf=true
   keytoolUtils:
     image:
@@ -1002,7 +1005,7 @@ connectors-backend:
   zkTLSPort: 2281
   storage:
     connectorDataPvcEnabled: true
-    requests: 10Gi
+    size: 10Gi
     storageClassName: ""
 devops-ui:
   affinity: {}
@@ -1106,7 +1109,7 @@ fusion-admin:
     host: ingress.example.com
     tls:
       enabled: false
-  jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k -Dhttp.maxConnections=1000
+  jvmOptions: -XX:+ExitOnOutOfMemoryError -Xms1g -Xmx2g -Xss256k
     -XX:PermSize=256m -XX:MaxPermSize=512m
   keytoolUtils:
     image:
@@ -1236,7 +1239,7 @@ fusion-indexing:
     name: fusion-indexing
     repository: lucidworks
     tag: 5.5.0
-  javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k -Dhttp.maxConnections=1000
+  javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k
   keytoolUtils:
     image:
       imagePullPolicy: IfNotPresent
@@ -1343,7 +1346,7 @@ fusion-jupyter:
   storage:
     accessModes:
     - ReadWriteOnce
-    requests: 8Gi
+    size: 8Gi
   zkConnectionString: zk:2181
   zkPort: 2181
   zkReplicaCount: 1
@@ -1399,7 +1402,7 @@ fusion-log-forwarder:
   podDisruptionBudget:
     maxUnavailable: 1
   processorCount: 10
-  pulsarBacklogLimit: 1073741824
+  pulsarBacklogLimit: 3073741824
   pulsarBacklogPolicy: consumer_backlog_eviction
   pulsarNamespace: _logs
   pulsarNamespaceSizeRetention: 0
@@ -1706,6 +1709,7 @@ job-launcher:
     name: job-launcher
     repository: lucidworks
     tag: 5.5.0
+    kubectlImage: bitnami/kubectl
   javaToolOptions: -XX:+ExitOnOutOfMemoryError
   keytoolUtils:
     image:
@@ -2129,7 +2133,7 @@ ml-model-service:
       enabled: false
       mountPath: /var/lib/milvus/logs
       persistentVolumeClaim:
-        accessModes: ReadWriteMany
+        accessModes: [ "ReadWriteMany" ]
         existingClaim: ""
         size: 5Gi
         storageClass: null
@@ -2278,7 +2282,7 @@ ml-model-service:
       enabled: true
       mountPath: /var/lib/milvus/db
       persistentVolumeClaim:
-        accessModes: ReadWriteMany
+        accessModes: [ "ReadWriteMany" ]
         existingClaim: milvuspvc
         size: 50Gi
         storageClass: null
@@ -2601,11 +2605,11 @@ pulsar:
       journal:
         local_storage: true
         name: journal
-        size: 50Gi
+        size: 200Gi
       ledgers:
         local_storage: true
         name: ledgers
-        size: 50Gi
+        size: 200Gi
       persistence: true
   broker:
     affinity: {}
@@ -3357,7 +3361,6 @@ seldon-core-operator:
   logstashEnabled: true
   manager:
     annotations: {}
-    containerSecurityContext: {}
     cpuLimit: 500m
     cpuRequest: 100m
     deploymentNameAsPrefix: false
@@ -3539,9 +3542,6 @@ solr:
     timeoutSeconds: 2
   replicaCount: 3
   resources: {}
-  securityContext:
-    fsGroup: 8983
-    runAsUser: 8983
   service:
     annotations: {}
     type: ClusterIP

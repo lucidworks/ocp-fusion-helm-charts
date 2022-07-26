@@ -99,9 +99,6 @@ readinessProbe:
   timeoutSeconds: 2
 replicaCount: 3
 resources: {}
-securityContext:
-  fsGroup: 8983
-  runAsUser: 8983
 service:
   annotations: {}
   type: ClusterIP

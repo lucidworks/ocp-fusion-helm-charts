@@ -73,7 +73,7 @@ logsPersistence:
   enabled: false
   mountPath: /var/lib/milvus/logs
   persistentVolumeClaim:
-    accessModes: ReadWriteMany
+    accessModes: [ "ReadWriteMany" ]
     existingClaim: ""
     size: 5Gi
     storageClass: null
@@ -221,7 +221,7 @@ persistence:
   enabled: false
   mountPath: /var/lib/milvus/db
   persistentVolumeClaim:
-    accessModes: ReadWriteMany
+    accessModes: [ "ReadWriteMany" ]
     existingClaim: ""
     size: 50Gi
     storageClass: null

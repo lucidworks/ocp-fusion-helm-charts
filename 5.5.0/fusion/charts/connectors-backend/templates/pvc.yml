@@ -1,0 +1,28 @@
+{{- if .Values.storage.connectorDataPvcEnabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Release.Namespace }}-connector-data
+  namespace: {{ .Release.Namespace }}
+{{- with .Values.storage.annotations  }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+    app: {{ template "fusion.connectors-backend.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  accessModes: [ "ReadWriteMany" ]
+  resources:
+    requests:
+      storage: {{ .Values.storage.size | quote }}
+{{- if .Values.storage.storageClass }}
+{{- if (eq "-" .Values.storage.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.storage.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end }}

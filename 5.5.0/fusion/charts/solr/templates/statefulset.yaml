@@ -116,7 +116,7 @@ spec:
 {{- if not (eq $nodePool.name "" ) -}}
 {{- $sep = "-" -}}
 {{- end }}
-{{- $params := dict "Release" $.Release "global" $.Values.global "tls" $.Values.tls "tlsServiceName" ( printf "%s%s%s-headless" (include "solr.fullname" $) $sep ($nodePool.name) )  "keytoolUtils" $.Values.keytoolUtils  "additionalServices" (list ( include "solr.service-name" $ )) "securityContext" $.Values.securityContext }}
+{{- $params := dict "Release" $.Release "global" $.Values.global "tls" $.Values.tls "tlsServiceName" ( printf "%s%s%s-headless" (include "solr.fullname" $) $sep ($nodePool.name) )  "keytoolUtils" $.Values.keytoolUtils  "additionalServices" (list ( include "solr.service-name" $ )) "securityContext" }}
 {{- include "fusion.tls.init-container-v2" $params | nindent 8 }}
 {{- end }}
         - name: check-zk

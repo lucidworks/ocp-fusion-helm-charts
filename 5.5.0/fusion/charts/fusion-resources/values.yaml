@@ -10,8 +10,7 @@ keytoolUtils:
     tag: v2.1.0
 rbac:
   create: true
-securityContext:
-  fsGroup: 8764
+
   runAsUser: 8764
 serviceAccountKey: ""
 tls:

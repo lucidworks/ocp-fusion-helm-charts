@@ -90,8 +90,6 @@ replicaCount: 3
 resources: {}
 scope:
   singleNamespace: false
-securityContext:
-  runAsUser: 8888
 service:
   annotations: null
   ports:

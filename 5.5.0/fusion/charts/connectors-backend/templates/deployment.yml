@@ -54,7 +54,7 @@ spec:
 {{ toYaml .Values.image.imagePullSecrets | indent 8 }}
       initContainers:
 {{- if $tlsEnabled -}}
-{{ $params := dict "tlsServiceName" ( include "fusion.connectors-backend.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils "securityContext" $.Values.securityContext }}
+{{ $params := dict "tlsServiceName" ( include "fusion.connectors-backend.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils "securityContext" }}
 {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
 {{- end }}
         {{- include "fusion.initContainers.checkZk-v2" . | nindent 8 }}
@@ -70,6 +70,10 @@ spec:
             - name: application-config-k8s
               mountPath: "app/config"
               readOnly: true
+            - name: logs-dir
+              mountPath: /backend-logs
+            - name: config-volume
+              mountPath: /config-map
             - name: plugins-dir
               mountPath: "/app/plugins"
             - name: tmp
@@ -92,12 +96,14 @@ spec:
             - "--pulsar.service-url={{ include "fusion.connectors-backend.pulsarServiceUrl" . }}"
             - "--pulsar.tenant-name={{ include "fusion.connectors-backend.kubeNamespace" . }}"
           env:
+            - name: "LOGDIR"
+              value: "/backend-logs"
             - name: "COMPONENT"
               value: "connectors-backend"
             - name: SPRING_PROFILES_ACTIVE
               value: "{{ .Values.springProfiles }}{{- if $tlsEnabled }},tls{{- end }}{{- if $jsonOutput }},logjson{{- end }}{{- if $logstashHost }},logstash{{- end }}{{- if $logPulsar }},logpulsar{{- end }}"
             - name: JAVA_TOOL_OPTIONS
-              value: "-Dspring.cloud.kubernetes.secrets.paths=/etc/secrets {{ .Values.javaToolOptions }}
+              value: "-Dlogging.config=/config-map/logback.xml -Dspring.cloud.kubernetes.secrets.paths=/etc/secrets {{ .Values.javaToolOptions }}
 {{- if $tlsEnabled }} -Djavax.net.ssl.trustStore=/etc/ssl/keystores/truststore.jks -Djavax.net.ssl.trustStorePassword={{ .Values.tls.keystorePassword }} -Djavax.net.ssl.trustStoreType=PKCS12 -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ .Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ .Values.tls.keystorePassword }}{{- end -}}
 "
             {{ if $logstashHost }}
@@ -160,6 +166,12 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {}
+        - name: logs-dir
+          emptyDir: {}
+        - name: config-volume
+          configMap:
+            name: "{{ include "fusion.connectors-backend.fullname" . }}"
+            defaultMode: 420
         - name: secrets
           secret:
             secretName: service-account-key
@@ -179,7 +191,7 @@ spec:
 {{- if .Values.storage.connectorDataPvcEnabled }}
         - name: connector-data
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.pvcName }}
+            claimName: {{ .Release.Namespace }}-connector-data
 {{- end }}
 {{- if $tlsEnabled }}
 {{ $params := dict "tlsServiceName" ( include "fusion.connectors-backend.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils }}

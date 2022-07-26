@@ -177,7 +177,6 @@ spec:
             cpu: '{{ .Values.manager.cpuRequest }}'
             memory: '{{ .Values.manager.memoryRequest }}'
         securityContext:
-{{- .Values.containersSecurityContext | toYaml | nindent 10 }}
 {{- if not .Values.managerCreateResources }}
         volumeMounts:
         - mountPath: /tmp/k8s-webhook-server/serving-certs
