@@ -47,9 +47,7 @@ spec:
       {{- if ($nodePool.schedulerName | default $.Values.schedulerName) }}
       schedulerName: {{ ($nodePool.schedulerName | default $.Values.schedulerName) | quote }}
       {{- end }}
-      securityContext:
-        fsGroup: {{ $.Values.securityContext.fsGroup }}
-        runAsUser: {{ $.Values.securityContext.runAsUser }}
+
       affinity:
 {{ tpl (toYaml ($nodePool.affinity | default $.Values.affinity)) $  | indent 8 }}
       terminationGracePeriodSeconds: {{ $.Values.terminationGracePeriodSeconds }}
@@ -123,16 +121,15 @@ spec:
             runAsNonRoot: true
             allowPrivilegeEscalation: false
             privileged: false
-            runAsUser: {{ $.Values.securityContext.runAsUser }}
           args:
             - zookeeper
           resources:
             requests:
               cpu: 200m
-              memory: 32Mi
+              memory: 50Mi
             limits:
               cpu: 200m
-              memory: 32Mi
+              memory: 50Mi
           env:
             - name: ZOOKEEPER_CONNECTION_STRING
               value: {{ include "fusion.zkConnectionString" $ }}
@@ -337,7 +334,7 @@ spec:
     - metadata:
         name: {{ template "solr.pvc-name" $ }}{{- if not (eq $nodePool.name "") -}}-{{- end -}}{{ $nodePool.name }}
         annotations:
-          pv.beta.kubernetes.io/gid: "{{ $.Values.securityContext.fsGroup }}"
+          pv.beta.kubernetes.io/gid: "8983"
       spec:
         accessModes:
 {{ toYaml $.Values.volumeClaimTemplates.accessModes | indent 10 }}
