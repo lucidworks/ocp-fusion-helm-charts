@@ -494,10 +494,10 @@ Return the appropriate apiVersion for HorizontalPodAutoscaler.
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   env:
     - name: ZOOKEEPER_CONNECTION_STRING
       value: {{ include "fusion.zkConnectionString" . }}
@@ -532,10 +532,10 @@ Return the appropriate apiVersion for HorizontalPodAutoscaler.
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - logstash
   env:
@@ -566,10 +566,10 @@ Return the appropriate apiVersion for HorizontalPodAutoscaler.
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - admin
   env:
@@ -608,10 +608,10 @@ Return the appropriate apiVersion for HorizontalPodAutoscaler.
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - indexing
   env:
@@ -666,10 +666,10 @@ Define the admin url for pulsar broker
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - pulsar
   env:
@@ -800,10 +800,10 @@ Define the kafka endpoint
   resources:
     requests:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
     limits:
       cpu: 200m
-      memory: 32Mi
+      memory: 50Mi
   args:
     - kafka
   env:
