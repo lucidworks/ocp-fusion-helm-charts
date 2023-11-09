@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.6.24
+description: A helm chart to install the webapps component
+keywords:
+- fusion
+- webapps
+maintainers:
+- email: ops.eng@lucidworks.com
+  name: Fusion Business Unit / Engineering
+name: webapps
+version: 1.7.23

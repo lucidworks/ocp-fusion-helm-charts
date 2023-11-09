@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: v2.12.5
+dependencies:
+- condition: minio.install
+  name: minio
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 5.0.6
+deprecated: true
+description: A Helm chart for Argo Workflows
+home: https://github.com/argoproj/argo-helm
+icon: https://raw.githubusercontent.com/argoproj/argo/master/docs/assets/argo.png
+name: argo
+version: 1.0.9

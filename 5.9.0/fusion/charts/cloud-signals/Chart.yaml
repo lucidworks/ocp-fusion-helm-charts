@@ -1,0 +1,11 @@
+apiVersion: v2
+appVersion: "5"
+description: A helm chart to install the cloud-signals component
+keywords:
+- fusion
+- cloud-signals
+maintainers:
+- email: szymon.kurylo@lucidworks.com
+  name: Szymon Kurylo
+name: cloud-signals
+version: 0.3.10

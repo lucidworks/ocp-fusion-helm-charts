@@ -1,0 +1,201 @@
+---
+{{- $tlsEnabled := ( eq (include "fusion.tls.enabled" .) "true" ) -}}
+
+{{- if (has "s3" .Values.enabledStorage) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fusion.cloud-signals.fullname" .  }}-s3
+  labels:
+    {{ include "fusion.cloud-signals.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  {{- if .Values.deploymentStrategy }}
+  strategy:
+    {{ toYaml .Values.deploymentStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+      app.kubernetes.io/component: "cloud-signals"
+      app.kubernetes.io/part-of: "fusion"
+      cloud-storage: s3
+  template:
+    metadata:
+      name: {{ include "fusion.cloud-signals.fullname" .  }}
+      labels:
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+        app.kubernetes.io/component: "cloud-signals"
+        app.kubernetes.io/part-of: "fusion"
+        cloud-storage: s3
+      annotations:
+        {{ toYaml .Values.pod.annotations | nindent 8 }}
+    spec:
+        {{- if .Values.securityContext }}
+      securityContext:
+        {{- .Values.securityContext | toYaml | nindent 8 }}
+        {{- end }}
+      serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( include "fusion.cloud-signals.fullname" . ) }}"
+        {{ if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+        {{ end }}
+        {{ if .Values.tolerations }}
+      tolerations: {{ .Values.tolerations | toYaml | nindent 8 }}
+        {{ end }}
+        {{ if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+        {{ end }}
+        {{ if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+        {{ end }}
+        {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{ toYaml .Values.nodeSelector | nindent 8 }}
+        {{- end }}
+        {{- if .Values.affinity }}
+      affinity:
+        {{ tpl (toYaml .Values.affinity) . | nindent 8 }}
+        {{- end }}
+      imagePullSecrets:
+        {{ toYaml .Values.image.imagePullSecrets | nindent 8 }}
+      volumes:
+        - name: config
+          configMap:
+            name: "{{ template "fusion.cloud-signals.fullname" . }}-config"
+        - name: cloud-secret-s3
+          secret:
+            secretName: {{ .Values.s3.cloudSecret }}
+            items:
+              - key: key
+                path: key
+              - key: secret
+                path: secret
+        - name: buffers
+          emptyDir:
+            sizeLimit: 1Gi
+        - name: secrets
+          projected:
+            sources:
+              - serviceAccountToken:
+                  path: service-account-key
+                  expirationSeconds: 3600
+              - secret:
+                  name: service-account-key
+                  items:
+                    - key: sa
+                      path: service-account-key
+        - name: work-dir
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        {{- if $tlsEnabled }}
+        {{ $params := dict "tlsServiceName" ( include "fusion.cloud-signals.serviceName" . ) "Release" $.Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils }}
+        {{ include "fusion.tls.volumes" $params | indent 8 }}
+        {{- end }}
+
+      initContainers:
+        {{- if $tlsEnabled -}}
+        {{ $params := dict "tlsServiceName" ( include "fusion.cloud-signals.serviceName" . ) "Release" $.Release "global" .Values.global "tls" .Values.tls "securityContext" .Values.securityContext "keytoolUtils" .Values.keytoolUtils }}
+        {{ include "fusion.tls.init-container-v2" $params | indent 8 }}
+        {{- end }}
+      containers:
+        - name: "cloud-signals-s3"
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.imagePullPolicy }}"
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            privileged: false
+  {{- .Values.containersSecurityContext | toYaml | nindent 12 }}
+          volumeMounts:
+            - name: cloud-secret-s3
+              mountPath: {{ .Values.secretDir }}
+            - name: buffers
+              mountPath: /tmp/buffers
+            - name: secrets
+              mountPath: "/etc/secrets"
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+            - name: work-dir
+              mountPath: /app/var
+            - name: config
+              mountPath: {{ .Values.configDir }}
+  {{- if $tlsEnabled }}
+            - name: "keystore-volume"
+              mountPath: "/etc/ssl/keystores"
+  {{- end }} # tlsEnabled
+  {{- if .Values.secrets }}
+          envFrom:
+            - secretRef:
+                name: {{ template "fusion.cloud-signals.fullname" . }}
+  {{- end }} # .Values.secrets
+          readinessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            httpGet:
+              path: /probe
+              port: 4040
+          {{- if $tlsEnabled }}
+              scheme: HTTPS
+          {{- end }} # tlsEnabled
+          env:
+            - name: "JAVA_TOOL_OPTIONS"
+              value: "{{ .Values.javaToolOptions }}
+        {{- if $tlsEnabled }} -Dlogging.config=classpath:logback-kube-tls.xml {{- else }} -Dlogging.config=classpath:logback-kube.xml {{- end -}}
+        {{- if $tlsEnabled }} -Djavax.net.ssl.trustStore=/etc/ssl/keystores/truststore.jks -Djavax.net.ssl.trustStorePassword={{ .Values.tls.keystorePassword }} -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.client.secure=true -Dzookeeper.ssl.keyStore.location=/etc/ssl/keystores/keystore.jks -Dzookeeper.ssl.trustStore.location=/etc/ssl/keystores/truststore.jks -Dzookeeper.ssl.keyStore.password={{ .Values.tls.keystorePassword }} -Dzookeeper.ssl.trustStore.password={{ .Values.tls.keystorePassword }}{{- end -}}
+        "
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: '{{ include "fusion.cloud-signals.kafkaSvcUrl" $ }}'
+            - name: KAFKA_TOPIC
+              value: "{{ .Values.kafka.topic }}"
+            - name: PARTITIONS_PER_REPLICA
+              value: "{{ .Values.kafka.partitionsPerReplica }}"
+            - name: KAFKA_GROUP_ID
+              value: "cloud-signals-s3"
+            - name: BUFFER_LIMIT
+              value: "{{ .Values.bufferLimit }}"
+            - name: WINDOW_LENGTH
+              value: "{{ .Values.windowLength }}"
+            - name: POLL_INTERVAL
+              value: "{{ .Values.kafka.pollInterval }}"
+            - name: PARTITION_COLUMNS
+              value: "{{ .Values.kafka.partitionColumns}}"
+            - name: SIGNAL_OUTPUT_DIR
+              value: "{{ .Values.s3.outputDir }}"
+            - name: CONFIG_DIR
+              value: {{ .Values.configDir }}
+            - name: SECRET_DIR
+              value: {{ .Values.secretDir }}
+            - name: AWS_REGION
+              value: {{ .Values.s3.region }}
+            - name: BUFFER_DIR
+              value: /tmp/buffers
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: MY_POD_SERVICE_ACCOUNT
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.serviceAccountName
+            - name: "COMPONENT"
+              value: "cloud-signals"
+          resources:
+          {{ toYaml .Values.resources | nindent 12 }}
+
+  {{- end }} # if s3 enabled

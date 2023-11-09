@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.6.24
+description: A helm chart to install the api-gateway component
+keywords:
+- fusion
+- api-gateway
+maintainers:
+- email: support@lucidworks.com
+  name: Lucidworks
+name: api-gateway
+version: 1.12.15

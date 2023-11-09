@@ -1,0 +1,112 @@
+accessLogEnabled: false
+additionalVolumeMounts: []
+additionalVolumes: []
+affinity: {}
+autoscaling:
+  enabled: false
+  maxReplicas: 5
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 70
+        type: Utilization
+    type: Resource
+  minReplicas: 1
+cloudSignals:
+  enabled: false
+  topic: fusion.system.cloud-signals
+datadog:
+  enabled: false
+  port: 8126
+deploymentStrategy:
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 25%
+  type: RollingUpdate
+fusion-common-utils:
+  global: {}
+image:
+  imagePullPolicy: IfNotPresent
+  imagePullSecrets: []
+  name: fusion-indexing
+  repository: lucidworks
+  tag: latest
+javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx1g -Xss256k -Dhttp.maxConnections=1000
+kafka:
+  servicePort: "9092"
+  serviceTLSPort: "9092"
+kafkaReplicaCount: 1
+keytoolUtils:
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets:
+    - name: artifactory
+    name: keytool-utils
+    repository: lucidworks
+    tag: v2.1.2
+livenessProbe:
+  initialDelaySeconds: 20
+  periodSeconds: 10
+logLevelRoot: info
+networkPolicy:
+  additionalEgressRules: []
+  additionalIngressRules: []
+  dnsAccess:
+  - ipBlock:
+      cidr: 0.0.0.0/0
+  enabled: false
+  kubernetesAccess:
+  - ipBlock:
+      cidr: 0.0.0.0/0
+nodeSelector: {}
+pod:
+  annotations: {}
+podDisruptionBudget:
+  maxUnavailable: 1
+port: 8765
+preStopSleepTime: 10
+rbac:
+  create: true
+readinessProbe:
+  initialDelaySeconds: 20
+  periodSeconds: 10
+replicaCount: 1
+resources: {}
+securityContext:
+  fsGroup: 8764
+  runAsNonRoot: true
+  runAsUser: 8764
+serverStopTimeout: 5000
+service:
+  annotations: {}
+  port: 8765
+  targetPort: 8765
+  type: ClusterIP
+springProfiles: kubernetes,jwt,fusion
+tls:
+  caSecret:
+    name: ""
+  certSecret:
+    name: ""
+  clusterDomain: svc.cluster.local
+  duration: 8760h
+  enabled: false
+  generateCert: true
+  generateJKS: true
+  issuerRef:
+    kind: Issuer
+    name: fusion-ca-issuer
+  keystorePassword: changeit
+  renewBefore: 8464h
+tracing:
+  enabled: true
+  sampleProbability: 1
+zipkin:
+  enabled: false
+zkPort: 2181
+zkReplicaCount: 3
+zkTLSPort: 2281
+zookeeper:
+  config:
+    enabled: true

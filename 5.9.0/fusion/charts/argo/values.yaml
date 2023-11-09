@@ -1,0 +1,289 @@
+artifactRepository:
+  archiveLogs: false
+  s3:
+    accessKeySecret:
+      key: accesskey
+    insecure: true
+    secretKeySecret:
+      key: secretkey
+controller:
+  affinity: {}
+  containerRuntimeExecutor: k8sapi
+  extraArgs: []
+  extraEnv: []
+  image:
+    tag: v2.12.5
+  instanceID:
+    enabled: true
+    useReleaseName: true
+  links: []
+  loadBalancerSourceRanges: []
+  logging:
+    globallevel: "0"
+    level: info
+  metricsConfig:
+    enabled: false
+    path: /metrics
+    port: 8080
+  metricsServicePort: 8080
+  metricsServicePortName: metrics
+  name: workflow-controller
+  nodeSelector:
+    kubernetes.io/os: linux
+  parallelism: null
+  pdb:
+    enabled: false
+  persistence: {}
+  podAnnotations: {}
+  podGC: {}
+  podLabels: {}
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 8737
+  priorityClassName: ""
+  replicas: 1
+  resources: {}
+  serviceAccount: argo
+  serviceAccountAnnotations: {}
+  serviceAnnotations: {}
+  serviceLabels: {}
+  serviceMonitor:
+    additionalLabels: {}
+    enabled: false
+  serviceType: ClusterIP
+  telemetryConfig:
+    enabled: false
+    path: /telemetry
+    port: 8081
+  telemetryServicePort: 8081
+  telemetryServicePortName: telemetry
+  tolerations: []
+  workflowDefaults: {}
+  workflowNamespaces:
+  - default
+  workflowRestrictions: {}
+crdVersion: v1alpha1
+createAggregateRoles: true
+executor:
+  env: {}
+  image:
+    pullPolicy: Always
+    pullSecrets: []
+    tag: v2.12.5
+  resources: {}
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 8737
+global:
+  imagePullSecrets: []
+  imageRegistry: ""
+  storageClass: ""
+images:
+  controller: workflow-controller
+  executor: argoexec
+  pullPolicy: Always
+  pullSecrets: []
+  server: argocli
+  tag: v2.12.5
+init:
+  serviceAccount: ""
+installCRD: false
+minio:
+  DeploymentUpdate:
+    maxSurge: 100%
+    maxUnavailable: 0
+    type: RollingUpdate
+  StatefulSetUpdate:
+    updateStrategy: RollingUpdate
+  accessKey: ""
+  affinity: {}
+  azuregateway:
+    enabled: false
+    replicas: 4
+  bucketRoot: ""
+  buckets: []
+  certsPath: /etc/minio/certs/
+  clusterDomain: cluster.local
+  configPathmc: /etc/minio/mc/
+  defaultBucket:
+    enabled: true
+    name: argo-artifacts
+    policy: none
+    purge: false
+  drivesPerNode: 1
+  environment: {}
+  etcd:
+    clientCert: ""
+    clientCertKey: ""
+    corednsPathPrefix: ""
+    endpoints: []
+    pathPrefix: ""
+  existingSecret: ""
+  extraArgs: []
+  fullnameOverride: ""
+  gcsgateway:
+    enabled: false
+    gcsKeyJson: ""
+    projectId: ""
+    replicas: 4
+  global:
+    imagePullSecrets: []
+    imageRegistry: ""
+    storageClass: ""
+  helmKubectlJqImage:
+    pullPolicy: IfNotPresent
+    repository: bskim45/helm-kubectl-jq
+    tag: 3.1.0
+  image:
+    pullPolicy: IfNotPresent
+    repository: minio/minio
+    tag: RELEASE.2020-12-03T05-49-24Z
+  imagePullSecrets: []
+  ingress:
+    annotations: {}
+    enabled: false
+    hosts:
+    - chart-example.local
+    labels: {}
+    path: /
+    tls: []
+  install: false
+  makeBucketJob:
+    annotations: null
+    podAnnotations: null
+    resources:
+      requests:
+        memory: 128Mi
+    securityContext:
+      enabled: false
+      fsGroup: 1000
+      runAsGroup: 1000
+      runAsUser: 1000
+  mcImage:
+    pullPolicy: IfNotPresent
+    repository: minio/mc
+    tag: RELEASE.2020-11-25T23-04-07Z
+  metrics:
+    serviceMonitor:
+      additionalLabels: {}
+      enabled: false
+      relabelConfigs: {}
+  mode: standalone
+  mountPath: /export
+  nameOverride: ""
+  nasgateway:
+    enabled: false
+    pv: null
+    replicas: 4
+  networkPolicy:
+    allowExternal: true
+    enabled: false
+  nodeSelector: {}
+  persistence:
+    VolumeName: ""
+    accessMode: ReadWriteOnce
+    enabled: true
+    existingClaim: ""
+    size: 500Gi
+    storageClass: ""
+    subPath: ""
+  podAnnotations: {}
+  podDisruptionBudget:
+    enabled: false
+    maxUnavailable: 1
+  podLabels: {}
+  priorityClassName: ""
+  replicas: 4
+  resources:
+    requests:
+      memory: 4Gi
+  s3gateway:
+    accessKey: ""
+    enabled: false
+    replicas: 4
+    secretKey: ""
+    serviceEndpoint: ""
+  secretKey: ""
+  securityContext:
+    enabled: true
+    fsGroup: 1000
+    runAsGroup: 1000
+    runAsUser: 1000
+  service:
+    annotations: {}
+    clusterIP: null
+    externalIPs: []
+    nodePort: 32000
+    port: 9000
+    type: ClusterIP
+  serviceAccount:
+    create: true
+    name: null
+  tls:
+    certSecret: ""
+    enabled: false
+    privateKey: private.key
+    publicCrt: public.crt
+  tolerations: []
+  trustedCertsSecret: ""
+  updatePrometheusJob:
+    annotations: null
+    podAnnotations: null
+    securityContext:
+      enabled: false
+      fsGroup: 1000
+      runAsGroup: 1000
+      runAsUser: 1000
+  zones: 1
+rbac:
+  create: true
+server:
+  affinity: {}
+  baseHref: /
+  clusterWorkflowTemplates:
+    enableEditing: false
+  createServiceAccount: true
+  enabled: true
+  extraArgs: []
+  image:
+    tag: v2.12.5
+  ingress:
+    enabled: false
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  name: argo-ui
+  nodeSelector:
+    kubernetes.io/os: linux
+  pdb:
+    enabled: false
+  podAnnotations: {}
+  podGC: {}
+  podLabels: {}
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 8737
+  priorityClassName: ""
+  replicas: 1
+  resources: {}
+  secure: false
+  serviceAccount: argo-server
+  serviceAccountAnnotations: {}
+  serviceAnnotations: {}
+  serviceLabels: {}
+  servicePort: 2746
+  serviceType: ClusterIP
+  sso: null
+  tolerations: []
+  volumeMounts: []
+  volumes: []
+singleNamespace: true
+useDefaultArtifactRepo: false
+useStaticCredentials: true
+workflow:
+  namespace: ""
+  rbac:
+    create: true
+  serviceAccount:
+    annotations: {}
+    create: true
+    name: argo-workflow

@@ -1,0 +1,13 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ template "reverse-search.configmap-name" . }}-initdb"
+  labels:
+{{ include "reverse-search.common.labels" . | nindent 4 }}
+data:
+  bootstrap-configset.sh: |
+    #!/bin/bash
+    /opt/solr/bin/solr zk ls /configs/reverse-search &> /dev/null || /opt/solr/bin/solr zk upconfig -n reverse-search -d /opt/solr/modules/fusion-reverse-search/reverse-search-queries-configset
+

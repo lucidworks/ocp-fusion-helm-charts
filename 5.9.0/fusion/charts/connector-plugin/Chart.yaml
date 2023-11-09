@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.6.24
+description: Lucidworks service for hosting connector plugins
+keywords:
+- fusion
+- connectors
+- plugins
+- rpc
+- v2
+name: connector-plugin
+version: 1.5.1

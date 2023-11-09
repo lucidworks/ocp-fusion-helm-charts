@@ -1,0 +1,141 @@
+DeploymentUpdate:
+  maxSurge: 100%
+  maxUnavailable: 0
+  type: RollingUpdate
+StatefulSetUpdate:
+  updateStrategy: RollingUpdate
+accessKey: ""
+affinity: {}
+azuregateway:
+  enabled: false
+  replicas: 4
+bucketRoot: ""
+buckets: []
+certsPath: /etc/minio/certs/
+clusterDomain: cluster.local
+configPathmc: /etc/minio/mc/
+defaultBucket:
+  enabled: false
+  name: bucket
+  policy: none
+  purge: false
+drivesPerNode: 1
+environment: {}
+etcd:
+  clientCert: ""
+  clientCertKey: ""
+  corednsPathPrefix: ""
+  endpoints: []
+  pathPrefix: ""
+existingSecret: ""
+extraArgs: []
+fullnameOverride: ""
+gcsgateway:
+  enabled: false
+  gcsKeyJson: ""
+  projectId: ""
+  replicas: 4
+helmKubectlJqImage:
+  pullPolicy: IfNotPresent
+  repository: bskim45/helm-kubectl-jq
+  tag: 3.1.0
+image:
+  pullPolicy: IfNotPresent
+  repository: minio/minio
+  tag: RELEASE.2020-12-03T05-49-24Z
+imagePullSecrets: []
+ingress:
+  annotations: {}
+  enabled: false
+  hosts:
+  - chart-example.local
+  labels: {}
+  path: /
+  tls: []
+makeBucketJob:
+  annotations: null
+  podAnnotations: null
+  resources:
+    requests:
+      memory: 128Mi
+  securityContext:
+    enabled: false
+    fsGroup: 1000
+    runAsGroup: 1000
+    runAsUser: 1000
+mcImage:
+  pullPolicy: IfNotPresent
+  repository: minio/mc
+  tag: RELEASE.2020-11-25T23-04-07Z
+metrics:
+  serviceMonitor:
+    additionalLabels: {}
+    enabled: false
+    relabelConfigs: {}
+mode: standalone
+mountPath: /export
+nameOverride: ""
+nasgateway:
+  enabled: false
+  pv: null
+  replicas: 4
+networkPolicy:
+  allowExternal: true
+  enabled: false
+nodeSelector: {}
+persistence:
+  VolumeName: ""
+  accessMode: ReadWriteOnce
+  enabled: true
+  existingClaim: ""
+  size: 500Gi
+  storageClass: ""
+  subPath: ""
+podAnnotations: {}
+podDisruptionBudget:
+  enabled: false
+  maxUnavailable: 1
+podLabels: {}
+priorityClassName: ""
+replicas: 4
+resources:
+  requests:
+    memory: 4Gi
+s3gateway:
+  accessKey: ""
+  enabled: false
+  replicas: 4
+  secretKey: ""
+  serviceEndpoint: ""
+secretKey: ""
+securityContext:
+  enabled: true
+  fsGroup: 1000
+  runAsGroup: 1000
+  runAsUser: 1000
+service:
+  annotations: {}
+  clusterIP: null
+  externalIPs: []
+  nodePort: 32000
+  port: 9000
+  type: ClusterIP
+serviceAccount:
+  create: true
+  name: null
+tls:
+  certSecret: ""
+  enabled: false
+  privateKey: private.key
+  publicCrt: public.crt
+tolerations: []
+trustedCertsSecret: ""
+updatePrometheusJob:
+  annotations: null
+  podAnnotations: null
+  securityContext:
+    enabled: false
+    fsGroup: 1000
+    runAsGroup: 1000
+    runAsUser: 1000
+zones: 1
