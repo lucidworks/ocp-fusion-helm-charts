@@ -1,0 +1,31 @@
+{{- $tlsEnabled := .Values.tls.enabled -}}
+{{- if .Values.global -}}
+{{- if .Values.global.tlsEnabled -}}
+{{ $tlsEnabled = true }}
+{{- end }}
+{{- end }}
+
+{{- range $i, $nodePool := .Values.nodePools }}
+---
+
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: "{{ include "reverse-search.fullname" $ }}{{- if not (eq $nodePool.name "") -}}-{{- end -}}{{ $nodePool.name }}-headless"
+  labels:
+{{- if $tlsEnabled }}
+    secured: "true"
+{{- end }}
+{{ include "reverse-search.common.labels" $ | indent 4 }}
+spec:
+  publishNotReadyAddresses: true
+  clusterIP: "None"
+  ports:
+  - port: {{ $.Values.port }}
+    name: "reverse-search-headless"
+  selector:
+    app.kubernetes.io/name: "{{ include "reverse-search.name" $ }}"
+    app.kubernetes.io/instance: "{{ $.Release.Name }}"
+    app.kubernetes.io/component: "reverse-search"
+    app.kubernetes.io/reverse-searchpool: "{{ $nodePool.name }}"
+{{- end -}}

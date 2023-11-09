@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.6.21
+description: Lucidworks Fusion Apps Manager
+keywords:
+- fusion
+- apps
+- manager
+name: apps-manager
+version: 0.1.5

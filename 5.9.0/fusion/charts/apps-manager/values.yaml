@@ -1,0 +1,95 @@
+accessLogEnabled: false
+additionalVolumeMounts: []
+additionalVolumes: []
+affinity: {}
+annotations: {}
+component: apps-manager
+deploymentStrategy:
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 25%
+  type: RollingUpdate
+fusion-common-utils:
+  global: {}
+image:
+  imagePullSecrets: []
+  name: apps-manager
+  pullPolicy: IfNotPresent
+  repository: lucidworks
+  tag: latest
+javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
+  -Xss256k
+kafka:
+  servicePort: "9092"
+  serviceTLSPort: "9092"
+kafkaReplicaCount: 1
+keytoolUtils:
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: keytool-utils
+    repository: lucidworks
+    tag: v2.1.2
+livenessProbe:
+  failureThreshold: 10
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 2
+logdir: /app/logs
+name: apps-manager
+networkPolicy:
+  additionalEgressRules: []
+  additionalIngressRules: []
+  dnsAccess:
+  - ipBlock:
+      cidr: 0.0.0.0/0
+  enabled: false
+  kubernetesAccess:
+  - ipBlock:
+      cidr: 0.0.0.0/0
+nodeSelector: {}
+pod:
+  annotations: {}
+podDisruptionBudget:
+  maxUnavailable: 1
+port:
+  external: 9025
+  internal: 9025
+preStopSleepTime: 15
+rbac:
+  create: true
+readinessProbe:
+  failureThreshold: 8
+  initialDelaySeconds: 45
+  periodSeconds: 5
+  successThreshold: 1
+  timeoutSeconds: 2
+replicaCount: 1
+scheduler:
+  collections:
+    cron: 0 0 0/1 1/1 * ?
+  pipelines:
+    cron: 45 */5 * ? * *
+securityContext:
+  fsGroup: 8764
+  runAsNonRoot: true
+  runAsUser: 8764
+serviceName: apps-manager
+springProfiles: k8s,jwt
+tls:
+  caSecret:
+    name: ""
+  certSecret:
+    name: ""
+  clusterDomain: svc.cluster.local
+  duration: 8760h
+  enabled: false
+  generateCert: true
+  generateJKS: true
+  issuerRef:
+    kind: Issuer
+    name: fusion-ca-issuer
+  keystorePassword: changeit
+  renewBefore: 8464h
+trustedCertificates:
+  enabled: false
