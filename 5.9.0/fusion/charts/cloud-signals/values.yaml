@@ -40,9 +40,7 @@ s3:
 schedulerName: ""
 secretDir: /etc/appsecret
 securityContext:
-  fsGroup: 8764
   runAsNonRoot: true
-  runAsUser: 8764
 serviceAccount:
   annotations: {}
   create: true

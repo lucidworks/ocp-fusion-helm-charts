@@ -48,7 +48,6 @@ containerSecurityContext:
     - NET_RAW
   enabled: true
   runAsNonRoot: true
-  runAsUser: 1001
 customLivenessProbe: {}
 customReadinessProbe: {}
 customStartupProbe: {}
@@ -164,7 +163,6 @@ metrics:
     containerSecurityContext:
       enabled: true
       runAsNonRoot: true
-      runAsUser: 1001
     enabled: false
     existingConfigmap: ""
     image:
@@ -201,7 +199,6 @@ metrics:
     containerSecurityContext:
       enabled: true
       runAsNonRoot: true
-      runAsUser: 1001
     enabled: false
     extraFlags: {}
     extraVolumeMounts: []
@@ -225,7 +222,6 @@ metrics:
     podLabels: {}
     podSecurityContext:
       enabled: true
-      fsGroup: 1001
     resources:
       limits: {}
       requests: {}
@@ -302,7 +298,6 @@ podLabels: {}
 podManagementPolicy: Parallel
 podSecurityContext:
   enabled: true
-  fsGroup: 1001
 priorityClassName: ""
 provisioning:
   args: []
@@ -326,7 +321,6 @@ provisioning:
   containerSecurityContext:
     enabled: true
     runAsNonRoot: true
-    runAsUser: 1001
   enabled: false
   extraEnvVars: []
   extraEnvVarsCM: ""
@@ -341,7 +335,6 @@ provisioning:
   podLabels: {}
   podSecurityContext:
     enabled: true
-    fsGroup: 1001
   postScript: ""
   preScript: ""
   replicationFactor: 1
@@ -414,7 +407,6 @@ updateStrategy:
   type: RollingUpdate
 volumePermissions:
   containerSecurityContext:
-    runAsUser: 0
   enabled: false
   image:
     pullPolicy: IfNotPresent

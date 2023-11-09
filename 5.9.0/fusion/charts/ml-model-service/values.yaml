@@ -96,7 +96,6 @@ ambassador:
   scope:
     singleNamespace: true
   securityContext:
-    runAsUser: 8888
   service:
     annotations: null
     ports:
@@ -376,8 +375,6 @@ milvus:
         memory: 256Mi
     securityContext:
       enabled: false
-      fsGroup: 999
-      runAsUser: 999
     service:
       annotations: {}
       port: 3306
@@ -507,9 +504,7 @@ readinessProbe:
 replicaCount: 1
 runLabelNamespaceJob: true
 securityContext:
-  fsGroup: 8764
   runAsNonRoot: true
-  runAsUser: 8764
 service:
   annotations: {}
   port: 8086

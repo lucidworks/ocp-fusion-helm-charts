@@ -16,7 +16,6 @@ securityContext:
   capabilities:
     drop:
     - NET_RAW
-  fsGroup: 8764
 tls:
   enabled: false
   keystorePassword: changeit

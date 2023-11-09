@@ -146,8 +146,6 @@ readinessProbe:
 replicaCount: 3
 resources: {}
 securityContext:
-  fsGroup: 8983
-  runAsUser: 8983
 service:
   annotations: {}
   type: ClusterIP
@@ -380,8 +378,6 @@ zookeeper:
   replicaCount: 3
   resources: {}
   securityContext:
-    fsGroup: 1000
-    runAsUser: 1000
   service:
     annotations: {}
     ports:

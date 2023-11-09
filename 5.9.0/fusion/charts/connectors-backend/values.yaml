@@ -97,9 +97,7 @@ readinessProbe:
   timeoutSeconds: 10
 replicaCount: 1
 securityContext:
-  fsGroup: 8764
   runAsNonRoot: true
-  runAsUser: 8764
 serviceName: connectors-backend
 springProfiles: k8s,jwt
 storage:

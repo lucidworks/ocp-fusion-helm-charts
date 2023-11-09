@@ -58,9 +58,7 @@ admin-ui:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -183,9 +181,7 @@ api-gateway:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotations: {}
     port: 6764
@@ -296,9 +292,7 @@ apps-manager:
     pipelines:
       cron: 45 */5 * ? * *
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serviceName: apps-manager
   springProfiles: k8s,jwt
   tls:
@@ -363,7 +357,6 @@ argo:
     podLabels: {}
     podSecurityContext:
       runAsNonRoot: true
-      runAsUser: 8737
     priorityClassName: ""
     replicas: 1
     resources: {}
@@ -397,7 +390,6 @@ argo:
     resources: {}
     securityContext:
       runAsNonRoot: true
-      runAsUser: 8737
   global:
     imagePullSecrets: []
     imageRegistry: ""
@@ -486,9 +478,6 @@ argo:
           memory: 128Mi
       securityContext:
         enabled: false
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsUser: 1000
     mcImage:
       pullPolicy: IfNotPresent
       repository: minio/mc
@@ -536,9 +525,6 @@ argo:
     secretKey: ""
     securityContext:
       enabled: true
-      fsGroup: 1000
-      runAsGroup: 1000
-      runAsUser: 1000
     service:
       annotations: {}
       clusterIP: null
@@ -561,9 +547,6 @@ argo:
       podAnnotations: null
       securityContext:
         enabled: false
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsUser: 1000
     zones: 1
   rbac:
     create: true
@@ -591,7 +574,6 @@ argo:
     podLabels: {}
     podSecurityContext:
       runAsNonRoot: true
-      runAsUser: 8737
     priorityClassName: ""
     replicas: 1
     resources: {}
@@ -638,7 +620,6 @@ argo-common-workflows:
     capabilities:
       drop:
       - NET_RAW
-    fsGroup: 8764
   tls:
     enabled: false
     keystorePassword: changeit
@@ -719,9 +700,7 @@ async-parsing:
     create: true
   replicaCount: 1
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serviceName: async-parsing
   springProfiles: k8s,jwt
   tika:
@@ -844,9 +823,7 @@ auth-ui:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -937,9 +914,7 @@ classic-rest-service:
     timeoutSeconds: 2
   replicaCount: 1
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connectors-classic
   springProfiles: k8s,jwt
   tls:
@@ -989,7 +964,6 @@ classification:
     capabilities:
       drop:
       - NET_RAW
-    fsGroup: 8764
   tls:
     enabled: false
     keystorePassword: changeit
@@ -1043,9 +1017,7 @@ cloud-signals:
   schedulerName: ""
   secretDir: /etc/appsecret
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serviceAccount:
     annotations: {}
     create: true
@@ -1179,9 +1151,7 @@ connector-plugin:
     timeoutSeconds: 10
   replicaCount: 0
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connector-plugin
   springProfiles: k8s,jwt
   storage:
@@ -1287,9 +1257,7 @@ connectors:
     timeoutSeconds: 2
   replicaCount: 1
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connectors
   springProfiles: k8s,jwt
   tls:
@@ -1413,9 +1381,7 @@ connectors-backend:
     timeoutSeconds: 10
   replicaCount: 1
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serviceName: connectors-backend
   springProfiles: k8s,jwt
   storage:
@@ -1516,9 +1482,7 @@ fusion-admin:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotation: {}
     externalPort: 8765
@@ -1657,9 +1621,7 @@ fusion-indexing:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -1713,8 +1675,6 @@ fusion-resources:
   rbac:
     create: true
   securityContext:
-    fsGroup: 8764
-    runAsUser: 8764
   serviceAccountKey: ""
   tls:
     caSecret:
@@ -1785,9 +1745,7 @@ insights:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotations: {}
     port: 8080
@@ -1884,9 +1842,7 @@ job-launcher:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -1988,9 +1944,7 @@ job-rest-server:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -2067,7 +2021,6 @@ kafka:
       - NET_RAW
     enabled: true
     runAsNonRoot: true
-    runAsUser: 1001
   customLivenessProbe: {}
   customReadinessProbe: {}
   customStartupProbe: {}
@@ -2191,7 +2144,6 @@ kafka:
       containerSecurityContext:
         enabled: true
         runAsNonRoot: true
-        runAsUser: 1001
       enabled: false
       existingConfigmap: ""
       image:
@@ -2228,7 +2180,6 @@ kafka:
       containerSecurityContext:
         enabled: true
         runAsNonRoot: true
-        runAsUser: 1001
       enabled: false
       extraFlags: {}
       extraVolumeMounts: []
@@ -2252,7 +2203,6 @@ kafka:
       podLabels: {}
       podSecurityContext:
         enabled: true
-        fsGroup: 1001
       resources:
         limits: {}
         requests: {}
@@ -2329,7 +2279,6 @@ kafka:
   podManagementPolicy: Parallel
   podSecurityContext:
     enabled: true
-    fsGroup: 1001
   priorityClassName: ""
   provisioning:
     args: []
@@ -2353,7 +2302,6 @@ kafka:
     containerSecurityContext:
       enabled: true
       runAsNonRoot: true
-      runAsUser: 1001
     enabled: false
     extraEnvVars: []
     extraEnvVarsCM: ""
@@ -2368,7 +2316,6 @@ kafka:
     podLabels: {}
     podSecurityContext:
       enabled: true
-      fsGroup: 1001
     postScript: ""
     preScript: ""
     replicationFactor: 1
@@ -2441,7 +2388,6 @@ kafka:
     type: RollingUpdate
   volumePermissions:
     containerSecurityContext:
-      runAsUser: 0
     enabled: false
     image:
       pullPolicy: IfNotPresent
@@ -2570,7 +2516,6 @@ ml-model-service:
     scope:
       singleNamespace: true
     securityContext:
-      runAsUser: 8888
     service:
       annotations: null
       ports:
@@ -2852,8 +2797,6 @@ ml-model-service:
           memory: 256Mi
       securityContext:
         enabled: false
-        fsGroup: 999
-        runAsUser: 999
       service:
         annotations: {}
         port: 3306
@@ -2983,9 +2926,7 @@ ml-model-service:
   replicaCount: 1
   runLabelNamespaceJob: true
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotations: {}
     port: 8086
@@ -3068,9 +3009,7 @@ pm-ui:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -3173,9 +3112,7 @@ query-pipeline:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -3257,7 +3194,6 @@ question-answering:
       sparkSolrEtl: {}
       train: {}
   securityContext:
-    fsGroup: 8764
   tls:
     enabled: false
     keystorePassword: changeit
@@ -3304,7 +3240,6 @@ recommender:
       etl: {}
       train: {}
   securityContext:
-    fsGroup: 8764
   tls:
     enabled: false
     keystorePassword: changeit
@@ -3384,8 +3319,6 @@ reverse-search:
   replicaCount: 3
   resources: {}
   securityContext:
-    fsGroup: 8983
-    runAsUser: 8983
   service:
     annotations: {}
     type: ClusterIP
@@ -3479,9 +3412,7 @@ rules-ui:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   service:
     http:
       annotations: {}
@@ -3814,8 +3745,6 @@ solr:
   replicaCount: 3
   resources: {}
   securityContext:
-    fsGroup: 8983
-    runAsUser: 8983
   service:
     annotations: {}
     type: ClusterIP
@@ -4049,8 +3978,6 @@ solr:
     replicaCount: 3
     resources: {}
     securityContext:
-      fsGroup: 1000
-      runAsUser: 1000
     service:
       annotations: {}
       ports:
@@ -4092,7 +4019,6 @@ solr-backup-runner:
     concurrencyPolicy: Forbid
     executorCount: 10
     failedJobsHistoryLimit: 1
-    fsGroup: 8983
     networkPolicy:
       additionalEgressRules: []
       additionalIngressRules: []
@@ -4103,7 +4029,6 @@ solr-backup-runner:
     podAnnotations: {}
     resources: {}
     restartPolicy: Never
-    runAsUser: 8983
     successfulJobsHistoryLimit: 3
   enabled: false
   fusion-common-utils:
@@ -4124,7 +4049,6 @@ solr-backup-runner:
     enabled: true
     executorCount: 10
     failedJobsHistoryLimit: 1
-    fsGroup: 8983
     networkPolicy:
       additionalEgressRules: []
       additionalIngressRules: []
@@ -4146,7 +4070,6 @@ solr-backup-runner:
           keep: 3
         - for: 2016h
           keep: 3
-    runAsUser: 8983
     schedule: 0 0 * * *
     successfulJobsHistoryLimit: 3
   solrBackupDirectory: /mnt/solr-backups/collection-backups
@@ -4228,9 +4151,7 @@ templating:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   serverStopTimeout: 5000
   service:
     annotations: {}
@@ -4332,9 +4253,7 @@ webapps:
   replicaCount: 1
   resources: {}
   securityContext:
-    fsGroup: 8764
     runAsNonRoot: true
-    runAsUser: 8764
   service:
     annotations: {}
     port: 8780
@@ -4553,9 +4472,6 @@ zookeeper:
     create: true
   replicaCount: 3
   resources: {}
-  securityContext:
-    fsGroup: 1000
-    runAsUser: 1000
   service:
     annotations: {}
     ports:

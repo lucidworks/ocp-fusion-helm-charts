@@ -70,9 +70,7 @@ readinessProbe:
 replicaCount: 1
 resources: {}
 securityContext:
-  fsGroup: 8764
   runAsNonRoot: true
-  runAsUser: 8764
 serverStopTimeout: 5000
 service:
   annotations: {}

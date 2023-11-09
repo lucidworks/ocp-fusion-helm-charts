@@ -63,9 +63,7 @@ readinessProbe:
   timeoutSeconds: 2
 replicaCount: 1
 securityContext:
-  fsGroup: 8764
   runAsNonRoot: true
-  runAsUser: 8764
 serviceName: connectors-classic
 springProfiles: k8s,jwt
 tls:
