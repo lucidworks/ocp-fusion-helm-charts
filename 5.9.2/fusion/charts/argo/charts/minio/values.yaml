@@ -60,9 +60,6 @@ makeBucketJob:
       memory: 128Mi
   securityContext:
     enabled: false
-    fsGroup: 1000
-    runAsGroup: 1000
-    runAsUser: 1000
 mcImage:
   pullPolicy: IfNotPresent
   repository: minio/mc
@@ -110,9 +107,6 @@ s3gateway:
 secretKey: ""
 securityContext:
   enabled: true
-  fsGroup: 1000
-  runAsGroup: 1000
-  runAsUser: 1000
 service:
   annotations: {}
   clusterIP: null
@@ -135,7 +129,4 @@ updatePrometheusJob:
   podAnnotations: null
   securityContext:
     enabled: false
-    fsGroup: 1000
-    runAsGroup: 1000
-    runAsUser: 1000
 zones: 1

@@ -45,8 +45,6 @@ spec:
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
       serviceAccountName: {{ template "mysql.serviceAccountName" . }}
       initContainers:

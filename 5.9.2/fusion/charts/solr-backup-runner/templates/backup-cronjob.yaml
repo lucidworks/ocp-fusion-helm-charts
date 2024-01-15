@@ -35,8 +35,6 @@ spec:
         spec:
           securityContext:
             runAsNonRoot: true
-            fsGroup: {{ $.Values.backup.fsGroup }}
-            runAsUser: {{ $.Values.backup.runAsUser }}
           volumes:
             - name: solr-backups
               persistentVolumeClaim:

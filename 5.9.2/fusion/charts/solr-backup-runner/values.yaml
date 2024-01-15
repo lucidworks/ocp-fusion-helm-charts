@@ -5,7 +5,6 @@ backup:
   concurrencyPolicy: Forbid
   executorCount: 10
   failedJobsHistoryLimit: 1
-  fsGroup: 8983
   networkPolicy:
     additionalEgressRules: []
     additionalIngressRules: []
@@ -16,7 +15,6 @@ backup:
   podAnnotations: {}
   resources: {}
   restartPolicy: Never
-  runAsUser: 8983
   successfulJobsHistoryLimit: 3
 fusion-common-utils:
   global: {}
@@ -33,7 +31,6 @@ prune:
   enabled: true
   executorCount: 10
   failedJobsHistoryLimit: 1
-  fsGroup: 8983
   networkPolicy:
     additionalEgressRules: []
     additionalIngressRules: []
@@ -55,7 +52,6 @@ prune:
         keep: 3
       - for: 2016h
         keep: 3
-  runAsUser: 8983
   schedule: 0 0 * * *
   successfulJobsHistoryLimit: 3
 solrBackupDirectory: /mnt/solr-backups/collection-backups

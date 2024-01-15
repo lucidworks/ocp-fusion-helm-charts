@@ -67,9 +67,7 @@ rbac:
   create: true
 replicaCount: 1
 securityContext:
-  fsGroup: 8764
   runAsNonRoot: true
-  runAsUser: 8764
 serviceName: async-parsing
 springProfiles: k8s,jwt
 tika:

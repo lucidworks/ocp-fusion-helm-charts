@@ -48,8 +48,6 @@ spec:
       schedulerName: {{ ($nodePool.schedulerName | default $.Values.schedulerName) | quote }}
       {{- end }}
       securityContext:
-        fsGroup: {{ $.Values.securityContext.fsGroup }}
-        runAsUser: {{ $.Values.securityContext.runAsUser }}
       affinity:
 {{ tpl (toYaml ($nodePool.affinity | default $.Values.affinity)) $  | indent 8 }}
       terminationGracePeriodSeconds: {{ $.Values.terminationGracePeriodSeconds }}
@@ -128,7 +126,6 @@ spec:
             runAsNonRoot: true
             allowPrivilegeEscalation: false
             privileged: false
-            runAsUser: {{ $.Values.securityContext.runAsUser }}
           args:
             - zookeeper
           resources:

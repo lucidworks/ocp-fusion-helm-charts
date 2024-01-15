@@ -39,7 +39,6 @@ controller:
   podLabels: {}
   podSecurityContext:
     runAsNonRoot: true
-    runAsUser: 8737
   priorityClassName: ""
   replicas: 1
   resources: {}
@@ -73,7 +72,6 @@ executor:
   resources: {}
   securityContext:
     runAsNonRoot: true
-    runAsUser: 8737
 global:
   imagePullSecrets: []
   imageRegistry: ""
@@ -156,9 +154,6 @@ minio:
         memory: 128Mi
     securityContext:
       enabled: false
-      fsGroup: 1000
-      runAsGroup: 1000
-      runAsUser: 1000
   mcImage:
     pullPolicy: IfNotPresent
     repository: minio/mc
@@ -206,9 +201,6 @@ minio:
   secretKey: ""
   securityContext:
     enabled: true
-    fsGroup: 1000
-    runAsGroup: 1000
-    runAsUser: 1000
   service:
     annotations: {}
     clusterIP: null
@@ -231,9 +223,6 @@ minio:
     podAnnotations: null
     securityContext:
       enabled: false
-      fsGroup: 1000
-      runAsGroup: 1000
-      runAsUser: 1000
   zones: 1
 rbac:
   create: true
@@ -261,7 +250,6 @@ server:
   podLabels: {}
   podSecurityContext:
     runAsNonRoot: true
-    runAsUser: 8737
   priorityClassName: ""
   replicas: 1
   resources: {}

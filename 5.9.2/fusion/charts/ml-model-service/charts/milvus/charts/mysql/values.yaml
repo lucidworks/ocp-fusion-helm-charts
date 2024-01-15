@@ -69,8 +69,6 @@ resources:
     memory: 256Mi
 securityContext:
   enabled: false
-  fsGroup: 999
-  runAsUser: 999
 service:
   annotations: {}
   port: 3306

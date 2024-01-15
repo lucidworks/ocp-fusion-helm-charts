@@ -9,8 +9,6 @@ keytoolUtils:
 rbac:
   create: true
 securityContext:
-  fsGroup: 8764
-  runAsUser: 8764
 serviceAccountKey: ""
 tls:
   caSecret:

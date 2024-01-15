@@ -292,7 +292,6 @@ Return the appropriate apiVersion for HorizontalPodAutoscaler.
     allowPrivilegeEscalation: false
     privileged: false
 {{- if .securityContext.runAsUser }}
-    runAsUser: {{ .securityContext.runAsUser }}
 {{- end }}
   command:
     - "/bin/bash"
@@ -488,7 +487,6 @@ Return the appropriate apiVersion for HorizontalPodAutoscaler.
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   args:
     - zookeeper
   resources:
@@ -528,7 +526,6 @@ Return the appropriate apiVersion for HorizontalPodAutoscaler.
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m
@@ -562,7 +559,6 @@ Return the appropriate apiVersion for HorizontalPodAutoscaler.
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m
@@ -604,7 +600,6 @@ Return the appropriate apiVersion for HorizontalPodAutoscaler.
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m
@@ -662,7 +657,6 @@ Define the admin url for pulsar broker
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m
@@ -796,7 +790,6 @@ Define the kafka endpoint
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     privileged: false
-    runAsUser: {{ .Values.securityContext.runAsUser }}
   resources:
     requests:
       cpu: 200m

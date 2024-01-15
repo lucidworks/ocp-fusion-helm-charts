@@ -184,8 +184,6 @@ rbac:
 replicaCount: 3
 resources: {}
 securityContext:
-  fsGroup: 1000
-  runAsUser: 1000
 service:
   annotations: {}
   ports:

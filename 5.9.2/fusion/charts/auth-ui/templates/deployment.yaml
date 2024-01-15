@@ -78,7 +78,6 @@ spec:
           runAsNonRoot: true
           allowPrivilegeEscalation: false
           privileged: false
-          runAsUser: {{ .Values.securityContext.runAsUser }}
 {{- .Values.containersSecurityContext | toYaml | nindent 10 }}
         # args:
         #   -

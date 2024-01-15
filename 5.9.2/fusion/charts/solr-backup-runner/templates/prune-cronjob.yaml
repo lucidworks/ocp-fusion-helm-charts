@@ -28,8 +28,6 @@ spec:
         spec:
           securityContext:
             runAsNonRoot: true
-            fsGroup: {{ .Values.prune.fsGroup }}
-            runAsUser: {{ .Values.prune.runAsUser }}
           volumes:
             - name: solr-backups
               persistentVolumeClaim:

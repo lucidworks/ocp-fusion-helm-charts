@@ -71,9 +71,7 @@ scheduler:
   pipelines:
     cron: 45 */5 * ? * *
 securityContext:
-  fsGroup: 8764
   runAsNonRoot: true
-  runAsUser: 8764
 serviceName: apps-manager
 springProfiles: k8s,jwt
 tls:
