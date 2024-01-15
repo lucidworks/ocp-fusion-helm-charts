@@ -1,0 +1,58 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ template "fusion.async-parsing.fullname" . }}-tika-server-config"
+  labels:
+{{ include "fusion.async-parsing.labels" . | indent 4 }}
+  annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+data:
+  tika-config.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+      <properties>
+      <!-- <parsers etc.../> -->
+        <server>
+          <params>
+            <port>{{ .Values.port.internal }}</port>
+            <!-- Origin URL for cors requests. Set to '*' if you want to allow all CORS requests. Leave blank or remove element if you do not want to enable CORS. -->
+            <cors>*</cors>
+            <!-- request URI log level 'debug' or 'info' -->
+            <logLevel>{{ .Values.tika.config.log.level }}</logLevel>
+            <!-- whether or not to return the stacktrace in the data returned to the user when a parse exception happens-->
+            <returnStackTrace>{{ .Values.tika.config.returnStackTrace}}</returnStackTrace>
+            <!-- If set to 'true', this runs tika server "in process" in the legacy 1.x mode. This means that the server will be susceptible to infinite loops and crashes.
+            If set to 'false', the server will spawn a forked process and restart the forked process on catastrophic failures
+            (this was called -spawnChild mode in 1.x). noFork=false is the default in 2.x
+            -->
+            <noFork>false</noFork>
+            <!-- maximum time to allow per parse before shutting down and restarting the forked parser. Not allowed if noFork=true. -->
+            <taskTimeoutMillis>{{ .Values.tika.config.noForK.taskTimeoutMillis}}</taskTimeoutMillis>
+            <!-- maximum amount of time to wait for a forked process to start up. Not allowed if noFork=true. -->
+            <maxForkedStartupMillis>{{ .Values.tika.config.noForK.maxForkedStartupMillis}}</maxForkedStartupMillis>
+            <!-- maximum number of times to allow a specific forked process to be restarted. Not allowed if noFork=true. -->
+            <maxRestarts>{{ .Values.tika.config.noForK.maxRestarts}}</maxRestarts>
+            <!-- maximum files to parse per forked process before restarting the forked process to clear potential memory leaks. Not allowed if noFork=true. -->
+            <maxFiles>{{ .Values.tika.config.noForK.maxFiles}}</maxFiles>
+            <!-- if you want to specify a specific javaPath for the forked process.  This path should end the application 'java', e.g. /my/special-java/java Not allowed if noFork=true. -->
+            <javaPath>{{ .Values.tika.config.noForK.javaPath}}</javaPath>
+            <!-- jvm args to use in the forked process -->
+            <forkedJvmArgs> 
+              <arg>{{ .Values.tika.config.noForK.forkedJvmArgs.xms}}</arg>
+              <arg>{{ .Values.tika.config.noForK.forkedJvmArgs.xmx}}</arg>
+              <arg>-Dlog4j.configurationFile=/log4j2/log4j2.xml</arg>
+            </forkedJvmArgs>
+            <!-- this must be set to true for any handler that uses a fetcher or emitter.  These pipes features are inherently unsecure because
+            the client has the same read/write access as the tika-server process.  Implementers must secure Tika server so that only their clients can reach it.
+            A byproduct of setting this to true is that the /status endpoint is turned on -->
+            <enableUnsecureFeatures>false</enableUnsecureFeatures>
+            <!-- you can optionally select specific endpoints to turn on/load.  This can improve resource usage and decrease your attack surface.
+            If you want to access the status endpoint, specify it here or set unsecureFeatures to true -->
+            <endpoints>
+              <endpoint>version</endpoint>
+              <endpoint>status</endpoint>
+              <endpoint>rmeta</endpoint>
+            </endpoints>
+          </params>
+        </server>
+      </properties>

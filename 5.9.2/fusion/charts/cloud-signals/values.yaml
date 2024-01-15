@@ -1,0 +1,75 @@
+affinity: {}
+bufferLimit: 10000
+configDir: /etc/appconfig
+containersSecurityContext:
+  capabilities:
+    drop:
+    - NET_RAW
+fusion-common-utils:
+  global: {}
+gcs:
+  cloudSecret: solr-dev-gc-serviceaccount-key
+  outputDir: gs://smartdata-datasets/streaming-test/cloud-signals-test
+image:
+  imagePullPolicy: Always
+  imagePullSecrets: []
+  name: cloud-signals
+  repository: lucidworks
+  tag: latest
+javaToolOptions: -XX:+ExitOnOutOfMemoryError -Xms512m -Xmx512m -Xss256k -Dhttp.maxConnections=1000
+kafka:
+  groupId: test
+  partitionColumns: collection,type,year,month,day
+  partitionsPerReplica: 16
+  pollInterval: 1000
+  topic: fusion.system.cloud-signals
+networkPolicy:
+  enabled: false
+nodeSelector: {}
+pod:
+  annotations: {}
+podDisruptionBudget:
+  maxUnavailable: 1
+priorityClassName: ""
+rbac:
+  create: true
+replicaCount: 1
+resources: {}
+s3:
+  cloudSecret: aws-secret
+  outputDir: s3a://smartdata-datasets/streaming-test/cloud-signals-test
+  region: us-west-2
+schedulerName: ""
+secretDir: /etc/appsecret
+securityContext:
+  fsGroup: 8764
+  runAsNonRoot: true
+  runAsUser: 8764
+serviceAccount:
+  annotations: {}
+  create: true
+  name: ""
+sinkProperties:
+  fs.gs.batch.threads: 4
+  fs.gs.max.requests.per.batch: 4
+  fs.gs.outputstream.upload.chunk.size: 8388608
+  fs.s3a.buffer.dir: /tmp/buffers
+  fs.s3a.fast.upload.buffer: disk
+terminationGracePeriodSeconds: 30
+tls:
+  caSecret:
+    name: ""
+  certSecret:
+    name: ""
+  clusterDomain: svc.cluster.local
+  duration: 8760h
+  enabled: false
+  generateCert: true
+  generateJKS: true
+  issuerRef:
+    kind: Issuer
+    name: fusion-ca-issuer
+  keystorePassword: changeit
+  renewBefore: 8464h
+tolerations: []
+windowLength: 60

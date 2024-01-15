@@ -1,0 +1,14 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.6.28
+description: Lucidworks Fusion Connectors Backend Service
+keywords:
+- fusion
+- connectors
+- rpc
+- v2
+name: connectors-backend
+version: 2.2.8

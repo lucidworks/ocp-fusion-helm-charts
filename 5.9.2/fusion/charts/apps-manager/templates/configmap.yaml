@@ -1,0 +1,36 @@
+{{- $tlsEnabled := include "fusion.tls.enabled" $ -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fusion.apps-manager.fullname" . }}
+  labels:
+{{ include "fusion.apps-manager.labels" . | indent 4 }}
+  annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+data:
+  application-k8s.yml: |-
+    logging:
+      file: {{ .Values.logdir }}/apps-manager.log
+    spring:
+      cloud:
+        zookeeper:
+          connectString: {{ include "fusion.zkConnectionString" . }}
+          discovery:
+            enabled: false
+    app:
+      collections-scheduled-task:
+        cron: {{ .Values.scheduler.collections.cron }}
+      query-pipeline-scheduled-task:
+        cron: {{ .Values.scheduler.pipelines.cron }}
+    accesslog:
+      enabled: {{ .Values.accessLogEnabled }}
+{{- if  $tlsEnabled  }}
+    server:
+      ssl:
+        key-store-type: pkcs12
+        key-store: /etc/ssl/keystores/keystore.jks
+        key-store-password: {{ .Values.tls.keystorePassword }}
+        trust-store: /etc/ssl/keystores/truststore.jks
+        trust-store-password: {{ .Values.tls.keystorePassword }}
+{{- end }}

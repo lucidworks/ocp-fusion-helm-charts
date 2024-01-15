@@ -1,0 +1,65 @@
+---
+{{- $tlsEnabled := include "fusion.tls.enabled" $ -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ template "fusion.cloud-signals.fullname" . }}-config"
+  labels:
+    {{ include "fusion.cloud-signals.labels" . | nindent 4 }}
+data:
+  schema: |
+    id:
+      type: string
+      required: true
+    collection:
+      type: string
+      required: true
+    type:
+      type: string
+      required: true
+    year:
+      type: int
+      required: true
+    month:
+      type: int
+      required: true
+    day:
+      type: int
+      required: true
+    query:
+      type: string
+      required: true
+    doc_id:
+      type: string
+      default: ""
+    filters_s:
+      type: string
+      defaultValue: ""
+    count_i:
+      type: int
+      default: 1
+    timestamp_tdt:
+      type: string
+      required: true
+    fusion_query_id:
+      type: string
+      default: ""
+    user_id:
+      type: string
+      default: ""
+    session:
+      type: string
+      default: ""
+  jsonToAvroMapping: |
+    msg_id: id
+    query_t: query
+  sinkProperties: |
+{{- if .Values.sinkProperties }}
+    {{- .Values.sinkProperties | toYaml | nindent 4 }}
+{{- end }}
+  consumerProperties: |
+    "auto.offset.reset": earliest
+    "enable.auto.commit": false
+    "max.partition.fetch.bytes": 5000000
+    "max.poll.records": {{ .Values.bufferLimit }}

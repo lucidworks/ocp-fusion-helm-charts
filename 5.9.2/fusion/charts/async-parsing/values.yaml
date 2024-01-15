@@ -1,0 +1,135 @@
+accessLogEnabled: false
+additionalVolumeMounts: []
+additionalVolumes: []
+affinity: {}
+annotations: {}
+asyncParsing:
+  livenessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 2
+  readinessProbe:
+    failureThreshold: 8
+    initialDelaySeconds: 45
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 2
+component: async-parsing
+deploymentStrategy:
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 25%
+  type: RollingUpdate
+fusion-common-utils:
+  global: {}
+image:
+  imagePullSecrets: []
+  name: async-parsing
+  pullPolicy: IfNotPresent
+  repository: lucidworks
+  tag: latest
+javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
+  -Xss256k
+kafka:
+  servicePort: "9092"
+  serviceTLSPort: "9092"
+kafkaReplicaCount: 1
+keytoolUtils:
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: keytool-utils
+    repository: lucidworks
+    tag: v2.1.2
+logdir: /app/logs
+name: async-parsing
+networkPolicy:
+  additionalEgressRules: []
+  additionalIngressRules: []
+  dnsAccess:
+  - ipBlock:
+      cidr: 0.0.0.0/0
+  enabled: false
+  kubernetesAccess:
+  - ipBlock:
+      cidr: 0.0.0.0/0
+nodeSelector: {}
+pod:
+  annotations: {}
+podDisruptionBudget:
+  maxUnavailable: 1
+port:
+  external: 9005
+  internal: 9998
+preStopSleepTime: 15
+rbac:
+  create: true
+replicaCount: 1
+securityContext:
+  fsGroup: 8764
+  runAsNonRoot: true
+  runAsUser: 8764
+serviceName: async-parsing
+springProfiles: k8s,jwt
+tika:
+  config:
+    log:
+      dir: /logs/tika
+      level: info
+    noForK:
+      forkedJvmArgs:
+        xms: -Xms4g
+        xmx: -Xmx6g
+      javaPath: java
+      maxFiles: 250
+      maxForkedStartupMillis: 120000
+      maxRestarts: -1
+      taskTimeoutMillis: 300000
+    returnStackTrace: false
+  livenessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 2
+  readinessProbe:
+    failureThreshold: 8
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 2
+  resources:
+    limits:
+      cpu: 3
+      memory: 6Gi
+    requests:
+      cpu: 2
+      memory: 4Gi
+tikaImage:
+  imagePullSecrets: []
+  name: tika
+  pullPolicy: IfNotPresent
+  repository: apache
+  tag: 2.6.0.1
+tls:
+  caSecret:
+    name: ""
+  certSecret:
+    name: ""
+  clusterDomain: svc.cluster.local
+  duration: 8760h
+  enabled: false
+  generateCert: true
+  generateJKS: true
+  issuerRef:
+    kind: Issuer
+    name: fusion-ca-issuer
+  keystorePassword: changeit
+  renewBefore: 8464h
+trustedCertificates:
+  enabled: false
+volume:
+  accessMode: ReadWriteOnce
+  claimName: async-parsing-data-claim
+  name: async-parsing-data
+  storage: 100Gi

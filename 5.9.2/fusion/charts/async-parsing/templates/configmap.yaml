@@ -1,0 +1,30 @@
+{{- $tlsEnabled := include "fusion.tls.enabled" $ -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fusion.async-parsing.fullname" . }}
+  labels:
+{{ include "fusion.async-parsing.labels" . | indent 4 }}
+  annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+data:
+  application-k8s.yml: |-
+    logging:
+      file: {{ .Values.logdir }}/async-parsing.log
+    accesslog:
+      enabled: {{ .Values.accessLogEnabled }}
+{{- if  $tlsEnabled  }}
+    kafka:
+      properties:
+        security.protocol: SSL
+        ssl.truststore.location: /etc/ssl/keystores/truststore.jks
+        ssl.truststore.password: {{ .Values.tls.truststorePassword | default .Values.tls.keystorePassword | quote }}
+    server:
+      ssl:
+        key-store-type: pkcs12
+        key-store: /etc/ssl/keystores/keystore.jks
+        key-store-password: {{ .Values.tls.keystorePassword }}
+        trust-store: /etc/ssl/keystores/truststore.jks
+        trust-store-password: {{ .Values.tls.keystorePassword }}
+{{- end }}

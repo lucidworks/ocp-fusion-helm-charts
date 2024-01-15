@@ -1,0 +1,8 @@
+dependencies:
+  - name: fusion-common-utils
+    version: 1.6.28
+    repository: "https://charts.lucidworks.com/"
+  - name: zookeeper
+    version: 2.6.3
+    repository: "https://charts.lucidworks.com/"
+    condition: solr.zookeeper.enabled,zookeeper.enabled

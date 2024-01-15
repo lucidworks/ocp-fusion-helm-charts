@@ -1,0 +1,14 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.6.28
+description: Lucidworks Fusion Async Parsing
+keywords:
+- fusion
+- tika
+- async
+- parsing
+name: async-parsing
+version: 1.0.7

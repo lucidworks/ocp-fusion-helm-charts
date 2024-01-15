@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: 0.0.1
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.6.28
+description: A helm chart to install fusion-reserse-search
+home: http://lucidworks.com
+keywords:
+- reverse-search
+maintainers:
+- email: ops.eng@lucidworks.com
+  name: Fusion Business Unit / Engineering
+name: reverse-search
+version: 0.0.18

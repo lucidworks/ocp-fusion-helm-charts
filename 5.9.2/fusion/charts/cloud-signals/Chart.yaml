@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.6.28
+description: A helm chart to install the cloud-signals component
+keywords:
+- fusion
+- cloud-signals
+maintainers:
+- email: szymon.kurylo@lucidworks.com
+  name: Szymon Kurylo
+name: cloud-signals
+version: 0.3.23

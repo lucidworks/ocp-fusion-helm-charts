@@ -1,0 +1,100 @@
+affinity: {}
+annotations: {}
+config:
+  solrlog4j: ""
+  solrxml: ""
+fusion-common-utils:
+  global: {}
+image:
+  imagePullPolicy: IfNotPresent
+  imagePullSecrets: []
+  name: fusion-reverse-search
+  repository: lucidworks
+  tag: latest
+initContainer:
+  image:
+    repository: lucidworks
+    solrzoneImageName: bitnami/kubectl:1.23.11-debian-11-r3
+  resources: {}
+javaMem: -Xms2g -Xmx3g
+kafka:
+  servicePort: "9092"
+  serviceTLSPort: "9092"
+kafkaReplicaCount: 1
+keytoolUtils:
+  image:
+    imagePullPolicy: IfNotPresent
+    imagePullSecrets: []
+    name: keytool-utils
+    repository: lucidworks
+    tag: v2.1.2
+livenessProbe:
+  failureThreshold: 5
+  initialDelaySeconds: 30
+  periodSeconds: 15
+  timeoutSeconds: 10
+logLevel: INFO
+networkPolicy:
+  additionalEgressRules: []
+  additionalIngressRules: []
+  dnsAccess:
+  - ipBlock:
+      cidr: 0.0.0.0/0
+  enabled: false
+  kubernetesAccess:
+  - ipBlock:
+      cidr: 0.0.0.0/0
+nodePools:
+- name: ""
+nodeType: reverse-search
+podAnnotations: {}
+podDisruptionBudget:
+  maxUnavailable: 1
+port: 8983
+rbac:
+  create: true
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 15
+  periodSeconds: 5
+  successThreshold: 1
+  timeoutSeconds: 10
+replicaCount: 3
+resources: {}
+securityContext:
+  fsGroup: 8983
+  runAsUser: 8983
+service:
+  annotations: {}
+  type: ClusterIP
+serviceDnsName: ""
+solrModules: fusion-reverse-search,fusion-replica-placement
+terminationGracePeriodSeconds: 180
+tls:
+  caSecret:
+    name: ""
+  certSecret:
+    name: ""
+  checkPeerName: "false"
+  clusterDomain: svc.cluster.local
+  duration: 8760h
+  enabled: false
+  generateCert: true
+  generateJKS: true
+  issuerRef:
+    kind: Issuer
+    name: fusion-ca-issuer
+  keystorePassword: changeit
+  needClientAuth: "false"
+  renewBefore: 8464h
+  wantClientAuth: "false"
+updateStrategy:
+  type: OnDelete
+volumeClaimTemplates:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: ""
+  storageSize: 20Gi
+zkPort: 2181
+zkReplicaCount: 3
+zkTLSPort: 2281

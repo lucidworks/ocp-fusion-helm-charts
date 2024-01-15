@@ -1,0 +1,13 @@
+{{- if .Values.config.solrxml -}}
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ template "reverse-search.configmap-name" . }}-xml"
+  labels:
+{{ include "reverse-search.common.labels" . | nindent 4 }}
+data:
+  solr.xml: |
+{{ .Values.config.solrxml | indent 4 }}
+{{- end -}}

@@ -1,0 +1,12 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ template "reverse-search.configmap-name" . }}"
+  labels:
+{{ include "reverse-search.common.labels" . | nindent 4 }}
+data:
+  kafka-producer.props: |
+    bootstrap.servers:{{ template "fusion.reverse-search.kafkaBrokers" . }}
+

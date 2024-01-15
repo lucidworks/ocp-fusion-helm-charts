@@ -1,0 +1,34 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ template "fusion.async-parsing.fullname" . }}-tika-server-log4j2"
+  labels:
+{{ include "fusion.async-parsing.labels" . | indent 4 }}
+  annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+data:
+  log4j2.xml: |
+    <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+      <Configuration status="WARN">
+        <Appenders>
+          <Console name="Console" target="SYSTEM_ERR">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS}{GMT+0} - %-5p [%C@%L] - %message%n"/>
+          </Console>
+          <RollingRandomAccessFile name="File" fileName="{{ .Values.tika.config.log.dir }}/tika-server.log" filePattern="{{ .Values.tika.config.log.dir }}/$${date:yyyy-MM}/tika-server-%i.log.gz">
+            <PatternLayout>
+               <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS}{GMT+0} - %-5p [%C@%L] - %message%n</Pattern>
+            </PatternLayout>
+            <Policies>
+              <OnStartupTriggeringPolicy />
+              <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+          </RollingRandomAccessFile>
+        </Appenders>
+        <Loggers>
+          <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+           </Root>
+        </Loggers>
+      </Configuration>

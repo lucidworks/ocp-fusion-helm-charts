@@ -1,0 +1,69 @@
+{{- $tlsEnabled := include "fusion.tls.enabled" $ -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fusion.connectors-backend.fullname" . }}
+  labels:
+{{ include "fusion.connectors-backend.labels" . | indent 4 }}
+  annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+data:
+  application-k8s.yml: |-
+    spring:
+      profiles:
+        include: default
+      cloud:
+        kubernetes:
+          enabled: true
+          ribbon:
+            enabled: true
+          secrets:
+            enabled: true
+        zookeeper:
+          discovery:
+            enabled: false
+    ribbon:
+      zookeeper:
+        enabled: false
+    services:
+      zookeeper:
+         connect-string: {{ include "fusion.zkConnectionString" . }}
+    tika:
+      address: "async-parsing:9005"
+    kafka:
+      bootstrap-servers: {{ template "fusion.connectors-backend.kafkaBootstrapServers" . }}
+{{- if  $tlsEnabled  }}
+      properties:
+        security.protocol: SSL
+        ssl.truststore.location: /etc/ssl/keystores/truststore.jks
+        ssl.truststore.password: {{ .Values.tls.truststorePassword | default .Values.tls.keystorePassword | quote }}
+{{- end }}
+    app:
+      connectors-backend:
+         name: {{ template "fusion.connectors-backend.fullname" . }}
+      plugins:
+         repository:
+           id: {{ .Values.plugins.repository.id }}
+           name: {{ .Values.plugins.repository.name }}
+         replicas: {{ .Values.plugins.replicas }}
+         crd-create: {{ .Values.plugins.crd.create }}
+      grpc:
+{{- if  $tlsEnabled  }}
+         tlsEnabled: true
+{{- else  }}
+         tlsEnabled: false
+{{- end  }}
+         serverCertChainFile: /etc/ssl/keystores/tls.crt
+         serverPrivateKey: /etc/ssl/keystores/tls.key
+         trustCertCollectionFile: /etc/ssl/keystores/ca.crt
+
+{{- if  $tlsEnabled  }}
+    server:
+      ssl:
+        key-store-type: pkcs12
+        key-store: /etc/ssl/keystores/keystore.jks
+        key-store-password: {{ .Values.tls.keystorePassword }}
+        trust-store: /etc/ssl/keystores/truststore.jks
+        trust-store-password: {{ .Values.tls.keystorePassword }}
+{{- end }}

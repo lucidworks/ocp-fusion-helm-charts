@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: "5"
+dependencies:
+- name: fusion-common-utils
+  repository: https://charts.lucidworks.com/
+  version: 1.6.24
+description: A Helm chart to install App Insights
+keywords:
+- fusion
+- insights
+- app insights
+- appkit
+maintainers:
+- email: ian.thebridge@lucidworks.com
+  name: Ian Thebridge
+name: insights
+version: 1.2.6
