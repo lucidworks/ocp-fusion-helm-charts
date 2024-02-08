@@ -187,6 +187,7 @@ spec:
       hostNetwork: {{ .Values.hostNetwork }}
       priorityClassName: '{{ .Values.manager.priorityClassName }}'
       securityContext:
+        runAsUser: {{ .Values.managerUserID }}
       serviceAccountName: '{{ .Values.serviceAccount.name }}'
       imagePullSecrets: {{ .Values.image.imagePullSecrets | toYaml | nindent 8 }}
       terminationGracePeriodSeconds: 10
