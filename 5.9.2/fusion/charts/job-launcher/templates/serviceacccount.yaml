@@ -72,7 +72,7 @@ metadata:
   name: "{{ include "fusion.job-launcher.fullname" . }}-spark"
 rules:
 - apiGroups: [""]
-  resources: [ "pods", "services", "configmaps", "endpoints", "serviceaccounts", "namespaces","pvc", "customresourcedefinitions"]
+  resources: [ "pods", "pods/log", "services", "configmaps", "endpoints", "serviceaccounts", "namespaces","pvc", "customresourcedefinitions"]
   verbs: [ "get", "list", "watch", "create", "delete", "patch" ]
 - apiGroups: ["machinelearning.seldon.io"]
   resources: ["seldondeployments"]

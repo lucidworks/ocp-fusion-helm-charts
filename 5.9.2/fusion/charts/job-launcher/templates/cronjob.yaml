@@ -33,6 +33,7 @@ spec:
                 runAsNonRoot: true
                 allowPrivilegeEscalation: false
                 privileged: false
+                runAsUser: {{ .Values.securityContext.runAsUser }}
           restartPolicy: Never
   successfulJobsHistoryLimit: 0
 ---
@@ -71,5 +72,6 @@ spec:
                 runAsNonRoot: true
                 allowPrivilegeEscalation: false
                 privileged: false
+                runAsUser: {{ .Values.securityContext.runAsUser }}
           restartPolicy: Never
   successfulJobsHistoryLimit: 0

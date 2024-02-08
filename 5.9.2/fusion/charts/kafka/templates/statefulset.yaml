@@ -107,6 +107,7 @@ spec:
             runAsNonRoot: true
             allowPrivilegeEscalation: false
             privileged: false
+            runAsUser: {{ $.Values.containerSecurityContext.runAsUser }}
           args:
             - zookeeper
           resources:

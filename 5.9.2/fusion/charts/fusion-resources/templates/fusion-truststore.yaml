@@ -97,6 +97,8 @@ spec:
       {{- end }}
       securityContext:
         runAsNonRoot: true
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
       serviceAccountName: "{{ .Values.rbac.serviceAccountName | default ( printf "%s-secret-hook" ( include "fusion.fusion-resources.fullname" . )) }}"
       volumes:
         - name: keystore-volume
